@@ -1,26 +1,65 @@
 // src/pages/Home.js
-import { Check, Clock, Image as ImageIcon, Flower2 } from "lucide-react";
 import {
-  AQUA_WOMAN_MESSAGE,
+  Check,
+  Clock,
+  ExternalLink,
+  Flower2,
+  Image as ImageIcon,
+} from "lucide-react";
+import {
+  AQUA_WOMAN_SOCIAL,
   BUSINESS,
   MAIN_CTA_MESSAGE,
   WHATSAPP_NUMBERS,
   buildWhatsAppLink,
-  formatCOP,
-  highTicketProducts,
-  volumeProducts,
+  catalog,
+  formatPriceParts,
 } from "../data/CatalogData";
 
 /* -----------------------------------------------------------------------------
-   Palette (arbitrary values, so no tailwind.config.js changes are needed)
+   Palette (arbitrary values, no tailwind.config.js changes needed)
    Navy        #0B2545   primary / trust
-   Navy deep   #07182E   premium section background
+   Navy deep   #07182E   High-Ticket section background
    Navy card   #0F2F57   cards on the dark section
    Light gray  #F4F6F9   light section background
-   WA green    #25D366   ALL CTAs (hover #1EBE5A)
+   WA green    #25D366   ALL CTAs
 ----------------------------------------------------------------------------- */
 
-/** Lucide has no WhatsApp brand icon, so we ship our own inline SVG. */
+/** Set to a real photo path (e.g. "/images/hero.jpg") to replace the placeholder. */
+const HERO_IMAGE = null;
+
+/** Section look per `theme` in CatalogData.js */
+const THEMES = {
+  gray: {
+    section: "bg-[#F4F6F9]",
+    title: "text-[#0B2545]",
+    subtitle: "text-slate-600",
+    dark: false,
+  },
+  white: {
+    section: "bg-white",
+    title: "text-[#0B2545]",
+    subtitle: "text-slate-600",
+    dark: false,
+  },
+  dark: {
+    section: "bg-[#07182E]",
+    title: "text-white",
+    subtitle: "text-white/70",
+    dark: true,
+  },
+};
+
+/** SEO-optimized <h2> text per category id (see CatalogData.js). */
+const SECTION_TITLES = {
+  "volume-engine": "Paquetes Todo Incluido al Caribe: Punta Cana y Cancún",
+  nacionales: "Viajes Nacionales: San Andrés, La Guajira y Cartagena",
+  "high-ticket-2027":
+    "Viajes Internacionales y Experiencias Premium: Europa, Japón y F1 Miami",
+  "aqua-woman": "Aqua Woman: Retiros Terapéuticos y de Bienestar para Mujeres",
+};
+
+/** Lucide has no WhatsApp brand icon, so this is an inline SVG. */
 function WhatsAppIcon({ className = "h-5 w-5" }) {
   return (
     <svg
@@ -34,18 +73,32 @@ function WhatsAppIcon({ className = "h-5 w-5" }) {
   );
 }
 
-/** The only CTA style used on the whole page. */
+/**
+ * The only CTA style on the page: bg-[#25D366], brightness boost on hover,
+ * and an icon with a soft pulse (animate-pulse) to invite the click.
+ */
 function WhatsAppButton({ href, children, className = "" }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-2.5 rounded-lg bg-[#25D366] px-6 py-3.5 text-base font-bold text-[#062B16] transition-colors hover:bg-[#1EBE5A] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${className}`}
+      className={`inline-flex items-center justify-center gap-2.5 rounded-xl bg-[#25D366] px-6 py-3.5 text-base font-bold text-[#062B16] transition duration-300 hover:brightness-110 focus-visible:brightness-110 ${className}`}
     >
-      <WhatsAppIcon />
+      <WhatsAppIcon className="h-5 w-5 animate-pulse motion-reduce:animate-none" />
       {children}
     </a>
+  );
+}
+
+/** Gradient badge, absolutely positioned in the top-left of its image wrapper. */
+function FloatingBadge({ label, gradient }) {
+  return (
+    <span
+      className={`absolute left-4 top-4 z-10 inline-flex items-center rounded-full bg-gradient-to-r ${gradient} px-3 py-1.5 text-xs font-bold text-white`}
+    >
+      {label}
+    </span>
   );
 }
 
@@ -57,12 +110,13 @@ function ImagePlaceholder({ src, alt, label, dark = false, tone }) {
         src={src}
         alt={alt}
         loading="lazy"
-        className="h-full w-full object-cover"
+        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
     );
   }
   const toneClasses =
-    tone ?? (dark ? "bg-[#163B6B] text-white/60" : "bg-slate-200 text-slate-500");
+    tone ??
+    (dark ? "bg-[#163B6B] text-white/60" : "bg-slate-200 text-slate-500");
   return (
     <div
       role="img"
@@ -75,19 +129,55 @@ function ImagePlaceholder({ src, alt, label, dark = false, tone }) {
   );
 }
 
-function ProductCard({ product, dark = false }) {
-  const { destination, title, tagline, duration, includes, priceFrom, priceNote } =
-    product;
+function Price({ price, note, dark }) {
+  if (!price) {
+    return (
+      <p
+        className={`text-base font-bold ${
+          dark ? "text-white" : "text-[#0B2545]"
+        }`}
+      >
+        Consulta el precio de tu fecha
+      </p>
+    );
+  }
+  const { value, code } = formatPriceParts(price);
+  return (
+    <>
+      <p className={`text-sm ${dark ? "text-white/70" : "text-slate-500"}`}>
+        Desde
+      </p>
+      <p className="text-3xl font-extrabold tracking-tight">
+        {value}{" "}
+        <span
+          className={`text-sm font-semibold ${
+            dark ? "text-white/70" : "text-slate-500"
+          }`}
+        >
+          {code}
+          {note ? ` ${note}` : ""}
+        </span>
+      </p>
+    </>
+  );
+}
+
+function ProductCard({ product, category, dark }) {
+  const { destination, tagline, duration, includes, price } = product;
 
   return (
     <article
-      className={`flex flex-col overflow-hidden rounded-2xl border ${
+      className={`group flex flex-col overflow-hidden rounded-2xl border transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl ${
         dark
           ? "border-white/10 bg-[#0F2F57] text-white"
           : "border-slate-200 bg-white text-[#0B2545]"
       }`}
     >
-      <div className="aspect-[4/3] w-full">
+      <div className="relative aspect-[4/3] w-full overflow-hidden">
+        <FloatingBadge
+          label={category.badge.label}
+          gradient={category.badge.gradient}
+        />
         <ImagePlaceholder
           src={product.image}
           alt={product.imageAlt}
@@ -97,59 +187,56 @@ function ProductCard({ product, dark = false }) {
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-xl font-bold leading-snug">{title}</h3>
-        <p className={`mt-2 text-sm ${dark ? "text-white/70" : "text-slate-600"}`}>
+        <h3 className="text-xl font-bold leading-snug">{destination}</h3>
+        <p
+          className={`mt-2 text-sm ${dark ? "text-white/70" : "text-slate-600"}`}
+        >
           {tagline}
         </p>
 
-        <p
-          className={`mt-4 flex items-center gap-2 text-sm font-semibold ${
-            dark ? "text-white/80" : "text-slate-700"
-          }`}
-        >
-          <Clock className="h-4 w-4" aria-hidden="true" />
-          {duration}
-        </p>
+        {duration && (
+          <p
+            className={`mt-4 flex items-center gap-2 text-sm font-semibold ${
+              dark ? "text-white/80" : "text-slate-700"
+            }`}
+          >
+            <Clock className="h-4 w-4" aria-hidden="true" />
+            {duration}
+          </p>
+        )}
 
-        <ul className="mt-3 space-y-1.5">
-          {includes.map((item) => (
-            <li
-              key={item}
-              className={`flex items-start gap-2 text-sm ${
-                dark ? "text-white/80" : "text-slate-600"
-              }`}
-            >
-              <Check
-                className="mt-0.5 h-4 w-4 flex-none text-[#25D366]"
-                aria-hidden="true"
-              />
-              {item}
-            </li>
-          ))}
-        </ul>
+        {includes?.length > 0 && (
+          <ul className="mt-3 space-y-1.5">
+            {includes.map((item) => (
+              <li
+                key={item}
+                className={`flex items-start gap-2 text-sm ${
+                  dark ? "text-white/80" : "text-slate-600"
+                }`}
+              >
+                <Check
+                  className="mt-0.5 h-4 w-4 flex-none text-[#25D366]"
+                  aria-hidden="true"
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+        )}
 
         <div
-          className={`mt-6 border-t pt-5 ${
+          className={`mt-auto border-t pt-5 ${
             dark ? "border-white/10" : "border-slate-200"
           }`}
         >
-          <p className={`text-sm ${dark ? "text-white/70" : "text-slate-500"}`}>
-            Desde
-          </p>
-          <p className="text-3xl font-extrabold tracking-tight">
-            {formatCOP(priceFrom)}{" "}
-            <span
-              className={`text-sm font-semibold ${
-                dark ? "text-white/70" : "text-slate-500"
-              }`}
-            >
-              COP {priceNote}
-            </span>
-          </p>
+          <Price price={price} note={product.priceNote} dark={dark} />
         </div>
 
         <WhatsAppButton
-          href={buildWhatsAppLink(WHATSAPP_NUMBERS.main, product.whatsappMessage)}
+          href={buildWhatsAppLink(
+            WHATSAPP_NUMBERS[category.whatsapp],
+            product.whatsappMessage
+          )}
           className="mt-5 w-full"
         >
           Cotizar este paquete
@@ -161,26 +248,52 @@ function ProductCard({ product, dark = false }) {
 
 function Hero() {
   return (
-    <header className="relative isolate overflow-hidden bg-[#0B2545]">
-      {/* Replace with the real hero photo, e.g.:
-          <img src="/images/hero.jpg" alt="..." className="absolute inset-0 -z-20 h-full w-full object-cover" /> */}
+    <header className="relative isolate overflow-hidden bg-[#07182E]">
+      {/* Aspirational image (placeholder until HERO_IMAGE is set) */}
+      {HERO_IMAGE ? (
+        <img
+          src={HERO_IMAGE}
+          alt="Destino de viaje aspiracional"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : (
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-[#1B5A8C] via-[#0B2545] to-[#07182E]"
+          aria-hidden="true"
+        >
+          <p className="absolute bottom-20 right-6 flex items-center gap-2 text-xs font-medium text-white/40">
+            <ImageIcon className="h-4 w-4" aria-hidden="true" />
+            Foto aspiracional del hero
+          </p>
+        </div>
+      )}
+
+      {/* Dark overlay for text readability */}
       <div
-        className="absolute inset-0 -z-20 bg-gradient-to-br from-[#163B6B] via-[#0B2545] to-[#07182E]"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute inset-0 -z-10 bg-[#07182E]/50"
+        className="absolute inset-0 bg-gradient-to-b from-black/80 to-transparent"
         aria-hidden="true"
       />
 
-      <div className="mx-auto flex min-h-[85vh] max-w-6xl flex-col justify-center px-6 py-24 md:py-32">
-        <p className="mb-4 text-base font-semibold text-white/80">
+      <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-start px-6 pb-40 pt-28 md:pt-36">
+        <p className="mb-5 inline-flex w-fit items-center rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
           {BUSINESS.name}
         </p>
-        <h1 className="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl">
-          Viajes a tu medida sin estrés ni carga mental
+
+        {/* Raw text of the H1 (spans joined by a space) must stay exactly:
+            "Agencia de Viajes en Zipaquirá: Punta Cana, San Andrés, Europa y Retiros para Mujeres" */}
+        <h1 className="max-w-4xl text-white">
+          <span className="block text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            Agencia de Viajes en Zipaquirá:
+          </span>{" "}
+          <span className="mt-3 block text-2xl font-bold leading-snug text-white/90 sm:text-3xl md:text-4xl">
+            Punta Cana, San Andrés, Europa y Retiros para Mujeres
+          </span>
         </h1>
-        <p className="mt-6 max-w-xl text-lg text-white/85 md:text-xl">
+
+        <p className="mt-6 max-w-xl text-xl font-semibold text-white md:text-2xl">
+          Viajes a tu medida sin estrés ni carga mental
+        </p>
+        <p className="mt-3 max-w-xl text-lg text-white/90 md:text-xl">
           9 años de experiencia garantizando tu inversión
         </p>
 
@@ -191,7 +304,7 @@ function Hero() {
           >
             Cotiza tu viaje por WhatsApp
           </WhatsAppButton>
-          <p className="text-sm text-white/70">
+          <p className="text-sm text-white/75">
             Sin formularios: te respondemos directo por chat.
           </p>
         </div>
@@ -200,27 +313,35 @@ function Hero() {
   );
 }
 
+/** Floating panel that overlaps the bottom edge of the hero. */
 function TrustBar() {
   const items = [
-    `🛡️ ${BUSINESS.years} años de experiencia`,
-    `📍 Oficina Física en ${BUSINESS.location}`,
-    `📋 RNT ${BUSINESS.rnt}`,
+    { text: `🛡️ ${BUSINESS.years} años de experiencia` },
+    { text: `📍 Oficina ${BUSINESS.city}` },
+    // RNT is legally required in Colombian travel advertising: highlighted pill
+    { text: `📋 RNT ${BUSINESS.rnt}`, highlight: true },
   ];
 
   return (
     <section
       aria-label="Respaldo de Viajes Aqua Travel"
-      className="border-b border-slate-200 bg-white"
+      className="relative z-10 -mt-12 bg-[linear-gradient(to_bottom,transparent_50%,#F4F6F9_50%)] px-6 md:-mt-14"
     >
-      <ul className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-3 px-6 py-5 text-center text-sm font-bold text-[#0B2545] md:flex-row md:gap-0 md:text-base">
-        {items.map((text, i) => (
+      <ul className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-5 text-center text-sm font-bold text-[#0B2545] shadow-xl md:flex-row md:gap-0 md:py-6 md:text-base">
+        {items.map(({ text, highlight }, i) => (
           <li
             key={text}
-            className={`md:px-8 ${
-              i > 0 ? "md:border-l md:border-slate-300" : ""
+            className={`md:flex-1 md:px-6 ${
+              i > 0 ? "md:border-l md:border-slate-200" : ""
             }`}
           >
-            {text}
+            {highlight ? (
+              <span className="inline-block rounded-full bg-[#0B2545] px-4 py-1.5 text-white">
+                {text}
+              </span>
+            ) : (
+              text
+            )}
           </li>
         ))}
       </ul>
@@ -228,89 +349,110 @@ function TrustBar() {
   );
 }
 
-function VolumeSection() {
-  return (
-    <section id="escapadas" className="bg-[#F4F6F9] py-20 md:py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl font-extrabold tracking-tight text-[#0B2545] md:text-4xl">
-            Escapadas y Todo Incluido
-          </h2>
-          <p className="mt-3 text-lg text-slate-600">
-            Paquetes listos para salir pronto, con todo resuelto.
-          </p>
-        </div>
+function CategorySection({ category, isFirst }) {
+  const theme = THEMES[category.theme];
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {volumeProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function HighTicketSection() {
-  return (
-    <section id="viajes-2027" className="bg-[#07182E] py-20 md:py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="max-w-2xl">
-          <h2 className="text-3xl font-extrabold tracking-tight text-white md:text-4xl">
-            Los viajes de tu vida: 2027
-          </h2>
-          <p className="mt-3 text-lg text-white/70">
-            Itinerarios diseñados contigo, con acompañamiento desde la
-            cotización hasta el regreso.
-          </p>
-        </div>
-
-        <div className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-          {highTicketProducts.map((product) => (
-            <ProductCard key={product.id} product={product} dark />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AquaWomanBanner() {
   return (
     <section
-      id="aqua-woman"
-      className="bg-[#D9F0EC]"
+      id={category.id}
+      className={`${theme.section} ${
+        isFirst ? "pb-20 pt-16 md:pb-28 md:pt-20" : "py-20 md:py-28"
+      }`}
+    >
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="max-w-2xl">
+          <h2
+            className={`text-3xl font-extrabold tracking-tight md:text-4xl ${theme.title}`}
+          >
+            {SECTION_TITLES[category.id] ?? category.title}
+          </h2>
+          <p className={`mt-3 text-lg ${theme.subtitle}`}>{category.subtitle}</p>
+        </div>
+
+        <div className={`mt-12 grid gap-8 ${category.gridClass}`}>
+          {category.products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              category={category}
+              dark={theme.dark}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Aqua Woman: full-width banner that bridges traffic to the brand's profile. */
+function AquaWomanBanner({ category }) {
+  const product = category.products[0];
+  const { value, code } = formatPriceParts(product.price);
+
+  return (
+    <section
+      id={category.id}
       aria-labelledby="aqua-woman-title"
+      className="bg-gradient-to-br from-[#D9F0EC] via-[#CDEDE8] to-[#BFE6F0]"
     >
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-2 md:py-28">
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#0B2545]/20 px-4 py-1.5 text-sm font-semibold text-[#0B2545]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#0B2545]/20 bg-white/50 px-4 py-1.5 text-sm font-semibold text-[#0B2545] backdrop-blur-md">
             <Flower2 className="h-4 w-4" aria-hidden="true" />
-            Retiros terapéuticos para mujeres
+            {category.subtitle}
           </span>
           <h2
             id="aqua-woman-title"
             className="mt-5 text-3xl font-extrabold tracking-tight text-[#0B2545] md:text-5xl"
           >
-            Aqua Woman Experience
+            {SECTION_TITLES[category.id] ?? category.title}
           </h2>
           <p className="mt-4 max-w-lg text-lg text-[#0B2545]/80">
-            Un viaje para volver a ti: descanso, bienestar y compañía de otras
-            mujeres, organizado por el equipo en el que ya confían.
+            {product.tagline}
           </p>
 
+          <div className="mt-6">
+            <p className="text-sm font-semibold text-[#0B2545]/70">
+              {product.destination} · Desde
+            </p>
+            <p className="text-4xl font-extrabold tracking-tight text-[#0B2545]">
+              {value}{" "}
+              <span className="text-base font-semibold text-[#0B2545]/70">
+                {code}
+              </span>
+            </p>
+          </div>
+
           <WhatsAppButton
-            href={buildWhatsAppLink(WHATSAPP_NUMBERS.aqua, AQUA_WOMAN_MESSAGE)}
+            href={buildWhatsAppLink(
+              WHATSAPP_NUMBERS[category.whatsapp],
+              product.whatsappMessage
+            )}
             className="mt-8 w-full px-8 py-4 sm:w-auto"
           >
-            Quiero información de Aqua Woman
+            Quiero información del retiro
           </WhatsAppButton>
+
+          <a
+            href={AQUA_WOMAN_SOCIAL.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#0B2545] underline underline-offset-4"
+          >
+            Conoce la comunidad en {AQUA_WOMAN_SOCIAL.handle}
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
 
-        <div className="aspect-[4/3] overflow-hidden rounded-2xl">
+        <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+          <FloatingBadge
+            label={category.badge.label}
+            gradient={category.badge.gradient}
+          />
           <ImagePlaceholder
-            alt="Mujeres compartiendo un retiro de bienestar al aire libre"
-            label="Aqua Woman Experience"
+            src={product.image}
+            alt={product.imageAlt}
+            label={product.destination}
             tone="bg-[#B8E0D9] text-[#0B2545]/60"
           />
         </div>
@@ -323,8 +465,9 @@ function Footer() {
   return (
     <footer className="bg-[#0B2545] px-6 py-10 text-center text-sm text-white/70">
       <p className="font-semibold text-white">{BUSINESS.name}</p>
-      <p className="mt-1">
-        {BUSINESS.location} · RNT {BUSINESS.rnt}
+      <p className="mt-1">Oficina física en {BUSINESS.location}</p>
+      <p className="mt-3 text-base font-bold text-white">
+        RNT {BUSINESS.rnt}
       </p>
     </footer>
   );
@@ -335,9 +478,17 @@ export default function Home() {
     <main>
       <Hero />
       <TrustBar />
-      <VolumeSection />
-      <HighTicketSection />
-      <AquaWomanBanner />
+      {catalog.map((category, index) =>
+        category.id === "aqua-woman" ? (
+          <AquaWomanBanner key={category.id} category={category} />
+        ) : (
+          <CategorySection
+            key={category.id}
+            category={category}
+            isFirst={index === 0}
+          />
+        )
+      )}
       <Footer />
     </main>
   );

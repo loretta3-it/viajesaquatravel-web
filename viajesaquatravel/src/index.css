@@ -33,17 +33,20 @@
     max-width: 100%;
     height: auto;
   }
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
+/*
+ * No custom keyframes needed: the WhatsApp icon pulse uses Tailwind's
+ * built-in `animate-pulse`, turned off with `motion-reduce:animate-none`.
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 
-    *,
-    *::before,
-    *::after {
-      transition-duration: 0.01ms !important;
-      animation-duration: 0.01ms !important;
-    }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
   }
 }
