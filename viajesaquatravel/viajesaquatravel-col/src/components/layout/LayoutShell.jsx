@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MapPin, ShieldCheck } from 'lucide-react';
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from 'react-icons/fa6';
 import { siteConfig } from '../../config/siteConfig';
@@ -11,21 +12,21 @@ export default function LayoutShell({ children }) {
       {/* Navbar Oscuro Translúcido */}
       <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <img src="/logo-circle.png" alt="Logo Aqua Travel" className="h-10 w-auto object-contain" />
             <div>
               <h1 className="text-xl font-bold tracking-tight text-white">{siteConfig.agency.name}</h1>
               <p className="text-xs text-slate-400 font-medium tracking-wide">RNT: {siteConfig.agency.rnt}</p>
             </div>
-          </div>
+          </Link>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <a href="#destinos" className="hover:text-white transition-colors">Destinos</a>
-            <a 
-              href="#aqua-woman" 
+            <a href="/#destinos" className="hover:text-white transition-colors">Destinos</a>
+            <Link 
+              to="/aquawoman" 
               className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-4 py-2 rounded-full font-bold transition-all shadow-md shadow-pink-500/20"
             >
               Aqua Woman
-            </a>
+            </Link>
           </nav>
         </div>
       </header>
@@ -39,10 +40,10 @@ export default function LayoutShell({ children }) {
       <footer className="bg-slate-900 border-t border-slate-800 py-12 mt-16">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
+            <Link to="/" className="flex items-center gap-3 mb-4 hover:opacity-80 transition-opacity">
               <img src="/logo-circle.png" alt="Logo Aqua Travel" className="h-12 w-auto object-contain" />
               <h3 className="font-bold text-lg text-white">{siteConfig.agency.name}</h3>
-            </div>
+            </Link>
             <p className="text-slate-400 text-sm mb-2">{siteConfig.agency.experienceYears} años creando experiencias inolvidables.</p>
             <div className="flex items-center gap-2 text-slate-400 text-sm mt-4">
               <ShieldCheck size={16} className="text-[#25D366]" />

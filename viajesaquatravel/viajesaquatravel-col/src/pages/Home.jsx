@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
 import { ShieldCheck, Star, ArrowRight, PlaneTakeoff, HeartHandshake } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
@@ -268,15 +269,13 @@ export default function Home() {
           </div>
           
           <div className="relative z-10 flex-shrink-0">
-            <a 
-              href={siteConfig.businessLines.aquaWoman.link}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link 
+              to="/aquawoman"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white rounded-full font-bold transition-all shadow-lg shadow-pink-500/30"
             >
               Descubrir Experiencias
               <ArrowRight size={20} />
-            </a>
+            </Link>
           </div>
         </div>
       </section>
