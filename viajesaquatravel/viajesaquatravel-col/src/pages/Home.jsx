@@ -187,7 +187,7 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* Botón WhatsApp Alta Conversión (Contraste WCAG & Efecto Ping) */}
+              {/* Botón WhatsApp Alta Conversión */}
               <button 
                 type="submit"
                 className="w-full mt-6 flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] px-6 py-4 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)] group overflow-hidden"

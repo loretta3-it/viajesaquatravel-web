@@ -1,33 +1,20 @@
-import { FaWhatsapp } from "react-icons/fa6";
-
-const WA_NUMBER = "57XXXXXXXXXX"; // replace with the real number, no "+"
-const WA_MESSAGE = "Hola Aqua Travel, quiero información sobre un viaje.";
+import React from 'react';
+import { FaWhatsapp } from 'react-icons/fa6';
+import { siteConfig } from '../../config/siteConfig';
 
 export default function WhatsAppFab() {
-  const href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+  const whatsappUrl = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent('Hola Viajes Aqua Travel, me gustaría recibir asesoría general.')}`;
 
   return (
     <a
-      href={href}
+      href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Escríbenos por WhatsApp"
-      className="group fixed right-5 z-50 bottom-[calc(1.25rem+env(safe-area-inset-bottom))]
-                 flex h-14 items-center gap-2 rounded-full bg-[#25D366] pl-4 pr-4
-                 text-[#0B1220] font-semibold shadow-[0_0_24px_rgba(37,211,102,0.35)]
-                 transition-all duration-300 hover:brightness-110 hover:shadow-[0_0_32px_rgba(37,211,102,0.55)]
-                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white
-                 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B1220]"
+      className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#1DA851] text-white p-4 rounded-full shadow-xl shadow-green-900/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center group"
+      aria-label="Contactar por WhatsApp"
     >
-      <span className="relative flex h-6 w-6 flex-shrink-0 items-center justify-center">
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 rounded-full bg-[#0B1220]/25 opacity-0
-                     motion-safe:group-hover:animate-ping"
-        />
-        <FaWhatsapp className="relative h-6 w-6" aria-hidden="true" />
-      </span>
-      <span className="hidden sm:inline text-sm">Cotiza por WhatsApp</span>
+      <div className="absolute inset-0 rounded-full border-2 border-[#25D366] animate-ping opacity-75"></div>
+      <FaWhatsapp size={28} className="relative z-10" />
     </a>
   );
 }

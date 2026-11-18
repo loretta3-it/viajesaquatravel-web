@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, ShieldCheck } from 'lucide-react';
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from 'react-icons/fa6';
 import { siteConfig } from '../../config/siteConfig';
+import WhatsAppFab from '../ui/WhatsAppFab';
 
 export default function LayoutShell({ children }) {
   const whatsappUrl = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent('Hola Viajes Aqua Travel, me gustaría recibir asesoría general.')}`;
@@ -89,16 +90,8 @@ export default function LayoutShell({ children }) {
         </div>
       </footer>
 
-      {/* Botón Flotante WhatsApp */}
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#1DA851] text-white p-4 rounded-full shadow-xl shadow-green-900/20 hover:scale-110 transition-transform flex items-center justify-center"
-        aria-label="Contactar por WhatsApp"
-      >
-        <FaWhatsapp size={28} />
-      </a>
+      {/* Botón Flotante WhatsApp Modular */}
+      <WhatsAppFab />
     </div>
   );
 }
