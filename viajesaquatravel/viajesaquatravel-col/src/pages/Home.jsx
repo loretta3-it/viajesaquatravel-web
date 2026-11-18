@@ -5,8 +5,7 @@ import { ShieldCheck, Star, ArrowRight, PlaneTakeoff, HeartHandshake } from 'luc
 import { FaWhatsapp } from 'react-icons/fa6';
 import ProductModal from '../components/ui/ProductModal';
 import HeroCarousel from '../components/ui/HeroCarousel';
-
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
+import PackageCard from '../components/ui/PackageCard';
 
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -55,6 +54,7 @@ export default function Home() {
         onOpenModal={setSelectedProduct} 
       />
 
+      {/* Why Choose Us & Trust Bar */}
       <section className="relative z-20 -mt-16 max-w-7xl mx-auto px-4 mb-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl backdrop-blur-md flex flex-col items-center text-center">
@@ -100,48 +100,13 @@ export default function Home() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {lineProducts.map((product) => (
-                  <div 
-                    key={product.id} 
-                    className="group flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-slate-700 transition-all duration-300 cursor-pointer"
-                    onClick={() => setSelectedProduct(product)}
-                  >
-                    <div className="relative h-56 overflow-hidden">
-                      <img 
-                        src={product.image} 
-                        alt={product.title}
-                        onError={(e) => { e.target.src = FALLBACK_IMAGE; }}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-md ${getCategoryColor(product.businessLine)}`}>
-                          {lineData.name}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="p-6 flex flex-col flex-grow">
-                      <h3 className="text-xl font-bold text-white mb-2">{product.title}</h3>
-                      <div className="flex gap-2 mb-6 flex-wrap">
-                        {product.features.map((feature, idx) => (
-                          <span key={idx} className="text-xs text-slate-400 bg-slate-950 px-2 py-1 rounded-md border border-slate-800">
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
-                      
-                      <div className="mt-auto pt-4 border-t border-slate-800 flex items-center justify-between">
-                        <div>
-                          <span className="block text-xs text-slate-400 mb-1">Precio</span>
-                          <span className="text-lg font-bold text-white">
-                            {product.price.includes('consultar') ? product.price : `$${product.price}`}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 text-white transition-colors group-hover:scale-110">
-                          <ArrowRight size={20} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <PackageCard 
+                    key={product.id}
+                    product={product}
+                    onClick={setSelectedProduct}
+                    categoryName={lineData.name}
+                    categoryColor={getCategoryColor(product.businessLine)}
+                  />
                 ))}
               </div>
             </div>
@@ -221,12 +186,17 @@ export default function Home() {
                   />
                 </div>
               </div>
+              
+              {/* Botón WhatsApp Alta Conversión (Contraste WCAG & Efecto Ping) */}
               <button 
                 type="submit"
-                className="w-full mt-4 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white px-6 py-4 rounded-xl font-bold transition-all shadow-lg shadow-green-900/20"
+                className="w-full mt-6 flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] px-6 py-4 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:shadow-[0_0_30px_rgba(37,211,102,0.5)] group overflow-hidden"
               >
-                <FaWhatsapp size={20} />
-                Enviar a WhatsApp
+                <div className="relative flex items-center justify-center">
+                  <span className="animate-ping absolute inline-flex h-10 w-10 rounded-full bg-[#04210f] opacity-20"></span>
+                  <FaWhatsapp size={22} className="relative z-10" />
+                </div>
+                <span className="relative z-10 text-lg">Enviar a WhatsApp</span>
               </button>
             </form>
           </div>
