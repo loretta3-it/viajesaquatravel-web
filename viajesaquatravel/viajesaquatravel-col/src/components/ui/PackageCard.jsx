@@ -1,54 +1,67 @@
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { FaWhatsapp } from "react-icons/fa6";
+import { MapPin } from "lucide-react";
 
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
+const WA_NUMBER = "57XXXXXXXXXX";
 
-export default function PackageCard({ product, onClick, categoryName, categoryColor }) {
+export default function PackageCard({ title, destination, price, badge, image, alt }) {
+  const message = `Hola Aqua Travel, quiero cotizar el paquete: ${title}.`;
+  const href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+
   return (
-    <div 
-      onClick={() => onClick(product)}
-      className="group relative flex flex-col bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:shadow-[0_8px_32px_rgba(37,211,102,0.15)] hover:border-white/20 hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+    <article
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10
+                 bg-[#0F1A2E] transition-all duration-300
+                 motion-safe:hover:-translate-y-1 hover:border-teal-400/40
+                 hover:shadow-[0_12px_40px_-12px_rgba(45,212,191,0.35)]"
     >
-      {/* Sheen Effect Superior */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent z-20"></div>
-
-      <div className="relative h-56 overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors duration-500 z-10 pointer-events-none"></div>
-        <img 
-          src={product.image} 
-          alt={product.title}
-          onError={(e) => { e.target.src = FALLBACK_IMAGE; }}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" 
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img
+          src={image}
+          alt={alt ?? title}
+          loading="lazy"
+          decoding="async"
+          width="800"
+          height="600"
+          className="h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
         />
-        <div className="absolute top-4 left-4 z-20">
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-md shadow-sm ${categoryColor}`}>
-            {categoryName}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-t from-[#0F1A2E] via-[#0F1A2E]/50 to-transparent"
+        />
+        {badge && (
+          <span className="absolute left-3 top-3 rounded-full bg-[#0B1220]/85 px-3 py-1 text-xs
+                           font-semibold text-teal-300 ring-1 ring-teal-300/30 backdrop-blur-sm">
+            {badge}
           </span>
-        </div>
+        )}
       </div>
-      
-      <div className="p-6 flex flex-col flex-grow relative z-10 bg-gradient-to-b from-transparent to-slate-950/50">
-        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">{product.title}</h3>
-        <div className="flex gap-2 mb-6 flex-wrap">
-          {product.features.map((feature, idx) => (
-            <span key={idx} className="text-xs text-slate-300 bg-white/5 px-2 py-1 rounded-md border border-white/10">
-              {feature}
-            </span>
-          ))}
-        </div>
-        
-        <div className="mt-auto pt-4 border-t border-white/10 flex items-center justify-between">
-          <div>
-            <span className="block text-xs text-slate-400 mb-1">Precio</span>
-            <span className="text-lg font-bold text-white">
-              {product.price.includes('consultar') ? product.price : `$${product.price}`}
-            </span>
-          </div>
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600/80 backdrop-blur-sm hover:bg-blue-500 text-white transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(37,136,229,0.5)]">
-            <ArrowRight size={20} />
-          </div>
-        </div>
+
+      <div className="flex flex-1 flex-col gap-3 p-5">
+        <p className="flex items-center gap-1.5 text-sm text-white/70">
+          <MapPin className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          {destination}
+        </p>
+        <h3 className="text-lg font-semibold leading-snug text-white">{title}</h3>
+        {price && (
+          <p className="text-sm text-white/70">
+            Desde <span className="text-base font-semibold text-white">{price}</span>
+          </p>
+        )}
+
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-auto inline-flex h-12 items-center justify-center gap-2 rounded-xl
+                     bg-[#25D366] px-4 font-semibold text-[#0B1220] transition-all duration-200
+                     hover:brightness-110 active:scale-[0.98]
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white
+                     focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F1A2E]"
+        >
+          <FaWhatsapp className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+          Cotizar este paquete
+        </a>
       </div>
-    </div>
+    </article>
   );
 }
