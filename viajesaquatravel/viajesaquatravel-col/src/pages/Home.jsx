@@ -36,7 +36,7 @@ export default function Home() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const { nombre, destino, fechas, personas } = formData;
-    const msg = `Hola Aqua Travel, soy ${nombre}. Solicito cotización para viajar a ${destino}. Fechas estimadas: ${fechas}. Número de personas: ${personas}.`;
+    const msg = `Hola AquaTravel, soy ${nombre}. Solicito cotización para viajar a ${destino}. Fechas estimadas: ${fechas}. Número de personas: ${personas}.`;
     const url = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
   };
@@ -221,7 +221,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Aqua Woman Traffic Bridge */}
+      {/* AquaWoman Traffic Bridge */}
       <section id="aqua-woman" className="max-w-7xl mx-auto px-4 md:px-8 mb-24">
         <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 group">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-pink-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>

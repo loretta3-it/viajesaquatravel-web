@@ -11,7 +11,7 @@ export default function AquaWoman() {
   }, []);
 
   const getWhatsAppLink = () => {
-    const msg = `Hola Aqua Travel, quiero más información sobre el retiro "${aquaWomanData.retreat.title}" de Aqua Woman.`;
+    const msg = `Hola AquaTravel, quiero más información sobre el retiro "${aquaWomanData.retreat.title}" de AquaWoman.`;
     return `https://wa.me/${agency.whatsappNumber}?text=${encodeURIComponent(msg)}`;
   };
 
@@ -22,7 +22,7 @@ export default function AquaWoman() {
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
-            alt="Aqua Woman Hero" 
+            alt="AquaWoman Hero" 
             className="w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-purple-900/60 via-rose-900/40 to-stone-50"></div>
@@ -175,7 +175,7 @@ export default function AquaWoman() {
       {/* Footer Minimalista Local (Opcional si el LayoutShell lo cubre, pero mejora la transición) */}
       <div className="bg-stone-100 py-12 text-center border-t border-stone-200">
         <Leaf className="w-8 h-8 text-rose-300 mx-auto mb-4" />
-        <p className="text-stone-500 text-sm">Aqua Woman es una experiencia respaldada por Viajes Aqua Travel.</p>
+        <p className="text-stone-500 text-sm">AquaWoman es una experiencia respaldada por Viajes AquaTravel.</p>
       </div>
     </div>
   );

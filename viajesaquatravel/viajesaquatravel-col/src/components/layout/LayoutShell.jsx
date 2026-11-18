@@ -6,7 +6,7 @@ import { siteConfig } from '../../config/siteConfig';
 import WhatsAppFab from '../ui/WhatsAppFab';
 
 export default function LayoutShell({ children }) {
-  const whatsappUrl = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent('Hola Viajes Aqua Travel, me gustaría recibir asesoría general.')}`;
+  const whatsappUrl = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent('Hola Viajes AquaTravel, me gustaría recibir asesoría general.')}`;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans flex flex-col">
@@ -14,7 +14,7 @@ export default function LayoutShell({ children }) {
       <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <img src="/logo-circle.png" alt="Logo Aqua Travel" className="h-10 w-auto object-contain" />
+            <img src="/logo-circle.png" alt="Logo AquaTravel" className="h-10 w-auto object-contain" />
             <div>
               <h1 className="text-xl font-bold tracking-tight text-white">{siteConfig.agency.name}</h1>
               <p className="text-xs text-slate-400 font-medium tracking-wide">RNT: {siteConfig.agency.rnt}</p>
@@ -26,7 +26,7 @@ export default function LayoutShell({ children }) {
               to="/aquawoman" 
               className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-4 py-2 rounded-full font-bold transition-all shadow-md shadow-pink-500/20"
             >
-              Aqua Woman
+              AquaWoman
             </Link>
           </nav>
         </div>
@@ -42,7 +42,7 @@ export default function LayoutShell({ children }) {
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <Link to="/" className="flex items-center gap-3 mb-4 hover:opacity-80 transition-opacity">
-              <img src="/logo-circle.png" alt="Logo Aqua Travel" className="h-12 w-auto object-contain" />
+              <img src="/logo-circle.png" alt="Logo AquaTravel" className="h-12 w-auto object-contain" />
               <h3 className="font-bold text-lg text-white">{siteConfig.agency.name}</h3>
             </Link>
             <p className="text-slate-400 text-sm mb-2">{siteConfig.agency.experienceYears} años creando experiencias inolvidables.</p>

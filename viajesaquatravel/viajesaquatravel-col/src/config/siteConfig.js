@@ -1,6 +1,6 @@
 export const siteConfig = {
   agency: {
-    name: "Viajes Aqua Travel",
+    name: "Viajes AquaTravel",
     experienceYears: 9,
     rnt: "115795",
     location: "Zipacentro, Zipaquirá, Colombia",
@@ -13,7 +13,7 @@ export const siteConfig = {
     margin: { id: "margin", name: "Destinos Bucket List", desc: "Viajes de alto impacto y experiencias globales únicas." },
     aquaWoman: { 
       id: "aquaWoman", 
-      name: "Aqua Woman", 
+      name: "AquaWoman", 
       desc: "Experiencia Femenina",
       link: "https://www.instagram.com/aquawomanexperience/"
     }
@@ -30,7 +30,7 @@ export const siteConfig = {
         "Alojamiento en eco-hotel boutique exclusivo",
         "Alimentación consciente (Todas las comidas)",
         "Talleres de sanación de linaje y empoderamiento",
-        "Kit de bienvenida Aqua Woman",
+        "Kit de bienvenida AquaWoman",
         "Transporte privado ida y regreso desde Bogotá"
       ],
       itinerary: [
@@ -221,7 +221,7 @@ export const siteConfig = {
       importantNotes: ["Fechas: 29 abr al 03 may 2027", "Precios sujetos a variaciones del evento", "Requiere Visa Americana vigente"]
     },
 
-    // AQUA WOMAN (aquaWoman)
+    // AquaWoman (aquaWoman)
     {
       id: "aw-01", title: "Retiro: El Legado de Ser Mujer", businessLine: "aquaWoman", price: "1.999.000 COP",
       image: "https://images.unsplash.com/photo-1528605105345-5344ea20e269?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
@@ -234,7 +234,7 @@ export const siteConfig = {
   testimonials: [
     {
       id: 1, name: "Laura Martínez", rating: 5,
-      text: "Viajamos a Punta Cana en familia y la asesoría de Aqua Travel fue espectacular. Se encargaron de cada detalle."
+      text: "Viajamos a Punta Cana en familia y la asesoría de AquaTravel fue espectacular. Se encargaron de cada detalle."
     },
     {
       id: 2, name: "Carlos Gómez", rating: 5,
@@ -242,7 +242,7 @@ export const siteConfig = {
     },
     {
       id: 3, name: "Diana Rodríguez", rating: 5,
-      text: "El retiro de Aqua Woman me cambió la vida. Una experiencia de conexión profunda impecablemente organizada."
+      text: "El retiro de AquaWoman me cambió la vida. Una experiencia de conexión profunda impecablemente organizada."
     }
   ]
 };

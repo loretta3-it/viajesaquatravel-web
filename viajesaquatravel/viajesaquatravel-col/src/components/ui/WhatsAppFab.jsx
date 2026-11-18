@@ -3,7 +3,7 @@ import { FaWhatsapp } from 'react-icons/fa6';
 import { siteConfig } from '../../config/siteConfig';
 
 export default function WhatsAppFab() {
-  const whatsappUrl = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent('Hola Viajes Aqua Travel, me gustaría recibir asesoría general.')}`;
+  const whatsappUrl = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent('Hola Viajes AquaTravel, me gustaría recibir asesoría general.')}`;
 
   return (
     <a
