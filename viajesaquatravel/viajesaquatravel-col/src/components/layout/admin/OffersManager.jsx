@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { collection, onSnapshot, doc, updateDoc, query } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
-import { AlertCircle, Tag, Search, Sparkles } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
+import { logAdminAction } from '../../../utils/auditLogger';
+import { AlertCircle, Tag, Search, Sparkles, Edit2 } from 'lucide-react';
+import EditOfferModal from '../../admin/EditOfferModal';
 
 export default function OffersManager() {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingOffer, setEditingOffer] = useState(null);
+
+  const { currentUser } = useAuth();
 
   // Suscripción en tiempo real a la colección de ofertas
   useEffect(() => {
@@ -28,13 +34,22 @@ export default function OffersManager() {
     return () => unsubscribe();
   }, []);
 
-  // Actualización directa a Firestore (Toggle)
+  // Actualización directa a Firestore (Toggle) con Auditoría
   const toggleOfferStatus = async (offerId, currentStatus) => {
+    const newStatus = !currentStatus;
     try {
       const offerRef = doc(db, 'offers', offerId);
       await updateDoc(offerRef, {
-        isActive: !currentStatus
+        isActive: newStatus
       });
+      
+      await logAdminAction(
+        'TOGGLE_STATUS', 
+        'offers', 
+        offerId, 
+        currentUser?.email, 
+        { isActive: newStatus }
+      );
     } catch (err) {
       console.error("Error actualizando estado:", err);
       alert("No se pudo actualizar el estado de la oferta.");
@@ -42,7 +57,7 @@ export default function OffersManager() {
   };
 
   const filteredOffers = offers.filter(offer => 
-    offer.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    offer.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
     offer.destination?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -56,7 +71,7 @@ export default function OffersManager() {
             <Sparkles className="text-yellow-500" size={28} />
             Campaña Black Days
           </h1>
-          <p className="text-slate-400">Gestiona el inventario y visibilidad de las ofertas promocionales.</p>
+          <p className="text-slate-400">Gestiona el inventario, precios y visibilidad de las ofertas promocionales.</p>
         </div>
         
         {/* Barra de búsqueda */}
@@ -89,7 +104,7 @@ export default function OffersManager() {
                 <th className="px-6 py-4">Precio (Desc.)</th>
                 <th className="px-6 py-4">Etiqueta</th>
                 <th className="px-6 py-4">Expiración</th>
-                <th className="px-6 py-4 text-center">Estado (Público)</th>
+                <th className="px-6 py-4 text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
@@ -138,30 +153,39 @@ export default function OffersManager() {
                       {offer.validUntil ? new Date(offer.validUntil).toLocaleDateString() : 'N/A'}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex justify-center">
-                        {/* Toggle Switch Component */}
+                      <div className="flex items-center justify-center gap-4">
+                        {/* Botón Editar */}
                         <button
-                          type="button"
-                          onClick={() => toggleOfferStatus(offer.id, offer.isActive)}
-                          className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                            offer.isActive ? 'bg-yellow-500' : 'bg-slate-700'
-                          }`}
-                          role="switch"
-                          aria-checked={offer.isActive}
+                          onClick={() => setEditingOffer(offer)}
+                          className="p-2 text-slate-400 hover:text-yellow-400 hover:bg-yellow-400/10 rounded-lg transition-colors"
+                          title="Editar oferta"
                         >
-                          <span className="sr-only">Toggle Oferta</span>
-                          <span
-                            aria-hidden="true"
-                            className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                              offer.isActive ? 'translate-x-5' : 'translate-x-0'
-                            }`}
-                          />
+                          <Edit2 size={18} />
                         </button>
-                      </div>
-                      <div className="text-center mt-1">
-                        <span className={`text-[10px] uppercase font-bold tracking-wider ${offer.isActive ? 'text-yellow-500' : 'text-slate-500'}`}>
-                          {offer.isActive ? 'Activa' : 'Inactiva'}
-                        </span>
+                        
+                        {/* Toggle Switch Component */}
+                        <div className="flex flex-col items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => toggleOfferStatus(offer.id, offer.isActive)}
+                            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                              offer.isActive ? 'bg-yellow-500' : 'bg-slate-700'
+                            }`}
+                            role="switch"
+                            aria-checked={offer.isActive}
+                          >
+                            <span className="sr-only">Toggle Oferta</span>
+                            <span
+                              aria-hidden="true"
+                              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                offer.isActive ? 'translate-x-5' : 'translate-x-0'
+                              }`}
+                            />
+                          </button>
+                          <span className={`text-[10px] uppercase font-bold tracking-wider ${offer.isActive ? 'text-yellow-500' : 'text-slate-500'}`}>
+                            {offer.isActive ? 'Activa' : 'Inactiva'}
+                          </span>
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -171,6 +195,14 @@ export default function OffersManager() {
           </table>
         </div>
       </div>
+
+      {/* Renderizado Condicional del Modal */}
+      {editingOffer && (
+        <EditOfferModal 
+          offer={editingOffer} 
+          onClose={() => setEditingOffer(null)} 
+        />
+      )}
     </div>
   );
 }

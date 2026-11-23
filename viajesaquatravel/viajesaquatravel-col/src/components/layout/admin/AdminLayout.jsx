@@ -22,7 +22,7 @@ export default function AdminLayout() {
  const navItems = [
   { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
   { name: 'Ofertas Black Friday', path: '/admin/offers', icon: <Tag size={20} /> },
-  { name: 'Catálogo', path: '/admin/catalog', icon: <></> },
+  { name: 'Catálogo', path: '/admin/catalog', icon: <Map size={20} /> },
 ];
 
   return (

@@ -14,33 +14,27 @@ import BlackFriday from './pages/BlackFriday.jsx';
 import Login from './components/admin/Login.jsx';
 import ProtectedRoute from './components/admin/ProtectedRoute.jsx';
 import AdminLayout from './components/layout/admin/AdminLayout.jsx';
+import Dashboard from './pages/admin/Dashboard.jsx'; // <-- NUEVA IMPORTACIÓN DEL DASHBOARD
 import OffersManager from './components/layout/admin/OffersManager.jsx';
 import DataMigrator from './components/layout/admin/DataMigrator.jsx';
+import CatalogManager from './pages/admin/CatalogManager.jsx';
 
 function App() {
-  console.log("🛠️ DEBUG [App] - Inicializando árbol de rutas...");
-
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          {/* ============================== */}
-          {/* RUTAS PÚBLICAS (Con Layout) */}
-          {/* ============================== */}
+          {/* RUTAS PÚBLICAS */}
           <Route path="/" element={<LayoutShell><Home /></LayoutShell>} />
           <Route path="/aquawoman" element={<LayoutShell><AquaWoman /></LayoutShell>} />
           <Route path="/black-friday" element={<LayoutShell><BlackFriday /></LayoutShell>} />
           <Route path="/terminos-y-condiciones" element={<LayoutShell><Terms /></LayoutShell>} />
           <Route path="/politicas-de-privacidad" element={<LayoutShell><Privacy /></LayoutShell>} />
 
-          {/* ============================== */}
-          {/* RUTA DE LOGIN (Sin Layout) */}
-          {/* ============================== */}
+          {/* RUTA DE LOGIN */}
           <Route path="/admin/login" element={<Login />} />
           
-          {/* ============================== */}
           {/* RUTAS CMS / ADMIN ANIDADAS */}
-          {/* ============================== */}
           <Route 
             path="/admin" 
             element={
@@ -49,18 +43,19 @@ function App() {
               </ProtectedRoute>
             }
           >
-            {/* Redirección automática de /admin a /admin/dashboard */}
             <Route index element={<Navigate to="dashboard" replace />} />
             
-            {/* El Outlet de AdminLayout renderizará estos componentes */}
-            <Route path="dashboard" element={<OffersManager />} />
+            {/* PANEL GERENCIAL */}
+            <Route path="dashboard" element={<Dashboard />} />
+            
+            {/* GESTOR DE OFERTAS BLACK FRIDAY */}
             <Route path="offers" element={<OffersManager />} />
             
-            {/* Herramienta temporal de migración */}
-            <Route path="migrator" element={<DataMigrator />} />
+            {/* HERRAMIENTA GESTOR DE CATÁLOGO */}
+            <Route path="catalog" element={<CatalogManager />} />
             
-            {/* Placeholder para futuras secciones */}
-            <Route path="catalog" element={<div className="text-slate-400 p-8">Módulo Catálogo en construcción...</div>} />
+            {/* HERRAMIENTA DE MIGRACIÓN TEMPORAL */}
+            <Route path="migrator" element={<DataMigrator />} />
           </Route>
           
         </Routes>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { MapPin, ShieldCheck, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, ShieldCheck, Phone, Mail, Clock, Lock } from 'lucide-react';
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from 'react-icons/fa6';
 import { siteConfig } from '../../config/siteConfig';
 
@@ -145,6 +145,13 @@ export default function Footer() {
                 </Link>
               </li>
             ))}
+            {/* Nuevo acceso al Portal Empresarial */}
+            <li>
+              <Link to="/admin/login" className="flex items-center gap-2 hover:text-blue-400 transition-colors group">
+                <Lock size={14} className="text-slate-500 group-hover:text-blue-400 transition-colors mt-0.5" />
+                <span>Portal Empresarial</span>
+              </Link>
+            </li>
           </ul>
           
           <div className="mt-auto pt-8">
@@ -162,15 +169,8 @@ export default function Footer() {
 
       </div>
 
-      {/* Derechos de Autor y Acceso Oculto al CMS */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-        <p>
-          &copy; {new Date().getFullYear()}{' '}
-          <Link to="/admin/login" className="outline-none cursor-text hover:text-slate-400 transition-colors">
-            {safeAgency.name}
-          </Link>
-          . Todos los derechos reservados. RNT {safeAgency.rnt}.
-        </p>
+        <p>&copy; {new Date().getFullYear()} {safeAgency.name}. Todos los derechos reservados. RNT {safeAgency.rnt}.</p>
       </div>
     </footer>
   );
