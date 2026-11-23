@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { 
-  LayoutDashboard, 
-  Map, 
-  Tag, 
-  LogOut, 
-  Menu, 
-  X,
-  User
-} from 'lucide-react';
+import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import { useAuth } from "../../../context/AuthContext.jsx";
+import { LayoutDashboard, Map, Tag, LogOut, Menu, X, User } from 'lucide-react';
 
-export default function AdminLayout({ children }) {
+export default function AdminLayout() {
+  console.log("🛠️ DEBUG [AdminLayout] - Renderizando Layout Base del CMS");
+  
   const { currentUser, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -25,12 +19,11 @@ export default function AdminLayout({ children }) {
       console.error("Error al cerrar sesión:", error);
     }
   };
-
-  const navItems = [
-    { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
-    { name: 'Ofertas Black Friday', path: '/admin/offers', icon: <Tag size={20} /> },
-    { name: 'Catálogo', path: '/admin/catalog', icon: <></> },
-  ];
+ const navItems = [
+  { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
+  { name: 'Ofertas Black Friday', path: '/admin/offers', icon: <Tag size={20} /> },
+  { name: 'Catálogo', path: '/admin/catalog', icon: <></> },
+];
 
   return (
     <div className="min-h-screen bg-[#050b14] flex text-slate-300 font-sans">
@@ -66,7 +59,7 @@ export default function AdminLayout({ children }) {
             Gestión Comercial
           </div>
           {navItems.map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname.includes(item.path);
             return (
               <Link
                 key={item.name}
@@ -109,7 +102,8 @@ export default function AdminLayout({ children }) {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden bg-[#050b14] pt-16 lg:pt-0">
         <div className="flex-1 overflow-y-auto p-6 md:p-10">
-          {children}
+          {/* AQUÍ SE INYECTAN LOS COMPONENTES HIJOS (Ej. OffersManager) */}
+          <Outlet /> 
         </div>
       </main>
       

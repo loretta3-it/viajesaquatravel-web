@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { collection, onSnapshot, doc, updateDoc, query } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { db } from '../../../config/firebase';
 import { AlertCircle, Tag, Search, Sparkles } from 'lucide-react';
 
 export default function OffersManager() {
