@@ -4,6 +4,7 @@ import { MapPin, ShieldCheck } from 'lucide-react';
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaTiktok } from 'react-icons/fa6';
 import { siteConfig } from '../../config/siteConfig';
 import WhatsAppFab from '../ui/WhatsAppFab';
+import Footer from './Footer.jsx';
 
 export default function LayoutShell({ children }) {
   const whatsappUrl = `https://wa.me/${siteConfig.agency.whatsappNumber}?text=${encodeURIComponent('Hola Viajes AquaTravel, me gustaría recibir asesoría general.')}`;
@@ -89,7 +90,7 @@ export default function LayoutShell({ children }) {
           </div>
         </div>
       </footer>
-
+<Footer />
       {/* Botón Flotante WhatsApp Modular */}
       <WhatsAppFab />
     </div>

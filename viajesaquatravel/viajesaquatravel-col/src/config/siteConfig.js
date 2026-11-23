@@ -1,12 +1,32 @@
 export const siteConfig = {
   agency: {
-    name: "Viajes AquaTravel",
+    name: "Viajes Aqua Travel",
     experienceYears: 9,
     rnt: "115795",
-    location: "Zipacentro, Zipaquirá, Colombia",
+    addressLine1: "Carrera 10 No. 5-73 oficina 213",
+    addressLine2: "Centro comercial Zipacentro, Segundo piso, Zipaquirá",
+    phone: "601 8826723",
     whatsappNumber: "573043321590",
+    email: "viajesaquatravel@gmail.com",
+    hours: {
+      weekdays: "9am a 6pm",
+      saturday: "9am a 1pm",
+      sundayAndHolidays: "Cerrado"
+    },
     defaultMessage: "Hola, vengo de la página web y quiero más información sobre "
   },
+  policies: [
+    {
+      id: "terms",
+      title: "Términos y Condiciones",
+      path: "/terminos-y-condiciones"
+    },
+    {
+      id: "privacy",
+      title: "Políticas de Privacidad",
+      path: "/politicas-de-privacidad"
+    }
+  ],
   businessLines: {
     volume: { id: "volume", name: "Caribe Todo Incluido", desc: "Las mejores playas de las Américas sin preocupaciones." },
     local: { id: "local", name: "Escapadas por Colombia", desc: "Destinos nacionales imperdibles." },
@@ -46,11 +66,17 @@ export const siteConfig = {
       ]
     }
   },
+  contact: {
+    // ... datos anteriores ...
+    phonePrimary: "601 8826723",
+    whatsappPrimary: "+57 3043321590",
+    email: "viajesaquatravel@gmail.com"
+  },
   catalog: [
     // CARIBE TODO INCLUIDO (volume)
     {
       id: "vol-01", title: "Punta Cana Todo Incluido", businessLine: "volume", price: "A consultar",
-      image: "https://images.unsplash.com/photo-1517400508447-f8dd518b86db?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-1PwLUZwNmJQ?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       features: ["Playa", "Todo Incluido", "Familiar/Pareja"],
       includes: ["Tiquetes aéreos", "Alojamiento en hotel seleccionado", "Alimentación Todo Incluido", "Traslados in/out", "Asistencia médica"],
       notIncludes: ["Excursiones opcionales", "Gastos de índole personal", "Propinas"],

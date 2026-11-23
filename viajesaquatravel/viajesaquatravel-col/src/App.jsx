@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LayoutShell from './components/layout/LayoutShell';
 import Home from './pages/Home';
 import AquaWoman from './pages/AquaWoman';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
 
 function App() {
   return (
@@ -14,6 +16,10 @@ function App() {
           
           {/* Ruta Submarca: Experiencia Femenina Cálida */}
           <Route path="/aquawoman" element={<AquaWoman />} />
+
+          {/* Rutas Estáticas Legales */}
+          <Route path="/terminos-y-condiciones" element={<Terms />} />
+          <Route path="/politicas-de-privacidad" element={<Privacy />} />
         </Routes>
       </LayoutShell>
     </Router>
