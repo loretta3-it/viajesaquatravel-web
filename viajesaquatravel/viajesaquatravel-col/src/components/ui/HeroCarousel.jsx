@@ -1,107 +1,141 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
+import { formatPrice } from '../../utils/price';
 
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
-
-export default function HeroCarousel({ slides, onOpenModal }) {
+export default function HeroCarousel({ slides = [], onSelectSlide, onSelectProduct }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const safeSlides = Array.isArray(slides) ? slides : [];
+  const total = safeSlides.length;
+
   useEffect(() => {
-    if (!slides || slides.length === 0) return;
+    if (total <= 1) return undefined;
     const timer = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 6000); 
+      setCurrentIndex((prev) => (prev + 1) % total);
+    }, 6000);
     return () => clearInterval(timer);
-  }, [slides]);
+  }, [total]);
 
-  const goToPrevious = () => {
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
+  if (total === 0) {
+    return null;
+  }
+
+  const activeIndex = currentIndex >= total ? 0 : currentIndex;
+  const activeSlide = safeSlides[activeIndex];
+
+  // Hotfix compatibilidad V2/V3
+  const slideImage = activeSlide?.media?.[0]?.url || activeSlide?.image || '';
+  const slidePrice =
+    activeSlide?.price !== undefined && activeSlide?.price !== null
+      ? formatPrice(activeSlide.price, activeSlide.currency, activeSlide.priceLabel)
+      : activeSlide?.priceLabel || '';
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
   };
 
-  const goToNext = () => {
-    const isLastSlide = currentIndex === slides.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % total);
   };
 
-  const goToSlide = (slideIndex) => {
-    setCurrentIndex(slideIndex);
+  const handleAction = () => {
+    if (typeof onSelectSlide === 'function') {
+      onSelectSlide(activeSlide);
+    } else if (typeof onSelectProduct === 'function') {
+      onSelectProduct(activeSlide);
+    }
   };
-
-  if (!slides || slides.length === 0) return null;
-
-  const currentSlide = slides[currentIndex];
 
   return (
-    <div className="relative w-full h-[80vh] min-h-[600px] overflow-hidden group">
-      <div 
-        className="w-full h-full flex transition-transform duration-700 ease-in-out"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-      >
-        {slides.map((slide, idx) => (
-          <div key={idx} className="relative w-full h-full flex-shrink-0">
-            <img 
-              src={slide.image} 
-              alt={slide.title} 
-              onError={(e) => { e.target.src = FALLBACK_IMAGE; }}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-slate-900/60"></div>
-            
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 max-w-5xl mx-auto z-10">
-              <span className="inline-block py-1 px-4 rounded-full bg-white/10 border border-white/20 text-sm font-semibold text-white mb-6 backdrop-blur-md uppercase tracking-widest">
-                Viaje Destacado
-              </span>
-              <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight drop-shadow-xl">
-                {slide.title}
-              </h1>
-              <p className="text-2xl md:text-3xl font-light text-slate-200 mb-10 drop-shadow-md">
-                Desde <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-300">{slide.price}</span>
+    <section className="relative w-full h-[520px] md:h-[600px] overflow-hidden bg-slate-900">
+      {slideImage ? (
+        <img
+          src={slideImage}
+          alt={activeSlide?.title || 'Destino destacado Viajes Aqua Travel'}
+          className="w-full h-full object-cover object-center transition-opacity duration-500"
+        />
+      ) : (
+        <div className="w-full h-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+      )}
+
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
+
+      <div className="absolute inset-0 flex items-end">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-14 md:pb-16">
+          <div className="max-w-2xl text-white">
+            {activeSlide?.destination && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-xs font-medium mb-3">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>{activeSlide.destination}</span>
+              </div>
+            )}
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-3">
+              {activeSlide?.title || 'Viajes Aqua Travel'}
+            </h1>
+
+            {(activeSlide?.subtitle || activeSlide?.description) && (
+              <p className="text-sm sm:text-base text-slate-200 mb-5 line-clamp-2">
+                {activeSlide.subtitle || activeSlide.description}
               </p>
-              
-              <button 
-                onClick={() => onOpenModal(slide)}
-                className="flex items-center gap-3 bg-[#25D366] hover:bg-[#1DA851] text-white px-8 py-4 rounded-xl font-bold transition-all hover:scale-105 shadow-xl shadow-green-900/30 text-lg"
-              >
-                Ver Detalles / Cotizar
-                <ArrowRight size={20} />
-              </button>
+            )}
+
+            <div className="flex flex-wrap items-center gap-4">
+              {slidePrice && (
+                <span className="inline-flex items-center px-4 py-2 rounded-xl bg-white/15 backdrop-blur-sm text-white font-semibold text-sm sm:text-base">
+                  Desde {slidePrice}
+                </span>
+              )}
+
+              {(onSelectSlide || onSelectProduct) && (
+                <button
+                  type="button"
+                  onClick={handleAction}
+                  className="px-5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-slate-950 font-semibold text-sm sm:text-base transition cursor-pointer"
+                >
+                  {activeSlide?.ctaLabel || 'Ver detalles'}
+                </button>
+              )}
             </div>
           </div>
-        ))}
+        </div>
       </div>
 
-      <button 
-        onClick={goToPrevious}
-        className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white transition-all opacity-0 group-hover:opacity-100 z-20"
-        aria-label="Anterior"
-      >
-        <ChevronLeft size={28} />
-      </button>
-      <button 
-        onClick={goToNext}
-        className="absolute top-1/2 right-4 md:right-8 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white transition-all opacity-0 group-hover:opacity-100 z-20"
-        aria-label="Siguiente"
-      >
-        <ChevronRight size={28} />
-      </button>
-
-      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20">
-        {slides.map((_, slideIndex) => (
+      {total > 1 && (
+        <>
           <button
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className={`w-3 h-3 rounded-full transition-all ${
-              currentIndex === slideIndex 
-                ? 'bg-[#25D366] scale-125 shadow-[0_0_10px_rgba(37,211,102,0.8)]' 
-                : 'bg-white/50 hover:bg-white/80'
-            }`}
-            aria-label={`Ir al slide ${slideIndex + 1}`}
-          />
-        ))}
-      </div>
-    </div>
+            type="button"
+            onClick={handlePrev}
+            aria-label="Slide anterior"
+            className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-slate-950/50 hover:bg-slate-950/80 text-white backdrop-blur-sm transition cursor-pointer"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleNext}
+            aria-label="Slide siguiente"
+            className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-slate-950/50 hover:bg-slate-950/80 text-white backdrop-blur-sm transition cursor-pointer"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2">
+            {safeSlides.map((slide, idx) => (
+              <button
+                key={slide?.id || idx}
+                type="button"
+                onClick={() => setCurrentIndex(idx)}
+                aria-label={`Ir al slide ${idx + 1}`}
+                className={`h-2 rounded-full transition-all cursor-pointer ${
+                  idx === activeIndex ? 'w-8 bg-white' : 'w-2 bg-white/50 hover:bg-white/80'
+                }`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </section>
   );
 }

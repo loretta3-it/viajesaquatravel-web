@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase local cache & Admin SDK credentials (D5)
+.firebase/
+*-firebase-adminsdk-*.json
+serviceAccountKey*.json

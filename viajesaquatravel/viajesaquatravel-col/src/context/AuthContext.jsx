@@ -1,48 +1,79 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  onAuthStateChanged, 
-  signInWithEmailAndPassword, 
-  signOut 
-} from 'firebase/auth';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
-export const useAuth = () => useContext(AuthContext);
-
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Iniciar sesión
-  const login = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
-
-  // Cerrar sesión
-  const logout = () => {
-    return signOut(auth);
-  };
-
-  // Observador del estado de Firebase Auth
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setLoading(false);
-    });
-    
-    return unsubscribe;
+  const evaluateClaims = useCallback(async (user, forceRefresh = false) => {
+    if (!user) {
+      setIsAdmin(false);
+      return false;
+    }
+    try {
+      const tokenResult = await user.getIdTokenResult(forceRefresh);
+      const hasAdminClaim = tokenResult.claims?.admin === true;
+      setIsAdmin(hasAdminClaim);
+      return hasAdminClaim;
+    } catch {
+      setIsAdmin(false);
+      return false;
+    }
   }, []);
 
-  const value = {
-    currentUser,
-    login,
-    logout
-  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setCurrentUser(user);
+      await evaluateClaims(user, false);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [evaluateClaims]);
+
+  const login = useCallback(
+    async (email, password) => {
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      await evaluateClaims(credential.user, true);
+      return credential;
+    },
+    [evaluateClaims]
+  );
+
+  const logout = useCallback(async () => {
+    await signOut(auth);
+    setIsAdmin(false);
+  }, []);
+
+  const refreshClaims = useCallback(async () => {
+    if (!auth.currentUser) return false;
+    return evaluateClaims(auth.currentUser, true);
+  }, [evaluateClaims]);
 
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider
+      value={{
+        currentUser,
+        isAdmin,
+        loading,
+        login,
+        logout,
+        refreshClaims,
+      }}
+    >
+      {children}
     </AuthContext.Provider>
   );
-};
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error('useAuth debe utilizarse dentro de AuthProvider.');
+  }
+  return ctx;
+}

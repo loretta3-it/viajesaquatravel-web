@@ -1,41 +1,145 @@
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../config/firebase'; // Asegúrate de que la ruta apunte correctamente a firebase.js
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  writeBatch,
+} from 'firebase/firestore';
+// IMPORTANTE: Conserva aquí la ruta exacta de `db` que ya te funcionó en el último build
+import { db } from '../config/firebase';
+import { AUDIT_ACTIONS } from '../schemas/collections';
+
+const LEGACY_ACTION_MAP = {
+  UPDATE_AND_PUBLISH: 'UPDATE',
+  UPDATE_DRAFT: 'UPDATE',
+};
+
+function normalizeActionType(actionType) {
+  const mapped = LEGACY_ACTION_MAP[actionType] || actionType;
+  if (!AUDIT_ACTIONS.includes(mapped)) {
+    throw new Error(
+      `actionType inválido "${actionType}". Permitidos: ${AUDIT_ACTIONS.join(', ')}`
+    );
+  }
+  return mapped;
+}
 
 /**
- * Registra las acciones administrativas en la colección audit_logs de Firestore para mantener trazabilidad.
- * 
- * @param {string} actionType - Tipo de acción (ej. 'CREATE', 'UPDATE', 'TOGGLE_STATUS', 'DELETE')
- * @param {string} collectionName - Colección afectada (ej. 'destinations', 'offers', 'settings')
- * @param {string} documentId - ID del documento modificado
- * @param {string} adminEmail - Correo del administrador responsable del cambio
- * @param {object|null} changes - (Opcional) Objeto con el detalle específico de los campos alterados
+ * Calcula únicamente el diff { campo: { from, to } } entre dos versiones de un documento.
  */
-export const logAdminAction = async (actionType, collectionName, documentId, adminEmail, changes = null) => {
-  try {
-    const auditRef = collection(db, 'audit_logs');
-    
-    // Estructura base del registro de auditoría
-    const logData = {
-      actionType,
-      collection: collectionName,
-      documentId,
-      adminEmail,
-      timestamp: serverTimestamp(),
-    };
+export function computeDiff(previousData = {}, nextData = {}) {
+  const prev = previousData || {};
+  const next = nextData || {};
+  const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
+  const diff = {};
 
-    // Solo adjuntamos 'changes' si existe y tiene contenido
-    if (changes && Object.keys(changes).length > 0) {
-      logData.changes = changes;
+  for (const key of keys) {
+    if (key === 'updatedAt' || key === 'createdAt') continue;
+    const prevVal = prev[key] === undefined ? null : prev[key];
+    const nextVal = next[key] === undefined ? null : next[key];
+    if (JSON.stringify(prevVal) !== JSON.stringify(nextVal)) {
+      diff[key] = { from: prevVal, to: nextVal };
     }
-
-    await addDoc(auditRef, logData);
-    
-    // Debugging opcional para el entorno de desarrollo
-    console.log(`🛠️ DEBUG [AuditLog] - Acción '${actionType}' en '${collectionName}' registrada exitosamente.`);
-    
-  } catch (error) {
-    // Manejo de error silencioso: Si falla el log, no queremos romper 
-    // la experiencia del administrador, pero dejamos rastro en consola.
-    console.error("❌ ERROR [AuditLog] - Fallo al registrar la acción:", error);
   }
-};
+
+  return diff;
+}
+
+/**
+ * Registra un evento en audit_logs (API V3).
+ */
+export async function logAuditAction({
+  actionType,
+  collectionName,
+  documentId,
+  adminEmail,
+  previousData = null,
+  nextData = null,
+  changes = null,
+}) {
+  const safeAction = normalizeActionType(actionType);
+
+  const payload = {
+    actionType: safeAction,
+    collection: collectionName,
+    documentId: String(documentId || ''),
+    adminEmail: String(adminEmail || ''),
+    timestamp: serverTimestamp(),
+    changes: changes || computeDiff(previousData, nextData),
+  };
+
+  return addDoc(collection(db, 'audit_logs'), payload);
+}
+
+/**
+ * Alias retrocompatible para módulos legacy (OffersManager, CatalogManager, EditOfferModal, etc.).
+ * Soporta tanto firma de objeto ({ actionType, collectionName, ... })
+ * como firma posicional legacy (adminEmail, actionType, collectionName, documentId, changes).
+ */
+export async function logAdminAction(firstArg, ...rest) {
+  if (firstArg && typeof firstArg === 'object' && !Array.isArray(firstArg)) {
+    return logAuditAction(firstArg);
+  }
+
+  const [actionType, collectionName, documentId, changes] = rest;
+  return logAuditAction({
+    adminEmail: firstArg,
+    actionType,
+    collectionName,
+    documentId,
+    changes: changes && typeof changes === 'object' ? changes : {},
+  });
+}
+
+/**
+ * Ejecuta una mutación de documento junto con su registro en audit_logs usando writeBatch.
+ *
+ * NOTA ARQUITECTÓNICA:
+ * La atomicidad de escritura + log en cliente mediante writeBatch es una convención de aplicación;
+ * las reglas de Firestore garantizan integridad por documento individual (adminEmail, timestamp y enum),
+ * pero no pueden forzar transaccionalmente la creación simultánea de ambos documentos sin Cloud Functions.
+ */
+export async function commitWithAudit({
+  actionType,
+  collectionName,
+  documentId,
+  adminEmail,
+  previousData = null,
+  nextData = null,
+  operation = 'set', // 'set' | 'update' | 'delete'
+}) {
+  const safeAction = normalizeActionType(actionType);
+
+  const batch = writeBatch(db);
+  const targetRef = doc(db, collectionName, documentId);
+
+  if (operation === 'delete') {
+    batch.delete(targetRef);
+  } else if (operation === 'update') {
+    batch.update(targetRef, {
+      ...nextData,
+      updatedAt: serverTimestamp(),
+    });
+  } else {
+    batch.set(
+      targetRef,
+      {
+        ...nextData,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  }
+
+  const auditRef = doc(collection(db, 'audit_logs'));
+  batch.set(auditRef, {
+    actionType: safeAction,
+    collection: collectionName,
+    documentId: String(documentId),
+    adminEmail: String(adminEmail || ''),
+    timestamp: serverTimestamp(),
+    changes: computeDiff(previousData, nextData),
+  });
+
+  await batch.commit();
+}

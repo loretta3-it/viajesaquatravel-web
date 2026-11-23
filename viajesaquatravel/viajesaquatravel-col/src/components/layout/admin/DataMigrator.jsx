@@ -1,124 +1,266 @@
-import React, { useState } from 'react';
-import { doc, setDoc } from 'firebase/firestore';
-
-// Rutas actualizadas para subir 3 niveles: admin -> layout -> components -> src
-import { db } from "../../../config/firebase";
+import { useState } from 'react';
+import {
+  Timestamp,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
+import { AlertTriangle, CheckCircle2, Database, Play, ShieldCheck } from 'lucide-react';
+import { db } from "../../../config/firebase"; // si existe esta línea
 import { siteConfig } from "../../../config/siteConfig";
+import { useAuth } from "../../../context/AuthContext";
+import { validateDocument } from "../../../schemas/collections";
+import { logAdminAction } from "../../../utils/auditLogger"; // si existe esta línea
 
-import { ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
+function convertDatesToTimestamps(record) {
+  const next = { ...record };
+  for (const field of ['validFrom', 'validUntil']) {
+    if (typeof next[field] === 'string' && next[field].trim()) {
+      const parsed = new Date(next[field]);
+      if (!Number.isNaN(parsed.getTime())) {
+        next[field] = Timestamp.fromDate(parsed);
+      }
+    }
+  }
+  return next;
+}
+
+function buildMigrationPlan() {
+  const { seed, agency } = siteConfig;
+  const settingsDocs = [
+    {
+      id: 'agency',
+      name: agency.name,
+      rnt: agency.rnt,
+      location: agency.location,
+      phone: agency.phone,
+      email: agency.email,
+      whatsappPrefix: agency.whatsappPrefix,
+      social: agency.social,
+      mapPins: agency.mapPins,
+    },
+    seed.settings.promo_button,
+    seed.settings.aquawoman_page,
+    seed.settings.reviews,
+  ].filter(Boolean);
+
+  return [
+    { collection: 'destinations', docs: seed.destinations || [] },
+    { collection: 'offers', docs: seed.offers || [] },
+    { collection: 'aquawoman_retreats', docs: seed.aquawoman_retreats || [] },
+    { collection: 'services', docs: seed.services || [] },
+    { collection: 'banners', docs: seed.banners || [] },
+    { collection: 'settings', docs: settingsDocs },
+  ];
+}
 
 export default function DataMigrator() {
-  const [status, setStatus] = useState('idle'); // idle, loading, success, error
-  const [log, setLog] = useState([]);
+  const { currentUser, isAdmin } = useAuth();
+  const [forceOverwrite, setForceOverwrite] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [report, setReport] = useState([]);
+  const [summary, setSummary] = useState(null);
 
-  const addLog = (message) => {
-    setLog(prev => [...prev, message]);
-  };
+  const runMigration = async ({ dryRun }) => {
+    if (!isAdmin || !currentUser?.email) return;
 
-  const handleMigration = async () => {
-    setStatus('loading');
-    setLog([]);
-    addLog('Iniciando migración de datos a Firestore...');
+    setRunning(true);
+    setReport([]);
+    setSummary(null);
+
+    const plan = buildMigrationPlan();
+    const logs = [];
+    let created = 0;
+    let updated = 0;
+    let skipped = 0;
+    let invalid = 0;
 
     try {
-      // 1. Colección settings -> Documento agency
-      addLog('Migrando datos de la agencia (settings/agency)...');
-      await setDoc(doc(db, 'settings', 'agency'), siteConfig.agency);
-      addLog('✓ Datos de la agencia guardados con éxito.');
+      for (const group of plan) {
+        let groupCreated = 0;
+        let groupUpdated = 0;
+        let groupSkipped = 0;
 
-      // 2. Colección destinations -> Iterando siteConfig.catalog
-      addLog(`Migrando ${siteConfig.catalog.length} destinos del catálogo...`);
-      for (const item of siteConfig.catalog) {
-        // Estructuramos el nuevo objeto mapeando 'image' a 'media'
-        const destinationData = {
-          ...item,
-          media: [{ type: 'image', url: item.image }]
-        };
-        // Eliminamos la propiedad original 'image' para mantener limpia la BD
-        delete destinationData.image;
+        for (const rawDoc of group.docs) {
+          const validation = validateDocument(group.collection, rawDoc);
+          if (!validation.valid) {
+            invalid += 1;
+            logs.push({
+              level: 'error',
+              message: `[INVALID] ${group.collection}/${rawDoc?.id || 'sin-id'}: ${validation.errors.join(' ')}`,
+            });
+            continue;
+          }
 
-        await setDoc(doc(db, 'destinations', item.id), destinationData);
-      }
-      addLog('✓ Destinos guardados con éxito.');
+          const ref = doc(db, group.collection, rawDoc.id);
+          const snap = await getDoc(ref);
+          const exists = snap.exists();
 
-      // 3. Colección offers -> Iterando siteConfig.offers.deals
-      if (siteConfig.offers && siteConfig.offers.deals) {
-        addLog(`Migrando ${siteConfig.offers.deals.length} ofertas de campaña...`);
-        for (const deal of siteConfig.offers.deals) {
-          await setDoc(doc(db, 'offers', deal.id), deal);
+          if (exists && !forceOverwrite) {
+            skipped += 1;
+            groupSkipped += 1;
+            logs.push({
+              level: 'skip',
+              message: `[OMITIDO] ${group.collection}/${rawDoc.id} ya existe (sin sobrescritura).`,
+            });
+            continue;
+          }
+
+          const payload = {
+            ...convertDatesToTimestamps(rawDoc),
+            updatedAt: serverTimestamp(),
+            ...(exists ? {} : { createdAt: serverTimestamp() }),
+          };
+
+          if (dryRun) {
+            if (exists) {
+              updated += 1;
+              groupUpdated += 1;
+            } else {
+              created += 1;
+              groupCreated += 1;
+            }
+            logs.push({
+              level: 'ok',
+              message: `[DRY-RUN] ${exists ? 'Sobrescribiría' : 'Crearía'} ${group.collection}/${rawDoc.id}`,
+            });
+          } else {
+            await setDoc(ref, payload, { merge: false });
+            if (exists) {
+              updated += 1;
+              groupUpdated += 1;
+            } else {
+              created += 1;
+              groupCreated += 1;
+            }
+            logs.push({
+              level: 'ok',
+              message: `[MIGRADO] ${exists ? 'Actualizado' : 'Creado'} ${group.collection}/${rawDoc.id}`,
+            });
+          }
         }
-        addLog('✓ Ofertas guardadas con éxito.');
-      } else {
-        addLog('⚠ No se encontraron ofertas para migrar.');
+
+        if (!dryRun && (groupCreated > 0 || groupUpdated > 0)) {
+          await logAuditAction({
+            actionType: 'MIGRATE',
+            collectionName: group.collection,
+            documentId: `batch-${group.collection}`,
+            adminEmail: currentUser.email,
+            changes: {
+              migrationSummary: {
+                from: null,
+                to: {
+                  created: groupCreated,
+                  updated: groupUpdated,
+                  skipped: groupSkipped,
+                  forceOverwrite,
+                },
+              },
+            },
+          });
+        }
       }
 
-      setStatus('success');
-      addLog('¡Migración completada exitosamente!');
-
+      setSummary({ dryRun, created, updated, skipped, invalid });
+      setReport(logs);
     } catch (error) {
-      console.error("Error en la migración:", error);
-      setStatus('error');
-      addLog(`❌ Error durante la migración: ${error.message}`);
+      logs.push({
+        level: 'error',
+        message: `[ERROR FATAL] ${error.message}`,
+      });
+      setReport(logs);
+    } finally {
+      setRunning(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-8 my-12 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl text-slate-300">
-      <div className="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
-        <ShieldCheck className="text-blue-500 w-8 h-8" />
-        <h2 className="text-2xl font-bold text-white">Panel de Administración: Migración V2</h2>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+      <div className="flex items-center gap-3 mb-4">
+        <Database className="w-6 h-6 text-slate-900" />
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900">
+            Migrador de Datos V3 (Schema v{siteConfig.schemaVersion})
+          </h1>
+          <p className="text-sm text-slate-600">
+            Valida contra esquema V3, protege ediciones existentes y registra auditoría MIGRATE.
+          </p>
+        </div>
       </div>
 
-      <p className="mb-6 text-sm text-slate-400">
-        Este script leerá el archivo estático <code className="bg-slate-800 px-1 rounded">siteConfig.js</code> y escribirá los datos en las colecciones correspondientes de Firestore. 
-        <strong> Advertencia:</strong> Ejecutar este proceso sobrescribirá los documentos existentes que tengan el mismo ID.
-      </p>
+      {!isAdmin && (
+        <div className="mb-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 shrink-0" />
+          <span>Debes tener el Custom Claim admin: true para ejecutar la migración.</span>
+        </div>
+      )}
 
-      <button
-        onClick={handleMigration}
-        disabled={status === 'loading'}
-        className={`flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-white transition-all shadow-lg ${
-          status === 'loading' 
-            ? 'bg-blue-600/50 cursor-not-allowed' 
-            : 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/20'
-        }`}
-      >
-        {status === 'loading' ? (
-          <>
-            <Loader2 className="animate-spin" size={20} />
-            Migrando datos...
-          </>
-        ) : (
-          'Migrar Datos a Firestore'
-        )}
-      </button>
+      <label className="flex items-center gap-3 p-3 mb-5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={forceOverwrite}
+          onChange={(e) => setForceOverwrite(e.target.checked)}
+          disabled={running || !isAdmin}
+          className="w-4 h-4"
+        />
+        <span className="text-sm text-slate-700">
+          <strong>Forzar sobrescritura:</strong> reemplaza documentos ya existentes en Firestore
+          (desactivado por defecto para proteger ediciones del CMS).
+        </span>
+      </label>
 
-      {/* Log de Consola Visual */}
-      {log.length > 0 && (
-        <div className="mt-8 bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs overflow-y-auto max-h-64">
-          {log.map((msg, index) => (
-            <div key={index} className={`py-1 ${msg.includes('❌') ? 'text-rose-400' : msg.includes('✓') ? 'text-emerald-400' : 'text-slate-400'}`}>
-              &gt; {msg}
+      <div className="flex flex-wrap gap-3 mb-6">
+        <button
+          type="button"
+          disabled={running || !isAdmin}
+          onClick={() => runMigration({ dryRun: true })}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-800 text-sm font-medium hover:bg-slate-50 disabled:opacity-50"
+        >
+          <ShieldCheck className="w-4 h-4" />
+          Simular (Dry-Run)
+        </button>
+
+        <button
+          type="button"
+          disabled={running || !isAdmin}
+          onClick={() => runMigration({ dryRun: false })}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 disabled:opacity-50"
+        >
+          <Play className="w-4 h-4" />
+          {running ? 'Ejecutando...' : 'Ejecutar Migración V3'}
+        </button>
+      </div>
+
+      {summary && (
+        <div className="mb-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm flex items-center gap-2">
+          <CheckCircle2 className="w-5 h-5 shrink-0" />
+          <span>
+            {summary.dryRun ? 'Resultado Dry-Run' : 'Migración completada'} — Creados:{' '}
+            <strong>{summary.created}</strong> | Actualizados:{' '}
+            <strong>{summary.updated}</strong> | Omitidos:{' '}
+            <strong>{summary.skipped}</strong> | Inválidos:{' '}
+            <strong>{summary.invalid}</strong>
+          </span>
+        </div>
+      )}
+
+      {report.length > 0 && (
+        <div className="max-h-80 overflow-y-auto rounded-xl bg-slate-950 text-slate-100 p-4 font-mono text-xs space-y-1">
+          {report.map((entry, idx) => (
+            <div
+              key={idx}
+              className={
+                entry.level === 'error'
+                  ? 'text-red-400'
+                  : entry.level === 'skip'
+                    ? 'text-amber-300'
+                    : 'text-emerald-300'
+              }
+            >
+              {entry.message}
             </div>
           ))}
-        </div>
-      )}
-
-      {status === 'success' && (
-        <div className="mt-6 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-xl flex items-start gap-3">
-          <ShieldCheck className="text-emerald-500 w-6 h-6 flex-shrink-0 mt-0.5" />
-          <p className="text-emerald-300 text-sm">
-            La migración a la base de datos se ha completado. Ahora puedes configurar AGT-001 y a los componentes del frontend para que consuman Firestore en lugar del archivo estático.
-          </p>
-        </div>
-      )}
-
-      {status === 'error' && (
-        <div className="mt-6 p-4 bg-rose-900/20 border border-rose-500/30 rounded-xl flex items-start gap-3">
-          <AlertCircle className="text-rose-500 w-6 h-6 flex-shrink-0 mt-0.5" />
-          <p className="text-rose-300 text-sm">
-            Hubo un error de escritura. Verifica que tus reglas de Firestore permitan la escritura (durante la fase de migración local) y que las variables de entorno estén correctamente inyectadas en tu archivo <code className="bg-rose-900/50 px-1 rounded">.env.local</code>.
-          </p>
         </div>
       )}
     </div>

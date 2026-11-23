@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Reservada para activación definitiva al cierre del Sprint 3
+    function isVisible() {
+      return resource.data.status == 'published' && resource.data.isActive == true;
+    }
+
+    function okStatus() {
+      return request.resource.data.status in ['draft', 'published'];
+    }
+
+    function hasMedia() {
+      return request.resource.data.status == 'draft'
+        || (request.resource.data.media is list && request.resource.data.media.size() >= 1);
+    }
+
+    function hasBannerMedia() {
+      return request.resource.data.status == 'draft'
+        || (request.resource.data.media is list && request.resource.data.media.size() == 1);
+    }
+
+    function hasServiceMediaOrIcon() {
+      return request.resource.data.status == 'draft'
+        || (request.resource.data.media is list && request.resource.data.media.size() >= 1)
+        || (request.resource.data.icon is string
+            && request.resource.data.icon in ['visa', 'medical', 'sim']);
+    }
+
+    match /destinations/{id} {
+      // Transición S1–S3 sin downtime (consultas públicas aún no filtran por status/isActive)
+      allow read: if true;
+      // DEFINITIVA POST-SPRINT 3: allow read: if isAdmin() || isVisible();
+      allow create, update: if isAdmin() && okStatus() && hasMedia();
+      allow delete: if isAdmin();
+    }
+
+    match /offers/{id} {
+      allow read: if true;
+      // DEFINITIVA POST-SPRINT 3: allow read: if isAdmin() || isVisible();
+      allow create, update: if isAdmin() && okStatus() && hasMedia();
+      allow delete: if isAdmin();
+    }
+
+    match /aquawoman_retreats/{id} {
+      allow read: if true;
+      // DEFINITIVA POST-SPRINT 3: allow read: if isAdmin() || isVisible();
+      allow create, update: if isAdmin() && okStatus() && hasMedia();
+      allow delete: if isAdmin();
+    }
+
+    match /services/{id} {
+      allow read: if true;
+      // DEFINITIVA POST-SPRINT 3: allow read: if isAdmin() || isVisible();
+      allow create, update: if isAdmin() && okStatus() && hasServiceMediaOrIcon();
+      allow delete: if isAdmin();
+    }
+
+    match /banners/{id} {
+      allow read: if true;
+      // DEFINITIVA POST-SPRINT 3: allow read: if isAdmin() || isVisible();
+      allow create, update: if isAdmin() && okStatus() && hasBannerMedia();
+      allow delete: if isAdmin();
+    }
+
+    match /settings/{id} {
+      allow read: if id in ['agency', 'promo_button', 'aquawoman_page', 'reviews'] || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /audit_logs/{id} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.adminEmail == request.auth.token.email
+        && request.resource.data.timestamp == request.time
+        && request.resource.data.actionType in ['CREATE', 'UPDATE', 'TOGGLE_STATUS', 'DELETE', 'MIGRATE'];
+      allow update, delete: if false;
+    }
+  }
+}
