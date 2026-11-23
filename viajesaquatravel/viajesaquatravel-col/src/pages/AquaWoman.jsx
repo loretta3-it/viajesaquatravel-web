@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Leaf, Heart, MapPin, Calendar, CheckCircle2 } from 'lucide-react';
 import { FaInstagram, FaWhatsapp } from 'react-icons/fa6';
 import { siteConfig } from '../config/siteConfig';
+import Breadcrumb from '../components/ui/Breadcrumb'; // <-- Importación corregida
 
 export default function AquaWoman() {
   const { aquaWomanData, agency, businessLines } = siteConfig;
@@ -11,7 +12,7 @@ export default function AquaWoman() {
   }, []);
 
   const getWhatsAppLink = () => {
-    const msg = `Hola AquaTravel, quiero más información sobre el retiro "${aquaWomanData.retreat.title}" de AquaWoman.`;
+    const msg = `Hola Aqua Travel, quiero más información sobre el retiro "${aquaWomanData.retreat.title}" de Aqua Woman.`;
     return `https://wa.me/${agency.whatsappNumber}?text=${encodeURIComponent(msg)}`;
   };
 
@@ -22,13 +23,17 @@ export default function AquaWoman() {
         <div className="absolute inset-0">
           <img 
             src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" 
-            alt="AquaWoman Hero" 
+            alt="Aqua Woman Hero" 
             className="w-full h-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-purple-900/60 via-rose-900/40 to-stone-50"></div>
         </div>
         
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-20">
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-20 flex flex-col items-center">
+          
+          {/* Breadcrumb integrado en el Hero */}
+          <Breadcrumb items={[{ label: 'Aqua Woman', path: null }]} />
+
           <span className="inline-block py-1 px-4 rounded-full bg-white/20 border border-white/30 text-sm font-semibold text-white mb-6 backdrop-blur-md uppercase tracking-[0.2em]">
             Experiencia Exclusiva
           </span>
@@ -172,10 +177,9 @@ export default function AquaWoman() {
         </div>
       </section>
       
-      {/* Footer Minimalista Local (Opcional si el LayoutShell lo cubre, pero mejora la transición) */}
       <div className="bg-stone-100 py-12 text-center border-t border-stone-200">
         <Leaf className="w-8 h-8 text-rose-300 mx-auto mb-4" />
-        <p className="text-stone-500 text-sm">AquaWoman es una experiencia respaldada por Viajes AquaTravel.</p>
+        <p className="text-stone-500 text-sm">Aqua Woman es una experiencia respaldada por Viajes Aqua Travel.</p>
       </div>
     </div>
   );

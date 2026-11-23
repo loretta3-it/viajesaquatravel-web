@@ -33,7 +33,7 @@ export const siteConfig = {
     margin: { id: "margin", name: "Destinos Bucket List", desc: "Viajes de alto impacto y experiencias globales únicas." },
     aquaWoman: { 
       id: "aquaWoman", 
-      name: "AquaWoman", 
+      name: "Aqua Woman", 
       desc: "Experiencia Femenina",
       link: "https://www.instagram.com/aquawomanexperience/"
     }
@@ -50,7 +50,7 @@ export const siteConfig = {
         "Alojamiento en eco-hotel boutique exclusivo",
         "Alimentación consciente (Todas las comidas)",
         "Talleres de sanación de linaje y empoderamiento",
-        "Kit de bienvenida AquaWoman",
+        "Kit de bienvenida Aqua Woman",
         "Transporte privado ida y regreso desde Bogotá"
       ],
       itinerary: [
@@ -66,17 +66,255 @@ export const siteConfig = {
       ]
     }
   },
-  contact: {
-    // ... datos anteriores ...
-    phonePrimary: "601 8826723",
-    whatsappPrimary: "+57 3043321590",
-    email: "viajesaquatravel@gmail.com"
+  offers: {
+    campaignName: "Black Days",
+    isActive: true,
+    deals: [
+      {
+        id: "bf-eur-01",
+        title: "Europa: Madrid, París y Barcelona",
+        campaignTag: "Black Days",
+        isActive: true,
+        validUntil: "2026-11-20T23:59:59",
+        currency: "COP",
+        originalPrice: "9.500.000",
+        discountPrice: "8.690.000",
+        image: "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Francia y España",
+        duration: "11 Días / 10 Noches",
+        includes: ["Vuelos", "Hospedaje", "Desayunos", "Guía", "Traslados", "Seguro médico"],
+        notIncludes: ["Gastos personales"],
+        importantNotes: ["Precio válido a partir de dos personas", "Reserva con $500.000", "Fechas disponibles: Abril 9, 15, 16, 22, 23, 29, 30 de 2027", "Válido hasta el 20 de noviembre"],
+        whatsappMessage: "Hola, quiero reservar la oferta Black Days a Europa (Madrid, París y BCN) por $8'690.000 COP."
+      },
+      {
+        id: "bf-adz-01",
+        title: "Navidad en el Caribe - San Andrés",
+        campaignTag: "Black Days",
+        isActive: true,
+        validUntil: "2026-12-23T23:59:59",
+        currency: "COP",
+        originalPrice: "2.100.000",
+        discountPrice: "1.753.000",
+        image: "https://images.unsplash.com/photo-opz5XqwPhUY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "San Andrés, Colombia",
+        duration: "4 Días / 3 Noches",
+        includes: ["Tiquetes aéreos (con LATAM)", "Artículo Personal", "Traslados en destino", "Alojamiento 3 noches", "Alimentación según plan", "Asistencia Médica", "Tour vuelta a la isla + acuario mágico y bahía"],
+        notIncludes: ["Equipaje extra", "Tarjeta de ingreso a la isla", "Impuestos locales"],
+        importantNotes: ["Salidas desde Bogotá", "Viaje: Diciembre 23 al 26", "Tarifa basada en Hotel Portofino Caribe, opciones PA, PAM y FULL disponibles (consultar)"],
+        whatsappMessage: "Hola, quiero información de la oferta Navidad en el Caribe (San Andrés) desde $1.753.000 COP."
+      },
+      {
+        id: "bf-dxb-01",
+        title: "Celebra Fin de Año - Dubái",
+        campaignTag: "Black Days",
+        isActive: true,
+        validUntil: "2026-12-27T23:59:59",
+        currency: "USD",
+        originalPrice: "2.200",
+        discountPrice: "1.795",
+        image: "https://images.unsplash.com/photo-DcyL0IoCY0A?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Dubái, EAU",
+        duration: "8 Días / 7 Noches",
+        includes: ["Alojamiento 7 noches", "Desayunos", "Traslados", "Desert Safari con BBQ", "Tour Dubái y Abu Dhabi", "Cena Show Cruise Marina", "Cena Fin de Año", "Asistencia Médica", "Free Bancario"],
+        notIncludes: ["Vuelos Internacionales", "Tourism Dirham Fee (pago en hotel)"],
+        importantNotes: ["Fecha inicial: 27, 28 o 29 Diciembre", "Tarifa por persona en acomodación triple"],
+        whatsappMessage: "Hola, quiero reservar la oferta Celebra Fin de Año en Dubái por USD 1.795."
+      },
+      {
+        id: "bf-dom-01",
+        title: "Combinado Rep. Dominicana (Hodelpa + Emotions)",
+        campaignTag: "Black Days",
+        isActive: true,
+        validUntil: "2026-11-30T23:59:59",
+        currency: "COP",
+        originalPrice: "4.200.000",
+        discountPrice: "3.690.000",
+        image: "https://images.unsplash.com/photo-1zYWq3rdi8Y?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Santo Domingo y Juan Dolio",
+        duration: "5 Días / 4 Noches",
+        includes: ["Vuelos", "Estadía Hodelpa (Santo Domingo)", "Estadía Emotions", "Todo Incluido (All Inclusive)", "Seguro médico", "Traslados", "GRATIS: Cena en Nicolás de Ovando"],
+        notIncludes: ["Gastos no especificados"],
+        importantNotes: ["Salidas: 5 al 9 de enero 2027", "Tarifa en acomodación triple (doble: $3'790.000)", "Válido a partir de dos personas"],
+        whatsappMessage: "Hola, me interesa la oferta del Combinado República Dominicana (Hodelpa + Emotions) desde $3'690.000 COP."
+      },
+      {
+        id: "bf-dom-02",
+        title: "Combinado Punta Cana - Santo Domingo",
+        campaignTag: "Black Days",
+        isActive: true,
+        validUntil: "2026-11-30T23:59:59",
+        currency: "COP",
+        originalPrice: "4.800.000",
+        discountPrice: "4.290.000",
+        image: "https://images.unsplash.com/photo-u-Di0zMI4xI?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Santo Domingo y Punta Cana",
+        duration: "5 Días / 4 Noches",
+        includes: ["Vuelos", "Estadía Hodelpa (Santo Domingo)", "Estadía Impressive (Punta Cana)", "Todo Incluido (All Inclusive)", "Seguro médico", "Traslados", "GRATIS: Cena en Nicolás de Ovando"],
+        notIncludes: ["Gastos no especificados"],
+        importantNotes: ["Salidas: 5 al 9 de enero 2027", "Tarifa en acomodación triple (doble: $4'390.000)", "Válido a partir de dos personas"],
+        whatsappMessage: "Hola, me interesa la oferta del Combinado Punta Cana - Santo Domingo desde $4'290.000 COP."
+      },
+      {
+        id: "bf-puj-01",
+        title: "Impressive Punta Cana",
+        campaignTag: "Black Days",
+        isActive: true,
+        validUntil: "2026-11-30T23:59:59",
+        currency: "COP",
+        originalPrice: "3.200.000",
+        discountPrice: "2.820.000",
+        image: "https://images.unsplash.com/photo-u-Di0zMI4xI?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Punta Cana, Rep. Dominicana",
+        duration: "4 Días / 3 Noches",
+        includes: ["Vuelos", "Estadía en Impressive Punta Cana", "Todo incluido (All Inclusive)", "Seguro médico", "Traslados"],
+        notIncludes: ["Gastos no especificados"],
+        importantNotes: ["Temporada: Mayo y junio de 2027", "Tarifa en acomodación triple (doble: $2'890.000)", "Válido a partir de dos personas"],
+        whatsappMessage: "Hola, quiero reservar la oferta a Impressive Punta Cana desde $2'820.000 COP."
+      },
+      {
+        id: "bf-pop-01",
+        title: "Puerto Plata | Enero",
+        campaignTag: "Promo",
+        isActive: true,
+        validUntil: "2026-11-30T23:59:59",
+        currency: "COP",
+        originalPrice: "3.000.000",
+        discountPrice: "2.590.000",
+        image: "https://images.unsplash.com/photo-jrSA92yYkY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Puerto Plata, Rep. Dominicana",
+        duration: "4 Días / 3 Noches",
+        includes: ["Vuelos", "Hospedaje", "Todo incluido (All Inclusive)", "Seguro médico", "Traslados"],
+        notIncludes: ["Gastos no especificados"],
+        importantNotes: ["Salidas: 22 al 25 de enero 2027", "Tarifa en acomodación triple (doble: $2'690.000)", "Válido a partir de dos personas"],
+        whatsappMessage: "Hola, quiero reservar la Promo a Puerto Plata desde $2'590.000 COP."
+      },
+      {
+        id: "bf-jpn-01",
+        title: "Corea y Japón: El Alma de Oriente",
+        campaignTag: "Black Days",
+        isActive: true,
+        validUntil: "2026-11-30T23:59:59",
+        currency: "USD",
+        originalPrice: "7.500",
+        discountPrice: "6.860",
+        image: "https://images.unsplash.com/photo-4Q-Rbu8Ipcg?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Corea del Sur y Japón",
+        duration: "14 Días / 11 Noches",
+        includes: ["Vuelos internacionales e internos", "Alojamiento y desayunos", "Traslados (inc. Myeondong)", "Tren Alta Velocidad", "Guía y panorámicas", "Asistencia médica (60k USD)"],
+        notIncludes: ["Visados", "Comidas no descritas"],
+        importantNotes: ["Salidas 2027: 18 jun-01 jul / 17 sep-30 sep", "Itinerario abarca 14 ciudades", "Tarifa por persona en acomodación triple"],
+        whatsappMessage: "Hola, solicito información de la oferta Corea y Japón: El Alma de Oriente desde USD 6.860."
+      },
+      {
+        id: "bf-thai-01",
+        title: "Tailandia - La Travesía del Dragón",
+        campaignTag: "50% OFF 2do Pax",
+        isActive: true,
+        validUntil: "2026-11-27T23:59:59",
+        currency: "USD",
+        originalPrice: "8.500",
+        discountPrice: "7.182",
+        image: "https://images.unsplash.com/photo-gmOMKy9oXj8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Tailandia y Estambul",
+        duration: "16 Días / 12 Noches",
+        includes: ["Tiquetes aéreos", "Alojamiento", "Alimentación según itinerario", "Traslados", "Guía local", "Asistencia médica", "eSIM"],
+        notIncludes: ["Servicios no especificados"],
+        importantNotes: ["Salidas desde Bogotá: 1 al 16 de diciembre 2026", "Precio total por pareja en acomodación doble", "50% OFF en porción terrestre 2do pasajero (ya aplicado)"],
+        whatsappMessage: "Hola, quiero la oferta de Tailandia con el 50% OFF en el segundo pasajero por USD 7.182."
+      },
+      {
+        id: "bf-eur-02",
+        title: "Europa Fantástica (Desde Bogotá)",
+        campaignTag: "50% OFF 2do Pax",
+        isActive: true,
+        validUntil: "2026-11-27T23:59:59",
+        currency: "USD",
+        originalPrice: "7.102",
+        discountPrice: "6.746",
+        image: "https://images.unsplash.com/photo-WBGjg0DsO_g?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Europa Occidental",
+        duration: "19 Días / 17 Noches",
+        includes: ["Tiquetes aéreos", "Alojamiento", "Alimentación itinerario", "Traslados", "Guía", "Asistencia médica", "eSIM"],
+        notIncludes: ["Servicios no especificados"],
+        importantNotes: ["Salidas 2027: Abril 2, 16, 23 y 30", "Precio por pareja en acomodación doble", "50% OFF en porción terrestre 2do pasajero (ya aplicado)"],
+        whatsappMessage: "Hola, me interesa la oferta Europa Fantástica en pareja por USD 6.746."
+      },
+      {
+        id: "bf-eur-03",
+        title: "Europa Vibrante (Desde Bogotá)",
+        campaignTag: "50% OFF 2do Pax",
+        isActive: true,
+        validUntil: "2026-11-27T23:59:59",
+        currency: "USD",
+        originalPrice: "6.942",
+        discountPrice: "6.594",
+        image: "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Europa Occidental",
+        duration: "17 Días / 15 Noches",
+        includes: ["Tiquetes aéreos", "Alojamiento", "Alimentación itinerario", "Traslados", "Guía", "Asistencia médica", "eSIM"],
+        notIncludes: ["Servicios no especificados"],
+        importantNotes: ["Salidas 2027: Abril 9 y 23", "Precio por pareja en acomodación doble", "50% OFF en porción terrestre 2do pasajero (ya aplicado)"],
+        whatsappMessage: "Hola, me interesa la oferta Europa Vibrante (Bogotá) en pareja por USD 6.594."
+      },
+      {
+        id: "bf-eur-04",
+        title: "Latidos del Mar - Europa con Minicrucero",
+        campaignTag: "50% OFF 2do Pax",
+        isActive: true,
+        validUntil: "2026-11-27T23:59:59",
+        currency: "USD",
+        originalPrice: "7.142",
+        discountPrice: "6.784",
+        image: "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Europa y Mar Egeo",
+        duration: "17 Días / 15 Noches",
+        includes: ["Tiquetes aéreos", "Alojamiento", "Alimentación itinerario", "Traslados", "Guía", "Asistencia médica", "eSIM"],
+        notIncludes: ["Servicios no especificados"],
+        importantNotes: ["Salidas desde Bogotá: Abril 9 y 23 de 2027", "Precio por pareja en acomodación doble", "50% OFF en porción terrestre 2do pasajero (ya aplicado)"],
+        whatsappMessage: "Hola, me interesa Latidos del Mar - Europa con Minicrucero por USD 6.784."
+      },
+      {
+        id: "bf-eur-05",
+        title: "Europa Vibrante (Desde Medellín)",
+        campaignTag: "50% OFF 2do Pax",
+        isActive: true,
+        validUntil: "2026-11-27T23:59:59",
+        currency: "USD",
+        originalPrice: "6.942",
+        discountPrice: "6.594",
+        image: "https://images.unsplash.com/photo-WBGjg0DsO_g?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Europa Occidental",
+        duration: "17 Días / 15 Noches",
+        includes: ["Tiquetes aéreos", "Alojamiento", "Alimentación itinerario", "Traslados", "Guía", "Asistencia médica", "eSIM"],
+        notIncludes: ["Servicios no especificados"],
+        importantNotes: ["Salidas desde Medellín: Abril 2, 16 y 30 de 2027", "Precio por pareja en acomodación doble", "50% OFF en porción terrestre 2do pasajero (ya aplicado)"],
+        whatsappMessage: "Hola, me interesa la oferta Europa Vibrante (Medellín) en pareja por USD 6.594."
+      },
+      {
+        id: "bf-eur-06",
+        title: "Europa Esencial (Desde Medellín)",
+        campaignTag: "50% OFF 2do Pax",
+        isActive: true,
+        validUntil: "2026-11-27T23:59:59",
+        currency: "USD",
+        originalPrice: "6.782",
+        discountPrice: "6.442",
+        image: "https://images.unsplash.com/photo-WBGjg0DsO_g?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        destination: "Europa Occidental",
+        duration: "17 Días / 15 Noches",
+        includes: ["Tiquetes aéreos", "Alojamiento", "Alimentación itinerario", "Traslados", "Guía", "Asistencia médica", "eSIM"],
+        notIncludes: ["Servicios no especificados"],
+        importantNotes: ["Salidas desde Medellín: Abril 2, 16 y 30 de 2027", "Precio por pareja en acomodación doble", "50% OFF en porción terrestre 2do pasajero (ya aplicado)"],
+        whatsappMessage: "Hola, me interesa la oferta Europa Esencial (Medellín) en pareja por USD 6.442."
+      }
+    ]
   },
   catalog: [
     // CARIBE TODO INCLUIDO (volume)
     {
       id: "vol-01", title: "Punta Cana Todo Incluido", businessLine: "volume", price: "A consultar",
-      image: "https://images.unsplash.com/photo-1PwLUZwNmJQ?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-u-Di0zMI4xI?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       features: ["Playa", "Todo Incluido", "Familiar/Pareja"],
       includes: ["Tiquetes aéreos", "Alojamiento en hotel seleccionado", "Alimentación Todo Incluido", "Traslados in/out", "Asistencia médica"],
       notIncludes: ["Excursiones opcionales", "Gastos de índole personal", "Propinas"],
@@ -134,7 +372,7 @@ export const siteConfig = {
     // ESCAPADAS POR COLOMBIA (local)
     {
       id: "loc-01", title: "San Andrés Islas", businessLine: "local", price: "A consultar",
-      image: "https://images.unsplash.com/photo-1596422846543-7ce3ce60b4cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-opz5XqwPhUY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       features: ["Mar de los 7 colores", "Vuelos", "Playa"],
       includes: ["Tiquetes aéreos", "Alojamiento", "Alimentación según plan", "Traslados"],
       notIncludes: ["Tarjeta de turismo de San Andrés", "Tours ecológicos", "Gastos personales"],
@@ -176,7 +414,7 @@ export const siteConfig = {
     // DESTINOS BUCKET LIST (margin)
     {
       id: "mar-01", title: "Japón: Temporada de Cerezos", businessLine: "margin", price: "8.690 USD",
-      image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-4Q-Rbu8Ipcg?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       features: ["Tokio, Kioto, Osaka", "Guía Especializado", "26 Mar 2027"],
       includes: ["Vuelos internacionales", "Alojamiento Premium", "Desayunos", "Pases de tren alta velocidad", "Guía en español", "Entradas a monumentos"],
       notIncludes: ["Visado para Japón", "Almuerzos y cenas libres", "Gastos personales"],
@@ -184,7 +422,7 @@ export const siteConfig = {
     },
     {
       id: "mar-02", title: "Europa por Primera Vez", businessLine: "margin", price: "3.390 EUR",
-      image: "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       features: ["Multidestino", "Circuito Guiado", "19 Mar 2027"],
       includes: ["Vuelos desde Bogotá", "Alojamiento turista superior", "Autocar de lujo", "Desayunos buffet", "Guía acompañante"],
       notIncludes: ["ETIAS (si aplica)", "Excursiones opcionales", "Tasas hoteleras locales"],
@@ -208,7 +446,7 @@ export const siteConfig = {
     },
     {
       id: "mar-05", title: "Turquía con Crucero Islas Griegas", businessLine: "margin", price: "3.890 USD",
-      image: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-iQTmygr_WTY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       features: ["Estambul", "Capadocia", "Mar Egeo"],
       includes: ["Vuelos", "Circuito terrestre en Turquía", "Crucero con pensión completa", "Paquete de bebidas en crucero", "Alojamiento hoteles 4/5*"],
       notIncludes: ["Vuelo en globo (opcional)", "Excursiones en puertos griegos", "Propinas de crucero"],
@@ -247,7 +485,7 @@ export const siteConfig = {
       importantNotes: ["Fechas: 29 abr al 03 may 2027", "Precios sujetos a variaciones del evento", "Requiere Visa Americana vigente"]
     },
 
-    // AquaWoman (aquaWoman)
+    // AQUA WOMAN (aquaWoman)
     {
       id: "aw-01", title: "Retiro: El Legado de Ser Mujer", businessLine: "aquaWoman", price: "1.999.000 COP",
       image: "https://images.unsplash.com/photo-1528605105345-5344ea20e269?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
@@ -260,7 +498,7 @@ export const siteConfig = {
   testimonials: [
     {
       id: 1, name: "Laura Martínez", rating: 5,
-      text: "Viajamos a Punta Cana en familia y la asesoría de AquaTravel fue espectacular. Se encargaron de cada detalle."
+      text: "Viajamos a Punta Cana en familia y la asesoría de Aqua Travel fue espectacular. Se encargaron de cada detalle."
     },
     {
       id: 2, name: "Carlos Gómez", rating: 5,
@@ -268,7 +506,7 @@ export const siteConfig = {
     },
     {
       id: 3, name: "Diana Rodríguez", rating: 5,
-      text: "El retiro de AquaWoman me cambió la vida. Una experiencia de conexión profunda impecablemente organizada."
+      text: "El retiro de Aqua Woman me cambió la vida. Una experiencia de conexión profunda impecablemente organizada."
     }
   ]
 };
