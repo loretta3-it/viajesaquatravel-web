@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-import { useAuth } from "../../../context/AuthContext.jsx";
-import { LayoutDashboard, Map, Tag, LogOut, Menu, X, User } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext.jsx';
+import { 
+  LayoutDashboard, 
+  Map, 
+  Tag, 
+  LogOut, 
+  Menu, 
+  X,
+  User,
+  ExternalLink
+} from 'lucide-react';
 
 export default function AdminLayout() {
-  console.log("🛠️ DEBUG [AdminLayout] - Renderizando Layout Base del CMS");
-  
   const { currentUser, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -19,11 +26,14 @@ export default function AdminLayout() {
       console.error("Error al cerrar sesión:", error);
     }
   };
- const navItems = [
-  { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
-  { name: 'Ofertas Black Friday', path: '/admin/offers', icon: <Tag size={20} /> },
-  { name: 'Catálogo', path: '/admin/catalog', icon: <Map size={20} /> },
-];
+
+  const navItems = [
+    { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
+    { name: 'Ofertas Black Friday', path: '/admin/offers', icon: <Tag size={20} /> },
+    { name: 'Catálogo', path: '/admin/catalog', icon: 
+<Map size={20} />
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#050b14] flex text-slate-300 font-sans">
@@ -76,6 +86,18 @@ export default function AdminLayout() {
               </Link>
             );
           })}
+
+          <div className="mt-8 pt-6 border-t border-slate-800/50">
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-3 py-2.5 text-slate-400 hover:bg-emerald-500/10 hover:text-emerald-400 rounded-lg transition-all font-medium border border-transparent"
+            >
+              <ExternalLink size={20} />
+              Ver mi sitio web
+            </a>
+          </div>
         </nav>
 
         {/* User Profile & Logout */}
@@ -102,7 +124,6 @@ export default function AdminLayout() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden bg-[#050b14] pt-16 lg:pt-0">
         <div className="flex-1 overflow-y-auto p-6 md:p-10">
-          {/* AQUÍ SE INYECTAN LOS COMPONENTES HIJOS (Ej. OffersManager) */}
           <Outlet /> 
         </div>
       </main>

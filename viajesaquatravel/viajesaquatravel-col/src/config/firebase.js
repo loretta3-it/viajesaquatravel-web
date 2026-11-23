@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 // 1. Configuración con variables de entorno
 const firebaseConfig = {
@@ -15,6 +16,7 @@ const firebaseConfig = {
 // 2. Inicializar Firebase PRIMERO
 const app = initializeApp(firebaseConfig);
 
-// 3. Exportar los servicios usando la 'app' ya inicializada
+// 3. Exportar los servicios
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const storage = getStorage(app);
