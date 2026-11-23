@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../../config/firebase';
-import { siteConfig } from '../../config/siteConfig';
+
+// Rutas actualizadas para subir 3 niveles: admin -> layout -> components -> src
+import { db } from "../../../config/firebase";
+import { siteConfig } from "../../../config/siteConfig";
+
 import { ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function DataMigrator() {

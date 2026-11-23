@@ -162,8 +162,15 @@ export default function Footer() {
 
       </div>
 
+      {/* Derechos de Autor y Acceso Oculto al CMS */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 mt-12 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-        <p>&copy; {new Date().getFullYear()} {safeAgency.name}. Todos los derechos reservados. RNT {safeAgency.rnt}.</p>
+        <p>
+          &copy; {new Date().getFullYear()}{' '}
+          <Link to="/admin/login" className="outline-none cursor-text hover:text-slate-400 transition-colors">
+            {safeAgency.name}
+          </Link>
+          . Todos los derechos reservados. RNT {safeAgency.rnt}.
+        </p>
       </div>
     </footer>
   );

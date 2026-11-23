@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
-// La configuración utiliza variables de entorno para no exponer credenciales en el código fuente.
-// Asegúrate de crear un archivo .env.local en la raíz de tu proyecto con estas variables.
+// 1. Configuración con variables de entorno
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -12,8 +12,9 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
-// Inicializar Firebase
+// 2. Inicializar Firebase PRIMERO
 const app = initializeApp(firebaseConfig);
 
-// Exportar la instancia de Firestore
+// 3. Exportar los servicios usando la 'app' ya inicializada
 export const db = getFirestore(app);
+export const auth = getAuth(app);
