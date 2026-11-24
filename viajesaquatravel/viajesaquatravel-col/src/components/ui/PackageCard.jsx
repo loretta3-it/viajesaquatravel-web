@@ -1,12 +1,18 @@
 import React from 'react';
 import { ArrowRight, Tag } from 'lucide-react';
+import { formatPrice } from '../../utils/price';
 
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
 
 export default function PackageCard({ product, onClick, categoryName, categoryColor, isOffer = false }) {
-  const priceDisplay = isOffer ? product.discountPrice : product.price;
-  const originalPriceDisplay = isOffer ? product.originalPrice : null;
-  const currencyDisplay = product.currency ? ` ${product.currency}` : '';
+  // Compatibilidad V2 (string) / V3 (number | null): un único formateador
+  const priceDisplay = formatPrice(
+    isOffer ? (product.discountPrice ?? product.price) : product.price,
+    product.currency,
+    product.priceLabel
+  );
+  const originalPriceDisplay =
+    isOffer && product.originalPrice ? formatPrice(product.originalPrice, product.currency) : null;
   
   // Adaptación para Firestore: Leer de media array o hacer fallback a image
   const imageUrl = (product.media && product.media.length > 0) 
@@ -71,12 +77,12 @@ export default function PackageCard({ product, onClick, categoryName, categoryCo
           <div>
             {isOffer && originalPriceDisplay && (
               <span className="block text-xs text-slate-400 line-through decoration-rose-500/80 mb-0.5">
-                Antes {originalPriceDisplay}{currencyDisplay}
+                Antes {originalPriceDisplay}
               </span>
             )}
             {!isOffer && <span className="block text-xs text-slate-400 mb-1">Precio desde</span>}
             <span className={`text-lg font-bold ${isOffer ? 'text-yellow-400' : 'text-white'}`}>
-              {priceDisplay?.includes('consultar') ? priceDisplay : `${priceDisplay}${currencyDisplay}`}
+              {priceDisplay}
             </span>
           </div>
           <button 

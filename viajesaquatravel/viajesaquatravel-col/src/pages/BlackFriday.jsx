@@ -31,7 +31,7 @@ export default function BlackFriday() {
 
   const adaptOfferForModal = (offer) => ({
     ...offer,
-    price: offer.discountPrice,
+    price: offer.discountPrice ?? offer.price,
     businessLine: "volume",
     features: [offer.duration, offer.destination],
   });

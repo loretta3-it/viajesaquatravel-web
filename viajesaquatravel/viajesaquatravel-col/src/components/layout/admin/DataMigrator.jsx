@@ -7,11 +7,12 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import { AlertTriangle, CheckCircle2, Database, Play, ShieldCheck } from 'lucide-react';
-import { db } from "../../../config/firebase"; // si existe esta línea
+import { db } from "../../../config/firebase";
 import { siteConfig } from "../../../config/siteConfig";
 import { useAuth } from "../../../context/AuthContext";
 import { validateDocument } from "../../../schemas/collections";
-import { logAdminAction } from "../../../utils/auditLogger"; // si existe esta línea
+import { logAuditAction } from "../../../utils/auditLogger";
+import { parsePrice } from "../../../utils/price";
 
 function convertDatesToTimestamps(record) {
   const next = { ...record };
@@ -26,20 +27,49 @@ function convertDatesToTimestamps(record) {
   return next;
 }
 
+/**
+ * Documentos V2 (sin `status`): se actualizan a V3 conservando las ediciones hechas en el CMS.
+ * Solo se reescriben price/currency/priceLabel/originalPrice (string -> número), media, status e isActive;
+ * del seed solo se agregan los campos que el documento aún no tiene.
+ */
+function buildLegacyUpgrade(existing, seedDoc) {
+  const parsed = parsePrice(existing.discountPrice ?? existing.price, existing.currency || seedDoc.currency || 'COP');
+  const original =
+    existing.originalPrice !== undefined && existing.originalPrice !== null && existing.originalPrice !== ''
+      ? parsePrice(existing.originalPrice, parsed.currency).price
+      : null;
+  const media =
+    Array.isArray(existing.media) && existing.media.length > 0
+      ? existing.media
+      : existing.image
+        ? [{ type: 'image', url: existing.image }]
+        : seedDoc.media || [];
+
+  const forced = {
+    price: parsed.price,
+    currency: parsed.currency,
+    priceLabel: parsed.price === null ? parsed.priceLabel || 'A consultar' : '',
+    ...(original !== null ? { originalPrice: original } : {}),
+    media,
+    status: 'published',
+    isActive: typeof existing.isActive === 'boolean' ? existing.isActive : true,
+  };
+  const missing = Object.fromEntries(
+    Object.entries(convertDatesToTimestamps(seedDoc)).filter(
+      ([key]) => existing[key] === undefined && !(key in forced)
+    )
+  );
+  return { ...missing, ...forced };
+}
+
+function fillMissing(existing, seedDoc) {
+  return Object.fromEntries(Object.entries(seedDoc).filter(([key]) => existing[key] === undefined));
+}
+
 function buildMigrationPlan() {
   const { seed, agency } = siteConfig;
   const settingsDocs = [
-    {
-      id: 'agency',
-      name: agency.name,
-      rnt: agency.rnt,
-      location: agency.location,
-      phone: agency.phone,
-      email: agency.email,
-      whatsappPrefix: agency.whatsappPrefix,
-      social: agency.social,
-      mapPins: agency.mapPins,
-    },
+    { id: 'agency', ...agency },
     seed.settings.promo_button,
     seed.settings.aquawoman_page,
     seed.settings.reviews,
@@ -97,7 +127,17 @@ export default function DataMigrator() {
           const snap = await getDoc(ref);
           const exists = snap.exists();
 
-          if (exists && !forceOverwrite) {
+          const existing = exists ? snap.data() : null;
+          const upgradeMode =
+            exists && !forceOverwrite
+              ? group.collection === 'settings'
+                ? 'fill'
+                : existing.status === undefined
+                  ? 'legacy'
+                  : null
+              : null;
+
+          if (exists && !forceOverwrite && !upgradeMode) {
             skipped += 1;
             groupSkipped += 1;
             logs.push({
@@ -107,11 +147,35 @@ export default function DataMigrator() {
             continue;
           }
 
-          const payload = {
-            ...convertDatesToTimestamps(rawDoc),
-            updatedAt: serverTimestamp(),
-            ...(exists ? {} : { createdAt: serverTimestamp() }),
-          };
+          let payload;
+          if (upgradeMode === 'legacy') {
+            payload = { ...buildLegacyUpgrade(existing, rawDoc), updatedAt: serverTimestamp() };
+            const merged = validateDocument(group.collection, { ...existing, ...payload, id: rawDoc.id });
+            if (!merged.valid) {
+              invalid += 1;
+              logs.push({
+                level: 'error',
+                message: `[INVALID tras upgrade V2->V3] ${group.collection}/${rawDoc.id}: ${merged.errors.join(' ')}`,
+              });
+              continue;
+            }
+          } else if (upgradeMode === 'fill') {
+            const missingFields = fillMissing(existing, rawDoc);
+            if (Object.keys(missingFields).length === 0) {
+              skipped += 1;
+              groupSkipped += 1;
+              logs.push({ level: 'skip', message: `[OMITIDO] ${group.collection}/${rawDoc.id} ya está completo.` });
+              continue;
+            }
+            payload = { ...missingFields, updatedAt: serverTimestamp() };
+          } else {
+            payload = {
+              ...convertDatesToTimestamps(rawDoc),
+              updatedAt: serverTimestamp(),
+              ...(exists ? {} : { createdAt: serverTimestamp() }),
+            };
+          }
+          const verb = upgradeMode ? 'Actualizaría (upgrade)' : exists ? 'Sobrescribiría' : 'Crearía';
 
           if (dryRun) {
             if (exists) {
@@ -123,10 +187,10 @@ export default function DataMigrator() {
             }
             logs.push({
               level: 'ok',
-              message: `[DRY-RUN] ${exists ? 'Sobrescribiría' : 'Crearía'} ${group.collection}/${rawDoc.id}`,
+              message: `[DRY-RUN] ${verb} ${group.collection}/${rawDoc.id}`,
             });
           } else {
-            await setDoc(ref, payload, { merge: false });
+            await setDoc(ref, payload, { merge: Boolean(upgradeMode) });
             if (exists) {
               updated += 1;
               groupUpdated += 1;

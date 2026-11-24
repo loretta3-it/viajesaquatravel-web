@@ -5,7 +5,6 @@ import {
   serverTimestamp,
   writeBatch,
 } from 'firebase/firestore';
-// IMPORTANTE: Conserva aquí la ruta exacta de `db` que ya te funcionó en el último build
 import { db } from '../config/firebase';
 import { AUDIT_ACTIONS } from '../schemas/collections';
 
@@ -72,23 +71,31 @@ export async function logAuditAction({
 }
 
 /**
- * Alias retrocompatible para módulos legacy (OffersManager, CatalogManager, EditOfferModal, etc.).
- * Soporta tanto firma de objeto ({ actionType, collectionName, ... })
- * como firma posicional legacy (adminEmail, actionType, collectionName, documentId, changes).
+ * Alias retrocompatible para módulos legacy (OffersManager, CatalogManager, EditOfferModal, EditDestinationModal).
+ * - Firma de objeto: logAdminAction({ actionType, collectionName, documentId, adminEmail, ... })
+ * - Firma posicional LEGACY (la que usan hoy los callers):
+ *   logAdminAction(actionType, collectionName, documentId, adminEmail, changes)
+ * Como el logger V2, en la ruta legacy un fallo de auditoría se registra en consola y NO interrumpe
+ * la operación del administrador.
  */
 export async function logAdminAction(firstArg, ...rest) {
   if (firstArg && typeof firstArg === 'object' && !Array.isArray(firstArg)) {
     return logAuditAction(firstArg);
   }
 
-  const [actionType, collectionName, documentId, changes] = rest;
-  return logAuditAction({
-    adminEmail: firstArg,
-    actionType,
-    collectionName,
-    documentId,
-    changes: changes && typeof changes === 'object' ? changes : {},
-  });
+  const [collectionName, documentId, adminEmail, changes] = rest;
+  try {
+    return await logAuditAction({
+      actionType: firstArg,
+      collectionName,
+      documentId,
+      adminEmail,
+      changes: changes && typeof changes === 'object' ? changes : {},
+    });
+  } catch (error) {
+    console.error('[AuditLog] No se pudo registrar la acción:', error);
+    return null;
+  }
 }
 
 /**

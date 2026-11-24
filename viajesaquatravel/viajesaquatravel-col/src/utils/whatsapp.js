@@ -6,7 +6,8 @@
 export const WHATSAPP_PREFIX =
   'Hola Viajes Aqua Travel, te escribo desde la página web. ';
 
-export const DEFAULT_WHATSAPP_PHONE = '573000000000';
+// Número oficial de la agencia (debe coincidir con siteConfig.agency.whatsappNumber)
+export const DEFAULT_WHATSAPP_PHONE = '573043321590';
 
 const LEGACY_PREFIX_REGEX =
   /^(hola\s+(viajes\s+)?aqua\s*travel[,!.\s]*(te\s+escribo\s+desde\s+la\s+p[áa]gina\s+web\.?\s*)?|hola,\s*)/i;

@@ -9,6 +9,7 @@ import {
   Tag 
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
+import { formatPrice } from '../../utils/price';
 
 export default function ProductModal({ product, onClose, agencyNumber = "573043321590" }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -120,11 +121,11 @@ export default function ProductModal({ product, onClose, agencyNumber = "5730433
             <div className="flex flex-col md:items-end flex-shrink-0 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
               <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mb-1">Inversión desde</span>
               <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                {product.discountPrice || product.price}
+                {formatPrice(product.discountPrice ?? product.price, product.currency, product.priceLabel)}
               </div>
               {product.originalPrice && (
                 <div className="text-sm text-slate-400 line-through mt-1 flex items-center gap-1">
-                  <Tag size={12} /> {product.originalPrice}
+                  <Tag size={12} /> {formatPrice(product.originalPrice, product.currency)}
                 </div>
               )}
             </div>

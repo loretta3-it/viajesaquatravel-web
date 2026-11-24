@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { formatPrice } from '../../utils/price';
 
-export default function HeroCarousel({ slides = [], onSelectSlide, onSelectProduct }) {
+export default function HeroCarousel({ slides = [], onSelectSlide, onSelectProduct, onOpenModal }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const safeSlides = Array.isArray(slides) ? slides : [];
@@ -43,6 +43,9 @@ export default function HeroCarousel({ slides = [], onSelectSlide, onSelectProdu
       onSelectSlide(activeSlide);
     } else if (typeof onSelectProduct === 'function') {
       onSelectProduct(activeSlide);
+    } else if (typeof onOpenModal === 'function') {
+      // Alias de la API V2 (Home.jsx aún usa onOpenModal)
+      onOpenModal(activeSlide);
     }
   };
 
@@ -87,7 +90,7 @@ export default function HeroCarousel({ slides = [], onSelectSlide, onSelectProdu
                 </span>
               )}
 
-              {(onSelectSlide || onSelectProduct) && (
+              {(onSelectSlide || onSelectProduct || onOpenModal) && (
                 <button
                   type="button"
                   onClick={handleAction}
