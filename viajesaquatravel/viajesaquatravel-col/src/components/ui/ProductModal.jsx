@@ -1,186 +1,251 @@
-import React, { useState } from 'react';
-import { 
-  X, 
-  CheckCircle2, 
-  XCircle, 
-  ChevronLeft, 
-  ChevronRight, 
-  MapPin, 
-  Tag 
+import { useEffect } from 'react';
+import {
+  Calendar,
+  CheckCircle2,
+  Clock,
+  Info,
+  MapPin,
+  Sparkles,
+  X,
+  XCircle,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
+import MediaGallery from './MediaGallery';
+import { useSettings } from '../../hooks/useSettings';
 import { formatPrice } from '../../utils/price';
+import { normalizeProduct } from '../../utils/normalizeProduct';
+import { buildWhatsAppUrl } from '../../utils/whatsapp';
 
-export default function ProductModal({ product, onClose, agencyNumber = "573043321590" }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function ProductModal({ product, onClose }) {
+  const { agency } = useSettings();
+
+  useEffect(() => {
+    if (!product) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose?.();
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [product, onClose]);
 
   if (!product) return null;
 
-  // Resolución robusta de medios (Array 'media' > String 'image' > Placeholder)
-  const mediaItems = product.media && product.media.length > 0 
-    ? product.media 
-    : product.image 
-      ? [{ url: product.image, type: 'image' }] 
-      : [{ url: 'https://via.placeholder.com/800x600?text=Aqua+Travel', type: 'image' }];
+  const normalized = normalizeProduct(product);
+  const priceText = formatPrice(
+    normalized.price,
+    normalized.currency,
+    normalized.priceLabel
+  );
+  const originalPriceText =
+    normalized.originalPrice !== undefined && normalized.originalPrice !== null
+      ? formatPrice(normalized.originalPrice, normalized.currency)
+      : '';
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === mediaItems.length - 1 ? 0 : prevIndex + 1));
-  };
+  const phone = agency?.whatsappNumber || agency?.phone;
+  const whatsappMessage =
+    normalized.whatsappMessage ||
+    `Quiero recibir información y cotización sobre "${normalized.title}".`;
+  const whatsappHref = buildWhatsAppUrl(whatsappMessage, phone);
 
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? mediaItems.length - 1 : prevIndex - 1));
-  };
-
-  // Generación del enlace de WhatsApp dinámico
-  const whatsappMessage = product.whatsappMessage 
-    || `Hola Viajes Aqua Travel, estoy interesado en el paquete "${product.title}". Me gustaría recibir más información.`;
-  const whatsappUrl = `https://wa.me/${agencyNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+  const itinerary = Array.isArray(normalized.itinerary) ? normalized.itinerary : [];
+  const includes = Array.isArray(normalized.includes) ? normalized.includes : [];
+  const notIncludes = Array.isArray(normalized.notIncludes) ? normalized.notIncludes : [];
+  const importantNotes = Array.isArray(normalized.importantNotes)
+    ? normalized.importantNotes
+    : [];
+  const features = Array.isArray(normalized.features) ? normalized.features : [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[95vh] overflow-hidden relative">
-        
-        {/* Botón Flotante de Cerrar */}
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 p-2 bg-black/50 text-white hover:bg-black/70 rounded-full backdrop-blur-md transition-colors"
-          aria-label="Cerrar modal"
-        >
-          <X size={20} />
-        </button>
-
-        {/* Galería Multimedia (Carrusel) */}
-        <div className="relative w-full h-64 md:h-96 bg-slate-100 dark:bg-slate-950 flex items-center justify-center overflow-hidden group">
-          {mediaItems.map((item, index) => (
-            <div 
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-            >
-              {item.type === 'video' ? (
-                <video 
-                  src={item.url} 
-                  controls 
-                  autoPlay 
-                  muted 
-                  loop 
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <img 
-                  src={item.url} 
-                  alt={`${product.title} - Vista ${index + 1}`} 
-                  className="w-full h-full object-cover"
-                />
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="product-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-xs"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-4xl max-h-[92vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Cabecera fija */}
+        <div className="flex items-start justify-between gap-4 px-5 sm:px-7 py-4 border-b border-slate-200 bg-white">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mb-1">
+              {normalized.destination && (
+                <span className="inline-flex items-center gap-1 font-medium text-slate-700">
+                  <MapPin className="w-3.5 h-3.5 text-slate-900" aria-hidden="true" />
+                  {normalized.destination}
+                </span>
+              )}
+              {normalized.duration && (
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
+                  {normalized.duration}
+                </span>
+              )}
+              {normalized.spotsLabel && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-semibold">
+                  <Sparkles className="w-3 h-3" aria-hidden="true" />
+                  {normalized.spotsLabel}
+                </span>
               )}
             </div>
-          ))}
+            <h2
+              id="product-modal-title"
+              className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight truncate"
+            >
+              {normalized.title}
+            </h2>
+          </div>
 
-          {/* Controles del Carrusel (Solo si hay más de 1 medio) */}
-          {mediaItems.length > 1 && (
-            <>
-              <button 
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 text-black rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"
-              >
-                <ChevronLeft size={24} />
-              </button>
-              <button 
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 text-black rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"
-              >
-                <ChevronRight size={24} />
-              </button>
-              
-              {/* Indicadores (Dots) */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-                {mediaItems.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentIndex(idx)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all shadow-sm ${idx === currentIndex ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'}`}
-                  />
-                ))}
-              </div>
-            </>
-          )}
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Cerrar ventana"
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer shrink-0"
+          >
+            <X className="w-5 h-5" aria-hidden="true" />
+          </button>
         </div>
 
-        {/* Contenido del Paquete */}
-        <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar flex-1">
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-2">
-                <MapPin size={14} />
-                {product.businessLine || 'Destino Exclusivo'}
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
-                {product.title}
-              </h2>
+        {/* Contenido desplazable */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-5 sm:p-7 space-y-6">
+          <MediaGallery
+            media={normalized.media}
+            title={normalized.title}
+            aspectClass="aspect-[16/9]"
+          />
+
+          {normalized.description && (
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              {normalized.description}
+            </p>
+          )}
+
+          {features.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {features.map((feat, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium"
+                >
+                  {feat}
+                </span>
+              ))}
             </div>
-            
-            <div className="flex flex-col md:items-end flex-shrink-0 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
-              <span className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider mb-1">Inversión desde</span>
-              <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-                {formatPrice(product.discountPrice ?? product.price, product.currency, product.priceLabel)}
+          )}
+
+          {/* Itinerario (AquaWoman u otros con agenda diaria) */}
+          {itinerary.length > 0 && (
+            <div className="rounded-2xl bg-purple-50/70 border border-purple-200/70 p-5 space-y-4">
+              <div className="flex items-center gap-2 text-purple-900 font-bold text-sm sm:text-base">
+                <Calendar className="w-4 h-4 text-purple-700" aria-hidden="true" />
+                <span>Itinerario de la experiencia</span>
               </div>
-              {product.originalPrice && (
-                <div className="text-sm text-slate-400 line-through mt-1 flex items-center gap-1">
-                  <Tag size={12} /> {formatPrice(product.originalPrice, product.currency)}
+              <ol className="space-y-3">
+                {itinerary.map((step, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="shrink-0 px-2.5 py-0.5 rounded-lg bg-purple-900 text-white text-xs font-semibold">
+                      {step.day || `Día ${idx + 1}`}
+                    </span>
+                    <div className="text-sm">
+                      <p className="font-semibold text-slate-900">{step.title}</p>
+                      {step.desc && (
+                        <p className="text-slate-600 mt-0.5 leading-relaxed">{step.desc}</p>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {/* Incluye / No incluye */}
+          {(includes.length > 0 || notIncludes.length > 0) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {includes.length > 0 && (
+                <div className="rounded-2xl bg-emerald-50/60 border border-emerald-200/70 p-5">
+                  <h3 className="text-sm font-bold text-slate-900 mb-3">Incluye</h3>
+                  <ul className="space-y-2">
+                    {includes.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+                        <CheckCircle2
+                          className="w-4 h-4 text-[#25D366] shrink-0 mt-0.5"
+                          aria-hidden="true"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {notIncludes.length > 0 && (
+                <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+                  <h3 className="text-sm font-bold text-slate-900 mb-3">No incluye</h3>
+                  <ul className="space-y-2">
+                    {notIncludes.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                        <XCircle
+                          className="w-4 h-4 text-slate-400 shrink-0 mt-0.5"
+                          aria-hidden="true"
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
-          </div>
+          )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            {/* Qué Incluye */}
-            {product.includes && product.includes.length > 0 && (
-              <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-2xl p-6 border border-emerald-100 dark:border-emerald-900/30">
-                <h3 className="font-bold text-emerald-900 dark:text-emerald-400 mb-4 flex items-center gap-2">
-                  <CheckCircle2 size={18} /> El plan incluye
-                </h3>
-                <ul className="space-y-3">
-                  {product.includes.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-emerald-800 dark:text-emerald-200/80 leading-relaxed">
-                      <span className="text-emerald-500 mt-1">•</span> {item}
-                    </li>
-                  ))}
-                </ul>
+          {/* Notas importantes */}
+          {importantNotes.length > 0 && (
+            <div className="rounded-2xl bg-amber-50 border border-amber-200/80 p-4 text-amber-900 text-xs sm:text-sm space-y-1.5">
+              <div className="flex items-center gap-2 font-semibold">
+                <Info className="w-4 h-4 text-amber-700 shrink-0" aria-hidden="true" />
+                <span>Notas importantes</span>
               </div>
-            )}
+              <ul className="list-disc pl-5 space-y-1">
+                {importantNotes.map((note, idx) => (
+                  <li key={idx}>{note}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
-            {/* Qué NO Incluye */}
-            {product.notIncludes && product.notIncludes.length > 0 && (
-              <div className="bg-rose-50 dark:bg-rose-900/10 rounded-2xl p-6 border border-rose-100 dark:border-rose-900/30">
-                <h3 className="font-bold text-rose-900 dark:text-rose-400 mb-4 flex items-center gap-2">
-                  <XCircle size={18} /> No incluye
-                </h3>
-                <ul className="space-y-3">
-                  {product.notIncludes.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-rose-800 dark:text-rose-200/80 leading-relaxed">
-                      <span className="text-rose-500 mt-1">•</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+        {/* Pie de conversión fijo */}
+        <div className="px-5 sm:px-7 py-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div>
+            <span className="block text-xs text-slate-500 font-medium">Tarifa de referencia</span>
+            <div className="flex items-baseline gap-2.5">
+              <span className="text-xl sm:text-2xl font-bold text-slate-900">{priceText}</span>
+              {originalPriceText && (
+                <span className="text-sm text-slate-400 line-through">{originalPriceText}</span>
+              )}
+            </div>
           </div>
 
-          {/* Footer del Modal (Llamado a la Acción) */}
-          <div className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-500 dark:text-slate-400 text-center md:text-left">
-              * Sujeto a disponibilidad y cambios sin previo aviso. Aplican T&C.
-            </p>
-            <a 
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-green-900/20"
-            >
-              <FaWhatsapp size={20} />
-              Reservar por WhatsApp
-            </a>
-          </div>
-
+          <a
+            href={whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-slate-950 font-semibold text-sm sm:text-base transition shadow-sm"
+          >
+            <FaWhatsapp className="w-5 h-5" aria-hidden="true" />
+            <span>Cotizar por WhatsApp</span>
+          </a>
         </div>
       </div>
     </div>

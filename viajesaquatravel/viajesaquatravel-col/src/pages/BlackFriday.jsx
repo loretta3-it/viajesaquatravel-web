@@ -1,98 +1,162 @@
-import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { Sparkles, Tag } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa6';
 import { db } from '../config/firebase';
 import { siteConfig } from '../config/siteConfig';
+import PageHeader from '../components/layout/PageHeader';
 import PackageCard from '../components/ui/PackageCard';
 import ProductModal from '../components/ui/ProductModal';
-import Breadcrumb from '../components/ui/Breadcrumb';
-import { Timer, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
+import { normalizeProduct } from '../utils/normalizeProduct';
+import { useSettings } from '../hooks/useSettings';
+import { buildWhatsAppUrl } from '../utils/whatsapp';
+
+function parseDateValue(value) {
+  if (!value) return null;
+  if (typeof value?.toDate === 'function') {
+    return value.toDate();
+  }
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function isOfferValid(offer, nowMs) {
+  const validUntilDate = parseDateValue(offer.validUntil);
+  if (validUntilDate && validUntilDate.getTime() < nowMs) {
+    return false;
+  }
+  const validFromDate = parseDateValue(offer.validFrom);
+  if (validFromDate && validFromDate.getTime() > nowMs) {
+    return false;
+  }
+  return true;
+}
+
+function prepareOffers(rawList) {
+  const nowMs = Date.now();
+  return (Array.isArray(rawList) ? rawList : [])
+    .filter((item) => item && item.status === 'published' && item.isActive !== false)
+    .filter((item) => isOfferValid(item, nowMs))
+    .map((item) => normalizeProduct(item))
+    .filter(Boolean)
+    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+}
+
+const FALLBACK_OFFERS = prepareOffers(siteConfig.seed?.offers || []);
 
 export default function BlackFriday() {
-  const [offers, setOffers] = useState([]);
+  const { agency, promoButton } = useSettings();
+  const [offers, setOffers] = useState(FALLBACK_OFFERS);
+  const [selectedOffer, setSelectedOffer] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    const fetchOffers = async () => {
-      try {
-        const q = query(collection(db, 'offers'), where('isActive', '==', true));
-        const snapshot = await getDocs(q);
-        const fetchedData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setOffers(fetchedData);
-      } catch (error) {
-        console.error("Error silencioso cargando ofertas:", error);
-      } finally {
+    const q = query(
+      collection(db, 'offers'),
+      where('status', '==', 'published'),
+      where('isActive', '==', true)
+    );
+
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const rawDocs = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...docSnap.data(),
+          }));
+          setOffers(prepareOffers(rawDocs));
+        } else {
+          setOffers(FALLBACK_OFFERS);
+        }
+        setLoading(false);
+      },
+      () => {
+        setOffers(FALLBACK_OFFERS);
         setLoading(false);
       }
-    };
-    fetchOffers();
+    );
+
+    return () => unsubscribe();
   }, []);
 
-  const adaptOfferForModal = (offer) => ({
-    ...offer,
-    price: offer.discountPrice ?? offer.price,
-    businessLine: "volume",
-    features: [offer.duration, offer.destination],
-  });
+  const campaignTitle = promoButton?.label || 'Ofertas Especiales';
+  const phone = agency?.whatsappNumber || agency?.phone;
+  const whatsappHref = buildWhatsAppUrl(
+    'Quiero consultar las ofertas y promociones vigentes en Viajes Aqua Travel.',
+    phone
+  );
 
   return (
-    <div className="w-full bg-[#050b14] min-h-screen text-slate-50 font-sans pb-20">
-      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden border-b border-yellow-500/20">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-900/20 via-[#050b14] to-[#050b14] z-0"></div>
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-yellow-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-600/5 rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 text-center mt-12">
-          <div className="flex justify-center mb-6">
-            <Breadcrumb items={[{ label: 'Black Days', path: null }]} />
-          </div>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-yellow-500/30 bg-yellow-500/10 text-yellow-400 text-sm font-bold tracking-widest uppercase mb-6 backdrop-blur-sm">
-            <Sparkles size={16} /> Edición Limitada
-          </div>
-          <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-yellow-100 to-yellow-500 mb-6 tracking-tighter drop-shadow-lg uppercase">
-            {siteConfig.offers?.campaignName || "Black Days"}
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-300 font-light max-w-3xl mx-auto mb-10">
-            Descubre nuestras mejores tarifas del año. Descuentos exclusivos, asesoría premium y cupos estrictamente limitados.
-          </p>
-          <div className="flex items-center justify-center gap-4 text-yellow-500 font-mono text-xl bg-[#050b14]/80 p-4 rounded-xl border border-yellow-500/20 backdrop-blur-md inline-flex shadow-[0_0_20px_rgba(234,179,8,0.15)]">
-            <Timer className="animate-pulse" />
-            <span>Ofertas con tiempo límite de reserva</span>
-          </div>
-        </div>
-      </section>
+    <main className="bg-slate-50 min-h-[70vh] pb-20">
+      <PageHeader
+        title={campaignTitle}
+        subtitle="Tarifas promocionales por tiempo limitado con el respaldo y acompañamiento de Viajes Aqua Travel."
+        breadcrumbItems={[
+          { label: 'Inicio', path: '/' },
+          { label: 'Ofertas Especiales', path: '/ofertas' },
+        ]}
+      />
 
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-20">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-pulse">
-            {[1, 2, 3].map((_, i) => (
-              <div key={i} className="bg-slate-800/50 rounded-2xl h-[400px] border border-yellow-500/10"></div>
-            ))}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-600">
+            <Tag className="w-4 h-4 text-[#25D366]" aria-hidden="true" />
+            <span>
+              {offers.length} {offers.length === 1 ? 'oferta vigente' : 'ofertas vigentes'}
+            </span>
           </div>
-        ) : offers.length === 0 ? (
-          <div className="text-center py-20 bg-white/5 rounded-2xl border border-white/10">
-            <AlertCircle className="w-12 h-12 text-yellow-500 mx-auto mb-4 opacity-80" />
-            <h3 className="text-2xl font-bold text-white mb-2">Estamos preparando las ofertas</h3>
-            <p className="text-slate-400">Vuelve pronto para descubrir nuestros descuentos exclusivos de temporada.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {offers.map((offer) => (
-              <PackageCard 
-                key={offer.id}
-                product={offer}
-                isOffer={true}
-                onClick={(prod) => setSelectedProduct(adaptOfferForModal(prod))}
+          <p className="text-xs sm:text-sm text-slate-500">
+            Las ofertas vencidas se ocultan automáticamente. Sujeto a disponibilidad aérea y
+            hotelera.
+          </p>
+        </div>
+
+        {loading && offers.length === 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="h-96 rounded-3xl bg-white border border-slate-200 animate-pulse"
               />
             ))}
+          </div>
+        ) : offers.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {offers.map((offer) => (
+              <PackageCard
+                key={offer.id}
+                product={offer}
+                onOpenModal={setSelectedOffer}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl bg-white border border-slate-200 p-10 text-center max-w-2xl mx-auto">
+            <Sparkles className="w-8 h-8 text-slate-900 mx-auto mb-3" aria-hidden="true" />
+            <h2 className="text-lg font-bold text-slate-900">
+              No hay promociones activas en este momento
+            </h2>
+            <p className="text-sm text-slate-600 mt-2">
+              Escríbenos por WhatsApp y te compartimos las tarifas especiales disponibles para tus
+              fechas de viaje.
+            </p>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-slate-950 font-semibold text-sm transition"
+            >
+              <FaWhatsapp className="w-4 h-4" aria-hidden="true" />
+              <span>Consultar promociones por WhatsApp</span>
+            </a>
           </div>
         )}
       </section>
 
-      {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} isOffer={true} />}
-    </div>
+      {selectedOffer && (
+        <ProductModal product={selectedOffer} onClose={() => setSelectedOffer(null)} />
+      )}
+    </main>
   );
 }

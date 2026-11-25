@@ -1,66 +1,143 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Link, useNavigate } from 'react-router-dom';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { ArrowRight, HeartHandshake, PlaneTakeoff, ShieldCheck, Star } from 'lucide-react';
 import { db } from '../config/firebase';
 import { siteConfig } from '../config/siteConfig';
 import HeroCarousel from '../components/ui/HeroCarousel';
 import PackageCard from '../components/ui/PackageCard';
 import ProductModal from '../components/ui/ProductModal';
+import ReviewsSlot from '../components/ui/ReviewsSlot';
 import TripPlannerForm from '../components/layout/TripPlannerForm';
+import { normalizeProduct } from '../utils/normalizeProduct';
+import { useSettings } from '../hooks/useSettings';
+import { buildWhatsAppUrl } from '../utils/whatsapp';
 
-const HERO_IDS = ['mar-01', 'vol-01', 'mar-09'];
+const FALLBACK_DESTINATIONS = (siteConfig.seed?.destinations || siteConfig.catalog || [])
+  .filter((item) => item && item.status !== 'draft' && item.isActive !== false)
+  .map((item) => normalizeProduct(item))
+  .filter(Boolean)
+  .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+const FALLBACK_BANNERS = (siteConfig.seed?.banners || [])
+  .filter((item) => item && item.status === 'published' && item.isActive !== false)
+  .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
 
 export default function Home() {
-  const [catalog, setCatalog] = useState(siteConfig.catalog || []);
+  const navigate = useNavigate();
+  const { agency } = useSettings();
+  const [destinations, setDestinations] = useState(FALLBACK_DESTINATIONS);
+  const [banners, setBanners] = useState(FALLBACK_BANNERS);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
-    let active = true;
+    const destQuery = query(
+      collection(db, 'destinations'),
+      where('status', '==', 'published'),
+      where('isActive', '==', true)
+    );
 
-    async function loadDestinations() {
-      try {
-        const q = query(collection(db, 'destinations'), where('isActive', '==', true));
-        let snap = await getDocs(q);
-
-        // Fallback temporal hasta cierre del Sprint 3
-        if (snap.empty) {
-          snap = await getDocs(collection(db, 'destinations'));
+    const unsubDestinations = onSnapshot(
+      destQuery,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const items = snapshot.docs
+            .map((docSnap) =>
+              normalizeProduct({
+                id: docSnap.id,
+                ...docSnap.data(),
+              })
+            )
+            .filter(Boolean)
+            .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+          setDestinations(items);
+        } else {
+          setDestinations(FALLBACK_DESTINATIONS);
         }
-
-        if (!snap.empty && active) {
-          const items = snap.docs.map((docSnap) => ({
-            id: docSnap.id,
-            ...docSnap.data(),
-          }));
-          setCatalog(items);
-        }
-      } catch {
-        // Mantiene respaldo local de siteConfig.catalog
+      },
+      () => {
+        setDestinations(FALLBACK_DESTINATIONS);
       }
-    }
+    );
 
-    loadDestinations();
+    const bannersQuery = query(
+      collection(db, 'banners'),
+      where('status', '==', 'published'),
+      where('isActive', '==', true)
+    );
+
+    const unsubBanners = onSnapshot(
+      bannersQuery,
+      (snapshot) => {
+        if (!snapshot.empty) {
+          const items = snapshot.docs
+            .map((docSnap) => ({
+              id: docSnap.id,
+              ...docSnap.data(),
+            }))
+            .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+          setBanners(items);
+        } else {
+          setBanners(FALLBACK_BANNERS);
+        }
+      },
+      () => {
+        setBanners(FALLBACK_BANNERS);
+      }
+    );
+
     return () => {
-      active = false;
+      unsubDestinations();
+      unsubBanners();
     };
   }, []);
 
-  const heroSlides = HERO_IDS.map((id) => catalog.find((item) => item.id === id)).filter(Boolean);
-  const slidesToRender = heroSlides.length > 0 ? heroSlides : catalog.slice(0, 3);
+  const slidesToRender = banners.length > 0 ? banners : destinations.slice(0, 3);
 
-  const volumeDeals = catalog.filter((item) => item.businessLine === 'volume');
-  const localDeals = catalog.filter((item) => item.businessLine === 'local');
-  const marginDeals = catalog.filter((item) => item.businessLine === 'margin');
+  const handleHeroAction = (slide) => {
+    if (!slide) return;
+
+    if (slide.ctaType === 'route' && slide.ctaTarget) {
+      navigate(slide.ctaTarget);
+      return;
+    }
+
+    if (slide.ctaType === 'whatsapp') {
+      const phone = agency?.whatsappNumber || agency?.phone;
+      const url = buildWhatsAppUrl(
+        slide.ctaTarget || `Quiero información sobre ${slide.title}.`,
+        phone
+      );
+      window.open(url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    if (slide.ctaType === 'product' && typeof slide.ctaTarget === 'string') {
+      const targetId = slide.ctaTarget.includes('/')
+        ? slide.ctaTarget.split('/').pop()
+        : slide.ctaTarget;
+      const matched = destinations.find((item) => item.id === targetId);
+      if (matched) {
+        setSelectedProduct(matched);
+        return;
+      }
+    }
+
+    setSelectedProduct(slide);
+  };
+
+  const volumeDeals = destinations.filter((item) => item.businessLine === 'volume');
+  const localDeals = destinations.filter((item) => item.businessLine === 'local');
+  const marginDeals = destinations.filter((item) => item.businessLine === 'margin');
 
   return (
     <main className="bg-slate-50">
-      <HeroCarousel slides={slidesToRender} onOpenModal={setSelectedProduct} />
+      <HeroCarousel slides={slidesToRender} onOpenModal={handleHeroAction} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-start gap-3.5">
-            <ShieldCheck className="w-6 h-6 text-slate-900 shrink-0 mt-0.5" />
+            <ShieldCheck className="w-6 h-6 text-slate-900 shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <h3 className="text-sm font-semibold text-slate-900">Agencia Formal RNT 115795</h3>
               <p className="text-xs text-slate-600 mt-1">
@@ -70,7 +147,10 @@ export default function Home() {
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-start gap-3.5">
-            <HeartHandshake className="w-6 h-6 text-slate-900 shrink-0 mt-0.5" />
+            <HeartHandshake
+              className="w-6 h-6 text-slate-900 shrink-0 mt-0.5"
+              aria-hidden="true"
+            />
             <div>
               <h3 className="text-sm font-semibold text-slate-900">Asesoría Humana Real</h3>
               <p className="text-xs text-slate-600 mt-1">
@@ -80,7 +160,7 @@ export default function Home() {
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-start gap-3.5">
-            <PlaneTakeoff className="w-6 h-6 text-slate-900 shrink-0 mt-0.5" />
+            <PlaneTakeoff className="w-6 h-6 text-slate-900 shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <h3 className="text-sm font-semibold text-slate-900">Destinos a la Medida</h3>
               <p className="text-xs text-slate-600 mt-1">
@@ -90,7 +170,7 @@ export default function Home() {
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-start gap-3.5">
-            <Star className="w-6 h-6 text-slate-900 shrink-0 mt-0.5" />
+            <Star className="w-6 h-6 text-slate-900 shrink-0 mt-0.5" aria-hidden="true" />
             <div>
               <h3 className="text-sm font-semibold text-slate-900">Planes Transparentes</h3>
               <p className="text-xs text-slate-600 mt-1">
@@ -189,10 +269,12 @@ export default function Home() {
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-slate-950 font-semibold text-sm hover:bg-slate-100 transition shrink-0"
           >
             <span>Explorar Aqua Woman</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
         </div>
       </section>
+
+      <ReviewsSlot />
 
       <section id="cotizar" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-20">
         <TripPlannerForm />
