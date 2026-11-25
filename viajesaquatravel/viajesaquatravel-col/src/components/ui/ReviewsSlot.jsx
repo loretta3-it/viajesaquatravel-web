@@ -48,24 +48,28 @@ export default function ReviewsSlot() {
     <section
       id="resenas"
       aria-labelledby="resenas-heading"
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
+      className="max-w-7xl mx-auto px-4 md:px-8 py-12"
     >
-      <div className="rounded-3xl bg-white border border-slate-200/90 shadow-sm p-6 sm:p-10">
+      <div className="rounded-3xl bg-slate-900 border border-slate-800 shadow-xl p-6 sm:p-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 text-amber-500 mb-2">
+            <div className="inline-flex items-center gap-1.5 text-amber-400 mb-2">
               {Array.from({ length: 5 }).map((_, idx) => (
-                <Star key={idx} className="w-4 h-4 fill-amber-400 text-amber-400" aria-hidden="true" />
+                <Star
+                  key={idx}
+                  className="w-4 h-4 fill-amber-400 text-amber-400"
+                  aria-hidden="true"
+                />
               ))}
-              <span className="ml-2 text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <span className="ml-2 text-xs font-semibold uppercase tracking-wider text-slate-300">
                 Confianza Verificada
               </span>
             </div>
 
-            <h2 id="resenas-heading" className="text-2xl sm:text-3xl font-bold text-slate-900">
+            <h2 id="resenas-heading" className="text-2xl sm:text-3xl font-bold text-white">
               Lo que dicen nuestros viajeros
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="mt-2 text-sm sm:text-base text-slate-400 leading-relaxed">
               Más de 9 años acompañando familias, parejas y grupos desde Zipaquirá hacia Colombia y
               el mundo con respaldo formal (RNT 115795).
             </p>
@@ -76,7 +80,7 @@ export default function ReviewsSlot() {
               href={googleProfileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition shadow-md shadow-blue-900/30"
             >
               <ShieldCheck className="w-4 h-4 text-[#25D366]" aria-hidden="true" />
               <span>Ver reseñas en Google</span>
@@ -87,11 +91,11 @@ export default function ReviewsSlot() {
 
         {hasWidget && (
           <div
-            className="mt-8 pt-6 border-t border-slate-100"
+            className="mt-8 pt-6 border-t border-slate-800"
             data-reviews-provider={safeProvider}
             data-reviews-widget-id={String(config.widgetId).trim()}
           >
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-400">
               Widget conectado ({safeProvider}) — ID verificado.
             </p>
           </div>

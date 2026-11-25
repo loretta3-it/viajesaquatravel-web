@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { AlertTriangle, Calendar, MapPin, Send, User, Users } from 'lucide-react';
+import { AlertTriangle, Calendar, MapPin, User, Users } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa6';
 import { useSettings } from '../../hooks/useSettings';
 import { buildWhatsAppUrl } from '../../utils/whatsapp';
 
@@ -84,22 +85,13 @@ export default function TripPlannerForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white rounded-3xl border border-slate-200/90 shadow-xl p-6 sm:p-8"
+      className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4"
       noValidate
     >
-      <div className="mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-          Diseña tu próximo viaje
-        </h2>
-        <p className="text-sm text-slate-600 mt-1">
-          Completa los datos básicos y recibe una cotización personalizada por WhatsApp.
-        </p>
-      </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="tp-name" className="block text-xs font-semibold text-slate-700 mb-1.5">
-            Tu nombre
+          <label htmlFor="tp-name" className="block text-xs font-semibold text-slate-300 mb-1.5">
+            Nombre Completo
           </label>
           <div className="relative">
             <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -110,14 +102,14 @@ export default function TripPlannerForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ej. Laura Gómez"
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="tp-dest" className="block text-xs font-semibold text-slate-700 mb-1.5">
-            Destino soñado
+          <label htmlFor="tp-dest" className="block text-xs font-semibold text-slate-300 mb-1.5">
+            Destino de Interés
           </label>
           <div className="relative">
             <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -128,13 +120,13 @@ export default function TripPlannerForm() {
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
               placeholder="Ej. Cancún, Europa, San Andrés..."
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="tp-start" className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label htmlFor="tp-start" className="block text-xs font-semibold text-slate-300 mb-1.5">
             Fecha desde
           </label>
           <div className="relative">
@@ -146,13 +138,13 @@ export default function TripPlannerForm() {
               min={todayIso}
               value={startDate}
               onChange={(e) => handleStartDateChange(e.target.value)}
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="tp-end" className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label htmlFor="tp-end" className="block text-xs font-semibold text-slate-300 mb-1.5">
             Fecha hasta
           </label>
           <div className="relative">
@@ -164,15 +156,15 @@ export default function TripPlannerForm() {
               min={startDate || todayIso}
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full pl-10 pr-3.5 py-3 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mt-4">
+      <div className="grid grid-cols-3 gap-3">
         <div>
-          <label htmlFor="tp-adults" className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label htmlFor="tp-adults" className="block text-xs font-semibold text-slate-300 mb-1.5">
             Adultos
           </label>
           <div className="relative">
@@ -184,13 +176,13 @@ export default function TripPlannerForm() {
               max={20}
               value={adults}
               onChange={(e) => setAdults(Math.max(1, Number(e.target.value) || 1))}
-              className="w-full pl-9 pr-2.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+              className="w-full pl-9 pr-2.5 py-3 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="tp-children" className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label htmlFor="tp-children" className="block text-xs font-semibold text-slate-300 mb-1.5">
             Menores (2–11)
           </label>
           <input
@@ -200,12 +192,12 @@ export default function TripPlannerForm() {
             max={20}
             value={children}
             onChange={(e) => setChildren(Math.max(0, Number(e.target.value) || 0))}
-            className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+            className="w-full px-3 py-3 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
 
         <div>
-          <label htmlFor="tp-infants" className="block text-xs font-semibold text-slate-700 mb-1.5">
+          <label htmlFor="tp-infants" className="block text-xs font-semibold text-slate-300 mb-1.5">
             Bebés (&lt;2)
           </label>
           <input
@@ -215,7 +207,7 @@ export default function TripPlannerForm() {
             max={10}
             value={infants}
             onChange={(e) => setInfants(Math.max(0, Number(e.target.value) || 0))}
-            className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
+            className="w-full px-3 py-3 rounded-lg bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         </div>
       </div>
@@ -223,9 +215,9 @@ export default function TripPlannerForm() {
       {babiesExceedAdults && (
         <div
           role="status"
-          className="mt-4 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-start gap-2"
+          className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-2"
         >
-          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" aria-hidden="true" />
           <span>
             Hay más bebés (&lt;2 años) que adultos. Las aerolíneas suelen requerir al menos un
             adulto por cada bebé en brazos; nuestra asesora te ayudará a cotizar la mejor opción.
@@ -234,17 +226,17 @@ export default function TripPlannerForm() {
       )}
 
       {error && (
-        <p role="alert" className="mt-4 text-xs font-medium text-red-600">
+        <p role="alert" className="text-xs font-medium text-rose-400">
           {error}
         </p>
       )}
 
       <button
         type="submit"
-        className="mt-6 w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-slate-950 font-semibold text-sm sm:text-base transition shadow-sm cursor-pointer"
+        className="w-full mt-2 flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] px-6 py-4 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(37,211,102,0.3)] cursor-pointer"
       >
-        <Send className="w-4 h-4" aria-hidden="true" />
-        <span>Cotizar mi viaje por WhatsApp</span>
+        <FaWhatsapp size={22} aria-hidden="true" />
+        <span>Enviar a WhatsApp</span>
       </button>
     </form>
   );

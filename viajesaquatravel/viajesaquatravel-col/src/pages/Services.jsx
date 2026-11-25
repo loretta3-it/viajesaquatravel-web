@@ -57,7 +57,7 @@ export default function Services() {
   );
 
   return (
-    <main className="bg-slate-50 min-h-[70vh] pb-20">
+    <main className="bg-[#0B1220] text-slate-50 min-h-[70vh] pb-20">
       <PageHeader
         title="Servicios Adicionales"
         subtitle="Complementa tu viaje con asesoría profesional en visas, asistencia médica integral y conectividad global sin roaming."
@@ -73,7 +73,7 @@ export default function Services() {
             {Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={idx}
-                className="h-96 rounded-3xl bg-white border border-slate-200 animate-pulse"
+                className="h-96 rounded-3xl bg-slate-900 border border-slate-800 animate-pulse"
               />
             ))}
           </div>
@@ -85,7 +85,7 @@ export default function Services() {
           </div>
         )}
 
-        <div className="mt-14 rounded-3xl bg-slate-950 text-white p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="mt-14 rounded-3xl bg-slate-900 border border-slate-800 text-white p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#25D366]">
               <ShieldCheck className="w-4 h-4" aria-hidden="true" />
@@ -104,7 +104,7 @@ export default function Services() {
             href={generalSupportHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-slate-950 font-semibold text-sm transition shrink-0"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] font-bold text-sm transition shrink-0 shadow-lg shadow-green-900/20"
           >
             <FaWhatsapp className="w-4 h-4" aria-hidden="true" />
             <span>Consultar por WhatsApp</span>

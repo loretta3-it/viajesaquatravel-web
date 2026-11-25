@@ -5,7 +5,7 @@ import {
   Clock,
   Info,
   MapPin,
-  Sparkles,
+  Tag,
   X,
   XCircle,
 } from 'lucide-react';
@@ -16,7 +16,7 @@ import { formatPrice } from '../../utils/price';
 import { normalizeProduct } from '../../utils/normalizeProduct';
 import { buildWhatsAppUrl } from '../../utils/whatsapp';
 
-export default function ProductModal({ product, onClose }) {
+export default function ProductModal({ product, onClose, agencyNumber }) {
   const { agency } = useSettings();
 
   useEffect(() => {
@@ -51,11 +51,11 @@ export default function ProductModal({ product, onClose }) {
       ? formatPrice(normalized.originalPrice, normalized.currency)
       : '';
 
-  const phone = agency?.whatsappNumber || agency?.phone;
+  const phone = agencyNumber || agency?.whatsappNumber || agency?.phone;
   const whatsappMessage =
     normalized.whatsappMessage ||
-    `Quiero recibir información y cotización sobre "${normalized.title}".`;
-  const whatsappHref = buildWhatsAppUrl(whatsappMessage, phone);
+    `Estoy interesado en el paquete "${normalized.title}". Me gustaría recibir más información.`;
+  const whatsappUrl = buildWhatsAppUrl(whatsappMessage, phone);
 
   const itinerary = Array.isArray(normalized.itinerary) ? normalized.itinerary : [];
   const includes = Array.isArray(normalized.includes) ? normalized.includes : [];
@@ -63,105 +63,96 @@ export default function ProductModal({ product, onClose }) {
   const importantNotes = Array.isArray(normalized.importantNotes)
     ? normalized.importantNotes
     : [];
-  const features = Array.isArray(normalized.features) ? normalized.features : [];
 
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="product-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl max-h-[92vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+        className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[95vh] overflow-hidden relative text-slate-100"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Cabecera fija */}
-        <div className="flex items-start justify-between gap-4 px-5 sm:px-7 py-4 border-b border-slate-200 bg-white">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mb-1">
-              {normalized.destination && (
-                <span className="inline-flex items-center gap-1 font-medium text-slate-700">
-                  <MapPin className="w-3.5 h-3.5 text-slate-900" aria-hidden="true" />
-                  {normalized.destination}
-                </span>
-              )}
-              {normalized.duration && (
-                <span className="inline-flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-                  {normalized.duration}
-                </span>
-              )}
-              {normalized.spotsLabel && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-semibold">
-                  <Sparkles className="w-3 h-3" aria-hidden="true" />
-                  {normalized.spotsLabel}
-                </span>
-              )}
-            </div>
-            <h2
-              id="product-modal-title"
-              className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight truncate"
-            >
-              {normalized.title}
-            </h2>
-          </div>
+        {/* Botón Flotante de Cerrar */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 p-2 bg-black/60 text-white hover:bg-black/85 rounded-full backdrop-blur-md transition-colors cursor-pointer"
+          aria-label="Cerrar modal"
+        >
+          <X size={20} aria-hidden="true" />
+        </button>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar ventana"
-            className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer shrink-0"
-          >
-            <X className="w-5 h-5" aria-hidden="true" />
-          </button>
-        </div>
-
-        {/* Contenido desplazable */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-5 sm:p-7 space-y-6">
+        {/* Contenido Desplazable */}
+        <div className="p-5 sm:p-8 overflow-y-auto custom-scrollbar flex-1 space-y-6">
           <MediaGallery
             media={normalized.media}
             title={normalized.title}
             aspectClass="aspect-[16/9]"
           />
 
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+            <div>
+              <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-wider text-blue-400 mb-2">
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin size={14} aria-hidden="true" />
+                  {normalized.destination || normalized.businessLine || 'Destino Exclusivo'}
+                </span>
+                {normalized.duration && (
+                  <span className="inline-flex items-center gap-1 text-slate-400">
+                    <Clock size={14} aria-hidden="true" />
+                    {normalized.duration}
+                  </span>
+                )}
+              </div>
+              <h2
+                id="product-modal-title"
+                className="text-2xl md:text-3xl font-bold text-white"
+              >
+                {normalized.title}
+              </h2>
+            </div>
+
+            <div className="flex flex-col md:items-end flex-shrink-0 bg-slate-800/60 p-4 rounded-xl border border-slate-700/70">
+              <span className="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">
+                Inversión desde
+              </span>
+              <div className="text-2xl font-black text-white flex items-center gap-2">
+                {priceText}
+              </div>
+              {originalPriceText && (
+                <div className="text-sm text-slate-400 line-through mt-1 flex items-center gap-1">
+                  <Tag size={12} aria-hidden="true" /> {originalPriceText}
+                </div>
+              )}
+            </div>
+          </div>
+
           {normalized.description && (
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
               {normalized.description}
             </p>
           )}
 
-          {features.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {features.map((feat, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium"
-                >
-                  {feat}
-                </span>
-              ))}
-            </div>
-          )}
-
           {/* Itinerario (AquaWoman u otros con agenda diaria) */}
           {itinerary.length > 0 && (
-            <div className="rounded-2xl bg-purple-50/70 border border-purple-200/70 p-5 space-y-4">
-              <div className="flex items-center gap-2 text-purple-900 font-bold text-sm sm:text-base">
-                <Calendar className="w-4 h-4 text-purple-700" aria-hidden="true" />
-                <span>Itinerario de la experiencia</span>
-              </div>
+            <div className="bg-purple-950/30 rounded-2xl p-6 border border-purple-500/25 space-y-4">
+              <h3 className="font-bold text-purple-300 flex items-center gap-2">
+                <Calendar size={18} aria-hidden="true" /> Itinerario de la experiencia
+              </h3>
               <ol className="space-y-3">
                 {itinerary.map((step, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <span className="shrink-0 px-2.5 py-0.5 rounded-lg bg-purple-900 text-white text-xs font-semibold">
+                    <span className="shrink-0 px-2.5 py-0.5 rounded-lg bg-purple-600/30 border border-purple-500/40 text-purple-200 text-xs font-bold">
                       {step.day || `Día ${idx + 1}`}
                     </span>
                     <div className="text-sm">
-                      <p className="font-semibold text-slate-900">{step.title}</p>
+                      <p className="font-semibold text-white">{step.title}</p>
                       {step.desc && (
-                        <p className="text-slate-600 mt-0.5 leading-relaxed">{step.desc}</p>
+                        <p className="text-slate-300 mt-0.5 leading-relaxed">{step.desc}</p>
                       )}
                     </div>
                   </li>
@@ -170,19 +161,21 @@ export default function ProductModal({ product, onClose }) {
             </div>
           )}
 
-          {/* Incluye / No incluye */}
+          {/* Incluye / No Incluye */}
           {(includes.length > 0 || notIncludes.length > 0) && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {includes.length > 0 && (
-                <div className="rounded-2xl bg-emerald-50/60 border border-emerald-200/70 p-5">
-                  <h3 className="text-sm font-bold text-slate-900 mb-3">Incluye</h3>
-                  <ul className="space-y-2">
+                <div className="bg-emerald-900/15 rounded-2xl p-6 border border-emerald-800/40">
+                  <h3 className="font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                    <CheckCircle2 size={18} aria-hidden="true" /> El plan incluye
+                  </h3>
+                  <ul className="space-y-3">
                     {includes.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
-                        <CheckCircle2
-                          className="w-4 h-4 text-[#25D366] shrink-0 mt-0.5"
-                          aria-hidden="true"
-                        />
+                      <li
+                        key={idx}
+                        className="flex items-start gap-2 text-sm text-emerald-100/85 leading-relaxed"
+                      >
+                        <span className="text-emerald-400 mt-0.5">•</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -191,15 +184,17 @@ export default function ProductModal({ product, onClose }) {
               )}
 
               {notIncludes.length > 0 && (
-                <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5">
-                  <h3 className="text-sm font-bold text-slate-900 mb-3">No incluye</h3>
-                  <ul className="space-y-2">
+                <div className="bg-rose-900/15 rounded-2xl p-6 border border-rose-800/40">
+                  <h3 className="font-bold text-rose-400 mb-4 flex items-center gap-2">
+                    <XCircle size={18} aria-hidden="true" /> No incluye
+                  </h3>
+                  <ul className="space-y-3">
                     {notIncludes.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                        <XCircle
-                          className="w-4 h-4 text-slate-400 shrink-0 mt-0.5"
-                          aria-hidden="true"
-                        />
+                      <li
+                        key={idx}
+                        className="flex items-start gap-2 text-sm text-rose-100/85 leading-relaxed"
+                      >
+                        <span className="text-rose-400 mt-0.5">•</span>
                         <span>{item}</span>
                       </li>
                     ))}
@@ -211,9 +206,9 @@ export default function ProductModal({ product, onClose }) {
 
           {/* Notas importantes */}
           {importantNotes.length > 0 && (
-            <div className="rounded-2xl bg-amber-50 border border-amber-200/80 p-4 text-amber-900 text-xs sm:text-sm space-y-1.5">
-              <div className="flex items-center gap-2 font-semibold">
-                <Info className="w-4 h-4 text-amber-700 shrink-0" aria-hidden="true" />
+            <div className="bg-amber-950/30 rounded-2xl p-5 border border-amber-500/25 text-amber-200/90 text-xs sm:text-sm space-y-2">
+              <div className="flex items-center gap-2 font-bold text-amber-400">
+                <Info size={16} aria-hidden="true" />
                 <span>Notas importantes</span>
               </div>
               <ul className="list-disc pl-5 space-y-1">
@@ -223,29 +218,22 @@ export default function ProductModal({ product, onClose }) {
               </ul>
             </div>
           )}
-        </div>
 
-        {/* Pie de conversión fijo */}
-        <div className="px-5 sm:px-7 py-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          <div>
-            <span className="block text-xs text-slate-500 font-medium">Tarifa de referencia</span>
-            <div className="flex items-baseline gap-2.5">
-              <span className="text-xl sm:text-2xl font-bold text-slate-900">{priceText}</span>
-              {originalPriceText && (
-                <span className="text-sm text-slate-400 line-through">{originalPriceText}</span>
-              )}
-            </div>
+          {/* Footer del Modal */}
+          <div className="pt-6 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-slate-400 text-center md:text-left">
+              * Sujeto a disponibilidad y cambios sin previo aviso. Aplican T&amp;C.
+            </p>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full md:w-auto flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] px-8 py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-green-900/25"
+            >
+              <FaWhatsapp size={20} aria-hidden="true" />
+              Reservar por WhatsApp
+            </a>
           </div>
-
-          <a
-            href={whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-slate-950 font-semibold text-sm sm:text-base transition shadow-sm"
-          >
-            <FaWhatsapp className="w-5 h-5" aria-hidden="true" />
-            <span>Cotizar por WhatsApp</span>
-          </a>
         </div>
       </div>
     </div>
