@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, Compass } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import PromoButton from '../ui/PromoButton';
 import { useSettings } from '../../hooks/useSettings';
 
@@ -15,69 +15,77 @@ export default function Navbar() {
   const { agency } = useSettings();
 
   const brandName = agency?.name || 'Viajes Aqua Travel';
+  const rnt = agency?.rnt || '115795';
   const closeMenu = () => setMobileOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <Link
-            to="/"
-            onClick={closeMenu}
-            className="inline-flex items-center gap-2.5 text-slate-900 hover:opacity-90 transition"
-          >
-            <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-slate-900 text-white">
-              <Compass className="w-5 h-5" aria-hidden="true" />
+    <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
+        <Link
+          to="/"
+          onClick={closeMenu}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+        >
+          <img
+            src="/logo-circle.png"
+            alt="Logo Aqua Travel"
+            className="h-10 w-auto object-contain"
+          />
+          <div>
+            <span className="block text-xl font-bold tracking-tight text-white">
+              {brandName}
             </span>
-            <div className="flex flex-col leading-tight">
-              <span className="text-base md:text-lg font-bold tracking-tight text-slate-900">
-                {brandName}
-              </span>
-              {agency?.rnt && (
-                <span className="text-[11px] font-medium text-slate-500">
-                  RNT {agency.rnt}
-                </span>
-              )}
-            </div>
+            <p className="text-xs text-slate-400 font-medium tracking-wide">
+              RNT: {rnt}
+            </p>
+          </div>
+        </Link>
+
+        <nav
+          aria-label="Navegación principal"
+          className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300"
+        >
+          {NAV_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) =>
+                `transition-colors ${
+                  isActive ? 'text-white font-semibold' : 'text-slate-300 hover:text-white'
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+
+          <Link
+            to="/aquawoman"
+            className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-4 py-2 rounded-full font-bold transition-all shadow-md shadow-pink-500/20"
+          >
+            Aqua Woman
           </Link>
 
-          <nav aria-label="Navegación principal" className="hidden md:flex items-center gap-7">
-            {NAV_ITEMS.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'text-slate-950 font-semibold'
-                      : 'text-slate-600 hover:text-slate-950'
-                  }`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
-            <PromoButton />
-          </nav>
+          <PromoButton />
+        </nav>
 
-          <div className="flex items-center gap-2 md:hidden">
-            <PromoButton className="px-3 py-1.5 text-xs" />
-            <button
-              type="button"
-              onClick={() => setMobileOpen((prev) => !prev)}
-              aria-expanded={mobileOpen}
-              aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
-              className="p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition cursor-pointer"
-            >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+        <div className="flex items-center gap-2 md:hidden">
+          <PromoButton className="px-3 py-1.5 text-xs" />
+          <button
+            type="button"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+            className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition cursor-pointer"
+          >
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-5 shadow-lg">
+        <div className="md:hidden border-t border-slate-800 bg-slate-900/95 backdrop-blur-md px-4 pt-3 pb-5 shadow-xl">
           <nav aria-label="Navegación móvil" className="flex flex-col gap-2">
             {NAV_ITEMS.map((item) => (
               <NavLink
@@ -88,14 +96,22 @@ export default function Navbar() {
                 className={({ isActive }) =>
                   `px-3 py-2.5 rounded-xl text-sm font-medium transition ${
                     isActive
-                      ? 'bg-slate-900 text-white'
-                      : 'text-slate-700 hover:bg-slate-100'
+                      ? 'bg-blue-600 text-white'
+                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                   }`
                 }
               >
                 {item.label}
               </NavLink>
             ))}
+
+            <Link
+              to="/aquawoman"
+              onClick={closeMenu}
+              className="mt-1 px-4 py-2.5 rounded-xl text-center text-sm font-bold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 transition-all shadow-md shadow-pink-500/20"
+            >
+              Aqua Woman
+            </Link>
           </nav>
         </div>
       )}
