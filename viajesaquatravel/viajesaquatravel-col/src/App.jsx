@@ -1,67 +1,102 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.jsx';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import LayoutShell from './components/layout/LayoutShell';
+import Home from './pages/Home';
+import About from './pages/About';
+import Services from './pages/Services';
+import BlackFriday from './pages/BlackFriday';
+import AquaWoman from './pages/AquaWoman';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Login from './components/admin/Login';
+import ProtectedRoute from './components/admin/ProtectedRoute';
+import AdminLayout from './components/layout/admin/AdminLayout';
+import Dashboard from './pages/admin/Dashboard';
+import CatalogManager from './pages/admin/CatalogManager';
+import OffersManager from './components/layout/admin/OffersManager';
+import DataMigrator from './components/layout/admin/DataMigrator';
 
-// Importaciones Públicas
-import LayoutShell from './components/layout/LayoutShell.jsx';
-import Home from './pages/Home.jsx';
-import AquaWoman from './pages/AquaWoman.jsx';
-import Terms from './pages/Terms.jsx';
-import Privacy from './pages/Privacy.jsx';
-import BlackFriday from './pages/BlackFriday.jsx';
-
-// Importaciones Administrativas
-import Login from './components/admin/Login.jsx';
-import ProtectedRoute from './components/admin/ProtectedRoute.jsx';
-import AdminLayout from './components/layout/admin/AdminLayout.jsx';
-import Dashboard from './pages/admin/Dashboard.jsx'; // <-- NUEVA IMPORTACIÓN DEL DASHBOARD
-import OffersManager from './components/layout/admin/OffersManager.jsx';
-import DataMigrator from './components/layout/admin/DataMigrator.jsx';
-import CatalogManager from './pages/admin/CatalogManager.jsx';
-
-function App() {
+export default function App() {
   return (
     <AuthProvider>
-      <Router>
+      <BrowserRouter>
         <Routes>
-          {/* RUTAS PÚBLICAS */}
-          <Route path="/" element={<LayoutShell><Home /></LayoutShell>} />
-          <Route path="/aquawoman" element={<LayoutShell><AquaWoman /></LayoutShell>} />
-          <Route path="/black-friday" element={<LayoutShell><BlackFriday /></LayoutShell>} />
-          <Route path="/terminos-y-condiciones" element={<LayoutShell><Terms /></LayoutShell>} />
-          <Route path="/politicas-de-privacidad" element={<LayoutShell><Privacy /></LayoutShell>} />
+          <Route
+            path="/"
+            element={
+              <LayoutShell>
+                <Home />
+              </LayoutShell>
+            }
+          />
+          <Route
+            path="/nosotros"
+            element={
+              <LayoutShell>
+                <About />
+              </LayoutShell>
+            }
+          />
+          <Route
+            path="/servicios"
+            element={
+              <LayoutShell>
+                <Services />
+              </LayoutShell>
+            }
+          />
+          <Route
+            path="/ofertas"
+            element={
+              <LayoutShell>
+                <BlackFriday />
+              </LayoutShell>
+            }
+          />
+          <Route path="/black-friday" element={<Navigate to="/ofertas" replace />} />
+          <Route
+            path="/aquawoman"
+            element={
+              <LayoutShell>
+                <AquaWoman />
+              </LayoutShell>
+            }
+          />
+          <Route
+            path="/terminos"
+            element={
+              <LayoutShell>
+                <Terms />
+              </LayoutShell>
+            }
+          />
+          <Route
+            path="/privacidad"
+            element={
+              <LayoutShell>
+                <Privacy />
+              </LayoutShell>
+            }
+          />
 
-          {/* RUTA DE LOGIN */}
           <Route path="/admin/login" element={<Login />} />
-          
-          {/* RUTAS CMS / ADMIN ANIDADAS */}
-          <Route 
-            path="/admin" 
+          <Route
+            path="/admin"
             element={
               <ProtectedRoute>
                 <AdminLayout />
               </ProtectedRoute>
             }
           >
-            <Route index element={<Navigate to="dashboard" replace />} />
-            
-            {/* PANEL GERENCIAL */}
-            <Route path="dashboard" element={<Dashboard />} />
-            
-            {/* GESTOR DE OFERTAS BLACK FRIDAY */}
-            <Route path="offers" element={<OffersManager />} />
-            
-            {/* HERRAMIENTA GESTOR DE CATÁLOGO */}
+            <Route index element={<Dashboard />} />
             <Route path="catalog" element={<CatalogManager />} />
-            
-            {/* HERRAMIENTA DE MIGRACIÓN TEMPORAL */}
+            <Route path="offers" element={<OffersManager />} />
             <Route path="migrator" element={<DataMigrator />} />
           </Route>
-          
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </AuthProvider>
   );
 }
-
-export default App;

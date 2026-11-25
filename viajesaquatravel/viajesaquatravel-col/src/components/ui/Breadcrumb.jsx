@@ -1,33 +1,56 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Home } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
-export default function Breadcrumb({ items }) {
+export default function Breadcrumb({ items = [] }) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return null;
+  }
+
+  const origin =
+    typeof window !== 'undefined' && window.location?.origin
+      ? window.location.origin
+      : 'https://viajesaquatravel.com';
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: item.label,
+      ...(item.path ? { item: `${origin}${item.path}` } : {}),
+    })),
+  };
+
   return (
-    <nav className="flex items-center space-x-2 text-sm text-slate-400 mb-6 overflow-x-auto whitespace-nowrap pb-2 custom-scrollbar">
-      <Link 
-        to="/" 
-        className="flex items-center hover:text-white transition-colors"
-        aria-label="Inicio"
-      >
-        <Home size={16} />
-      </Link>
-      
-      {items.map((item, index) => (
-        <React.Fragment key={index}>
-          <ChevronRight size={16} className="text-slate-600 flex-shrink-0" />
-          {item.path ? (
-            <Link 
-              to={item.path} 
-              className="hover:text-white transition-colors"
-            >
-              {item.label}
-            </Link>
-          ) : (
-            <span className="text-slate-200 font-medium">{item.label}</span>
-          )}
-        </React.Fragment>
-      ))}
-    </nav>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <nav aria-label="Breadcrumb" className="text-xs sm:text-sm text-slate-300">
+        <ol className="flex flex-wrap items-center gap-1.5">
+          {items.map((item, idx) => {
+            const isLast = idx === items.length - 1;
+            return (
+              <li key={`${item.label}-${idx}`} className="inline-flex items-center gap-1.5">
+                {idx > 0 && (
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
+                )}
+                {item.path && !isLast ? (
+                  <Link to={item.path} className="hover:text-white transition-colors">
+                    {item.label}
+                  </Link>
+                ) : (
+                  <span aria-current="page" className="text-white font-medium">
+                    {item.label}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+    </>
   );
 }

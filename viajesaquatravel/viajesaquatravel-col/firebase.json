@@ -9,6 +9,13 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      {
+        "source": "/black-friday",
+        "destination": "/ofertas",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
