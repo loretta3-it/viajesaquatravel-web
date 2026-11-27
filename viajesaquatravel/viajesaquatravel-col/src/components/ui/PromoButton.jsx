@@ -10,10 +10,10 @@ export default function PromoButton({ className = '', onClick }) {
   }
 
   const palette = promoButton.palette || {};
-  const bgFrom = palette.bgFrom || '#0F172A';
-  const bgTo = palette.bgTo || '#1E293B';
-  const textColor = palette.text || '#FFFFFF';
-  const glowColor = palette.glow || '#25D366';
+  const bgFrom = palette.bgFrom || '#F59E0B';
+  const bgTo = palette.bgTo || '#EAB308';
+  const textColor = palette.text || '#0F172A';
+  const glowColor = palette.glow || '#F59E0B';
   const targetPath = promoButton.targetPath || '/ofertas';
   const label = promoButton.label || 'Ofertas Especiales';
 
@@ -32,7 +32,7 @@ export default function PromoButton({ className = '', onClick }) {
       to={targetPath}
       onClick={onClick}
       style={buttonStyle}
-      className={`relative inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold tracking-tight transition-transform duration-200 hover:scale-[1.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-900 ${
+      className={`relative inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-bold tracking-tight transition-transform duration-200 hover:scale-[1.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:ring-amber-400 ${
         promoButton.pulse ? 'promo-pulse' : ''
       } ${className}`}
     >

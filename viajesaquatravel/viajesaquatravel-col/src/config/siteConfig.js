@@ -51,7 +51,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-u-Di0zMI4xI?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?q=80&w=1074?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -477,7 +477,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-4Q-Rbu8Ipcg?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?q=80&w=1964&?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -995,7 +995,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-u-Di0zMI4xI?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?q=80&w=1074?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1557,7 +1557,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-4Q-Rbu8Ipcg?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?q=80&w=1964&?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "ctaLabel": "Ver Detalles / Cotizar",
@@ -1607,15 +1607,15 @@ export const siteConfig = {
     settings: {
       promo_button: {
         id: 'promo_button',
-        label: 'Ofertas Especiales',
+        label: 'Black Friday Ofertas',
         isVisible: true,
         targetPath: '/ofertas',
         palette: {
-          preset: 'navy',
-          bgFrom: '#0F172A',
-          bgTo: '#1E293B',
-          text: '#FFFFFF',
-          glow: '#25D366',
+          preset: 'amber',
+          bgFrom: '#F59E0B',
+          bgTo: '#EAB308',
+          text: '#0F172A',
+          glow: '#F59E0B',
         },
         pulse: true,
         updatedBy: 'seed-v3',

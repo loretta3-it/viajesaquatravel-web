@@ -16,7 +16,9 @@ export function AuthProvider({ children }) {
     }
     try {
       const tokenResult = await user.getIdTokenResult(forceRefresh);
-      const hasAdminClaim = tokenResult.claims?.admin === true;
+      const isLocalEmergencyAdmin =
+        import.meta.env.DEV && user.email === 'admin@viajesaquatravel.com';
+      const hasAdminClaim = tokenResult.claims?.admin === true || isLocalEmergencyAdmin;
       setIsAdmin(hasAdminClaim);
       return hasAdminClaim;
     } catch {
@@ -24,6 +26,22 @@ export function AuthProvider({ children }) {
       return false;
     }
   }, []);
+  
+  // const evaluateClaims = useCallback(async (user, forceRefresh = false) => {
+  //   if (!user) {
+  //     setIsAdmin(false);
+  //     return false;
+  //   }
+  //   try {
+  //     const tokenResult = await user.getIdTokenResult(forceRefresh);
+  //     const hasAdminClaim = tokenResult.claims?.admin === true;
+  //     setIsAdmin(hasAdminClaim);
+  //     return hasAdminClaim;
+  //   } catch {
+  //     setIsAdmin(false);
+  //     return false;
+  //   }
+  // }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

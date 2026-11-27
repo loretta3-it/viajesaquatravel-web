@@ -32,14 +32,14 @@ export default function SocialDock() {
       label: 'TikTok',
       href: social.tiktok,
       icon: FaTiktok,
-      className: 'hover:bg-slate-950 hover:text-white',
+      className: 'hover:bg-white hover:text-slate-950',
     },
   ].filter((item) => typeof item.href === 'string' && item.href.trim().length > 0);
 
   return (
     <aside
       aria-label="Redes sociales y contacto rápido"
-      className="hidden lg:flex fixed right-4 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-2 p-1.5 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-lg social-dock-enter"
+      className="hidden lg:flex fixed right-4 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-2 p-1.5 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-slate-700/80 shadow-xl social-dock-enter"
     >
       {links.map((item) => {
         const Icon = item.icon;
@@ -51,7 +51,7 @@ export default function SocialDock() {
             rel="noopener noreferrer"
             aria-label={item.label}
             title={item.label}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 transition-colors ${item.className}`}
+            className={`w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 transition-colors ${item.className}`}
           >
             <Icon className="w-4 h-4" aria-hidden="true" />
           </a>
@@ -64,7 +64,7 @@ export default function SocialDock() {
         rel="noopener noreferrer"
         aria-label="Escribir por WhatsApp"
         title="Asesoría por WhatsApp"
-        className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#25D366] text-white hover:bg-[#1ebe5d] transition-colors shadow-sm"
+        className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#25D366] text-[#04210f] hover:bg-[#1DA851] transition-colors shadow-sm"
       >
         <FaWhatsapp className="w-5 h-5" aria-hidden="true" />
       </a>

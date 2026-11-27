@@ -57,7 +57,7 @@ export default function Services() {
   );
 
   return (
-    <main className="bg-[#0B1220] text-slate-50 min-h-[70vh] pb-20">
+    <main className="bg-[#0B1220] text-slate-100 min-h-[75vh] pb-20">
       <PageHeader
         title="Servicios Adicionales"
         subtitle="Complementa tu viaje con asesoría profesional en visas, asistencia médica integral y conectividad global sin roaming."
@@ -91,12 +91,12 @@ export default function Services() {
               <ShieldCheck className="w-4 h-4" aria-hidden="true" />
               <span>Asesoría Integral</span>
             </div>
-            <h2 className="text-2xl font-bold mt-2">
+            <h2 className="text-2xl font-bold text-white mt-2">
               ¿Necesitas combinar varios servicios para tu viaje?
             </h2>
-            <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-              Nuestro equipo verifica los requisitos migratorios y sanitarios de tu destino para
-              que viajes sin contratiempos.
+            <p className="text-sm sm:text-base text-slate-300 mt-2 leading-relaxed">
+              Nuestro equipo verifica los requisitos migratorios, médicos y de conectividad de tu
+              destino para que viajes con total tranquilidad.
             </p>
           </div>
 
@@ -104,9 +104,9 @@ export default function Services() {
             href={generalSupportHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] font-bold text-sm transition shrink-0 shadow-lg shadow-green-900/20"
+            className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-[#25D366] hover:bg-[#1DA851] text-[#04210f] font-bold text-sm sm:text-base transition shrink-0 shadow-lg shadow-green-900/25"
           >
-            <FaWhatsapp className="w-4 h-4" aria-hidden="true" />
+            <FaWhatsapp className="w-5 h-5" aria-hidden="true" />
             <span>Consultar por WhatsApp</span>
           </a>
         </div>

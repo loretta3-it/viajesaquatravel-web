@@ -4,19 +4,24 @@ import { db } from '../config/firebase';
 import { siteConfig } from '../config/siteConfig';
 
 const DEFAULT_AGENCY = siteConfig.agency || {};
-const DEFAULT_PROMO_BUTTON = siteConfig.seed?.settings?.promo_button || {
+
+const DEFAULT_PROMO_PALETTE = {
+  preset: 'amber',
+  bgFrom: '#F59E0B',
+  bgTo: '#EAB308',
+  text: '#0F172A',
+  glow: '#F59E0B',
+};
+
+const SEED_PROMO = siteConfig.seed?.settings?.promo_button || {};
+
+const DEFAULT_PROMO_BUTTON = {
   id: 'promo_button',
-  label: 'Ofertas Especiales',
-  isVisible: true,
-  targetPath: '/ofertas',
-  palette: {
-    preset: 'navy',
-    bgFrom: '#0F172A',
-    bgTo: '#1E293B',
-    text: '#FFFFFF',
-    glow: '#25D366',
-  },
-  pulse: true,
+  label: SEED_PROMO.label || 'Ofertas Especiales',
+  isVisible: SEED_PROMO.isVisible ?? true,
+  targetPath: SEED_PROMO.targetPath || '/ofertas',
+  palette: DEFAULT_PROMO_PALETTE,
+  pulse: SEED_PROMO.pulse ?? true,
 };
 
 /**
@@ -50,9 +55,10 @@ export function useSettings() {
               ...(DEFAULT_AGENCY.social || {}),
               ...(data.social || {}),
             },
-            mapPins: Array.isArray(data.mapPins) && data.mapPins.length > 0
-              ? data.mapPins
-              : DEFAULT_AGENCY.mapPins || [],
+            mapPins:
+              Array.isArray(data.mapPins) && data.mapPins.length > 0
+                ? data.mapPins
+                : DEFAULT_AGENCY.mapPins || [],
           });
         } else {
           setAgency(DEFAULT_AGENCY);
@@ -76,7 +82,7 @@ export function useSettings() {
             ...DEFAULT_PROMO_BUTTON,
             ...data,
             palette: {
-              ...(DEFAULT_PROMO_BUTTON.palette || {}),
+              ...DEFAULT_PROMO_PALETTE,
               ...(data.palette || {}),
             },
           });
