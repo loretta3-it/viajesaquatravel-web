@@ -16,7 +16,7 @@ export default function WhatsAppFab() {
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Contactar a Viajes Aqua Travel por WhatsApp"
+      aria-label="Contactar a Viajes AquaTravel por WhatsApp"
       className="lg:hidden fixed bottom-5 right-5 z-40 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#1ebe5d] text-white shadow-xl transition-transform duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#25D366]"
     >
       <FaWhatsapp className="w-7 h-7" aria-hidden="true" />

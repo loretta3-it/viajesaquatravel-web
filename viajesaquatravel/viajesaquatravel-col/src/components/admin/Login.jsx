@@ -33,7 +33,7 @@ export default function Login() {
       <div className="w-full max-w-md bg-slate-900/50 backdrop-blur-xl border border-slate-800 p-8 rounded-3xl shadow-2xl">
         
         <div className="text-center mb-10">
-          <img src="/logo-circle.png" alt="Aqua Travel Admin" className="w-16 h-16 mx-auto mb-4 object-contain opacity-90" />
+          <img src="/logo-circle.png" alt="AquaTravel Admin" className="w-16 h-16 mx-auto mb-4 object-contain opacity-90" />
           <h1 className="text-2xl font-bold text-white tracking-tight">Portal Administrativo</h1>
           <p className="text-sm text-slate-400 mt-2">Acceso restringido para personal autorizado</p>
         </div>

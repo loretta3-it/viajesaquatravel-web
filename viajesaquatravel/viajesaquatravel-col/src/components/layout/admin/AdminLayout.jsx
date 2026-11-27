@@ -58,7 +58,7 @@ export default function AdminLayout() {
         <div className="hidden lg:flex items-center gap-3 p-6 border-b border-slate-800">
           <img src="/logo-circle.png" alt="Logo" className="h-10 w-10 object-contain" />
           <div>
-            <h2 className="text-white font-bold tracking-tight">Aqua Travel</h2>
+            <h2 className="text-white font-bold tracking-tight">AquaTravel</h2>
             <p className="text-xs text-slate-500 font-medium">LorettaHUB CMS</p>
           </div>
         </div>

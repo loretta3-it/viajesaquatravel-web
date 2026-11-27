@@ -54,7 +54,7 @@ export default function HeroCarousel({ slides = [], onSelectSlide, onSelectProdu
       {slideImage ? (
         <img
           src={slideImage}
-          alt={activeSlide?.title || 'Destino destacado Viajes Aqua Travel'}
+          alt={activeSlide?.title || 'Destino destacado Viajes AquaTravel'}
           className="w-full h-full object-cover object-center transition-opacity duration-500"
         />
       ) : (
@@ -74,7 +74,7 @@ export default function HeroCarousel({ slides = [], onSelectSlide, onSelectProdu
             )}
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-3">
-              {activeSlide?.title || 'Viajes Aqua Travel'}
+              {activeSlide?.title || 'Viajes AquaTravel'}
             </h1>
 
             {(activeSlide?.subtitle || activeSlide?.description) && (

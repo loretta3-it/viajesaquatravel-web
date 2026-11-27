@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Globe2, MapPin } from 'lucide-react';
 import { useSettings } from '../../hooks/useSettings';
 
+const MAP_BG_IMAGE =
+  'https://images.unsplash.com/photo-1713098965471-d324f294a71d?q=80&w=1502&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D';
+
 function projectCoordinates(lat, lng) {
   const safeLat = Math.max(-90, Math.min(90, Number(lat) || 0));
   const safeLng = Math.max(-180, Math.min(180, Number(lng) || 0));
@@ -43,42 +46,37 @@ export default function WorldMap({ pins: propPins }) {
         )}
       </div>
 
-      <div className="relative w-full overflow-hidden rounded-2xl bg-[#0B1220] border border-slate-800">
+      <div className="relative w-full aspect-[2/1] overflow-hidden rounded-2xl bg-[#0B1220] border border-slate-800">
+        {/* Imagen de fondo limpia y nítida con overlay oscuro suave */}
+        <img
+          src={MAP_BG_IMAGE}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[#0B1220]/30"
+        />
+
+        {/* SVG transparente únicamente con chinchetas luminosas y tooltips */}
         <svg
           viewBox="0 0 1000 500"
           role="img"
           aria-label="Mapa mundial de destinos operados por Viajes Aqua Travel"
-          className="w-full h-auto block select-none"
+          className="relative z-10 w-full h-full block select-none"
         >
-          {/* Cuadrícula sutil de meridianos y paralelos */}
-          <g stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4">
-            <line x1="0" y1="125" x2="1000" y2="125" />
-            <line x1="0" y1="250" x2="1000" y2="250" />
-            <line x1="0" y1="375" x2="1000" y2="375" />
-            <line x1="250" y1="0" x2="250" y2="500" />
-            <line x1="500" y1="0" x2="500" y2="500" />
-            <line x1="750" y1="0" x2="750" y2="500" />
-          </g>
+          <defs>
+            <filter id="pin-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
 
-          {/* Siluetas minimalistas de continentes */}
-          <g fill="#1e293b" stroke="#334155" strokeWidth="1.2" strokeLinejoin="round">
-            {/* Norteamérica y Centroamérica */}
-            <path d="M85,78 L155,58 L245,62 L292,98 L272,155 L235,182 L212,212 L245,232 L222,248 L195,222 L152,188 L112,148 Z" />
-            {/* Sudamérica */}
-            <path d="M242,250 L292,262 L338,302 L322,368 L286,438 L260,425 L252,355 L232,298 Z" />
-            {/* Europa */}
-            <path d="M465,78 L538,68 L585,95 L568,145 L515,158 L472,142 L456,112 Z" />
-            {/* África */}
-            <path d="M468,175 L548,172 L592,225 L575,322 L532,388 L496,352 L472,265 L455,215 Z" />
-            {/* Asia y Medio Oriente */}
-            <path d="M585,82 L735,68 L852,102 L878,162 L812,218 L735,232 L665,215 L605,192 L578,145 Z" />
-            {/* Japón */}
-            <path d="M876,142 L894,152 L886,178 L868,168 Z" />
-            {/* Oceanía */}
-            <path d="M792,315 L872,312 L898,362 L858,402 L795,382 Z" />
-          </g>
-
-          {/* Chinchetas interactivas */}
           {pins.map((pin, idx) => {
             const { x, y } = projectCoordinates(pin.lat, pin.lng);
             const isHq = /zipaquir[áa]/i.test(pin.label || '');
@@ -102,28 +100,27 @@ export default function WorldMap({ pins: propPins }) {
                   }
                 }}
               >
-                {/* Área táctil ampliada invisible para móvil */}
                 <circle r="18" fill="transparent" />
                 <circle
-                  r={isSelected ? 15 : 10}
+                  r={isSelected ? 17 : 11}
                   fill={pinColor}
-                  fillOpacity={isSelected ? 0.3 : 0.16}
+                  fillOpacity={isSelected ? 0.38 : 0.22}
                 />
                 <circle
                   r={isHq ? 6.5 : 5}
                   fill={pinColor}
                   stroke="#0B1220"
                   strokeWidth="2"
+                  filter="url(#pin-glow)"
                 />
               </g>
             );
           })}
 
-          {/* Tooltip en capa superior para evitar solapamientos */}
           {activePin && (() => {
             const { x, y } = projectCoordinates(activePin.lat, activePin.lng);
             const clampedX = Math.max(85, Math.min(915, x));
-            const tooltipY = y < 55 ? y + 34 : y - 16;
+            const tooltipY = y < 55 ? y + 36 : y - 16;
 
             return (
               <g transform={`translate(${clampedX}, ${tooltipY})`} pointerEvents="none">
@@ -134,7 +131,8 @@ export default function WorldMap({ pins: propPins }) {
                   height="26"
                   rx="8"
                   fill="#0f172a"
-                  stroke="#475569"
+                  fillOpacity="0.95"
+                  stroke="#64748b"
                   strokeWidth="1.2"
                 />
                 <text

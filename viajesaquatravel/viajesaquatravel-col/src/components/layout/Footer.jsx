@@ -46,7 +46,7 @@ export default function Footer() {
           <Link to="/" className="flex items-center gap-3 mb-6 hover:opacity-80 transition-opacity">
             <img
               src="/logo-circle.png"
-              alt="Logo Aqua Travel"
+              alt="Logo AquaTravel"
               className="h-12 w-auto object-contain"
             />
             <h3 className="font-bold text-xl text-white">{safeAgency.name}</h3>

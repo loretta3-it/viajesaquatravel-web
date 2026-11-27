@@ -5,7 +5,7 @@
 
 export const STATUSES = ['draft', 'published'];
 export const CURRENCIES = ['COP', 'USD', 'EUR'];
-export const BUSINESS_LINES = ['volume', 'local', 'margin'];
+export const BUSINESS_LINES = ['volume', 'local', 'margin', 'southAmerica'];
 export const MEDIA_TYPES = ['image', 'video'];
 export const SERVICE_ICONS = ['visa', 'medical', 'sim'];
 export const CTA_TYPES = ['whatsapp', 'route', 'product'];

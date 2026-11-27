@@ -4,7 +4,7 @@ export const siteConfig = {
   schemaVersion: 3,
 
   agency: {
-    name: 'Viajes Aqua Travel',
+    name: 'Viajes AquaTravel',
     rnt: '115795',
     location: 'Zipacentro, Zipaquirá, Cundinamarca, Colombia',
     experienceYears: 9,
@@ -22,18 +22,30 @@ export const siteConfig = {
     },
     mapPins: [
       { label: 'Oficina Zipaquirá', lat: 5.0221, lng: -74.0048 },
+      { label: 'San Andrés', lat: 12.5847, lng: -81.7006 },
       { label: 'Cancún', lat: 21.1619, lng: -86.8515 },
       { label: 'Punta Cana', lat: 18.5601, lng: -68.3725 },
+      { label: 'Curazao', lat: 12.1696, lng: -68.99 },
       { label: 'Miami', lat: 25.7617, lng: -80.1918 },
+      { label: 'Perú', lat: -13.5319, lng: -71.9675 },
+      { label: 'Argentina', lat: -34.6037, lng: -58.3816 },
+      { label: 'Brasil', lat: -22.9068, lng: -43.1729 },
+      { label: 'Bolivia', lat: -20.1338, lng: -67.4891 },
+      { label: 'Chile', lat: -33.4489, lng: -70.6693 },
       { label: 'Europa', lat: 48.8566, lng: 2.3522 },
-      { label: 'Japón', lat: 35.6762, lng: 139.6503 },
       { label: 'Dubái', lat: 25.2048, lng: 55.2708 },
+      { label: 'Japón', lat: 35.6762, lng: 139.6503 },
     ],
   },
 
   businessLines: {
     volume: { id: 'volume', name: 'Caribe Todo Incluido', desc: 'Las mejores playas de las Américas sin preocupaciones.' },
     local: { id: 'local', name: 'Escapadas por Colombia', desc: 'Destinos nacionales imperdibles.' },
+    southAmerica: {
+      id: 'southAmerica',
+      name: 'Suramérica',
+      desc: 'Cultura, gastronomía y paisajes inolvidables del sur del continente.',
+    },
     margin: { id: 'margin', name: 'Destinos Bucket List', desc: 'Viajes de alto impacto y experiencias globales únicas.' },
     // Solo para el shim legacy (AquaWoman.jsx); no es valor válido de destinations.businessLine
     aquaWoman: { id: 'aquaWoman', name: 'Aqua Woman', desc: 'Experiencia Femenina', link: 'https://www.instagram.com/aquawomanexperience/' },
@@ -51,7 +63,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?q=80&w=1074?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -289,8 +301,171 @@ export const siteConfig = {
         "importantNotes": [
           "Consultar disponibilidad de cupos para Machu Picchu con antelación"
         ],
-        "businessLine": "volume",
+        "businessLine": "southAmerica",
         "priceLabel": "A consultar"
+      },
+      {
+        "id": "sa-arg-01",
+        "title": "Argentina: Buenos Aires y Bariloche",
+        "destination": "Buenos Aires y Bariloche, Argentina",
+        "duration": "7 Días / 6 Noches",
+        "businessLine": "southAmerica",
+        "price": null,
+        "priceLabel": "A consultar",
+        "currency": "USD",
+        "status": "published",
+        "isActive": true,
+        "media": [
+          {
+            "type": "image",
+            "url": "https://images.unsplash.com/photo-1589909202802-8f4aadce1849?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Buenos Aires y Patagonia Argentina"
+          }
+        ],
+        "description": "Combina la elegancia urbana, el tango y la gastronomía de Buenos Aires con los lagos y montañas de la Patagonia en Bariloche.",
+        "features": [
+          "City Tour Buenos Aires",
+          "Circuito Chico Bariloche",
+          "Traslados incluidos"
+        ],
+        "includes": [
+          "Alojamiento en hoteles seleccionados con desayuno diario",
+          "Traslados aeropuerto - hotel - aeropuerto en ambos destinos",
+          "City tour panorámico por Buenos Aires",
+          "Excursión Circuito Chico en Bariloche"
+        ],
+        "notIncludes": [
+          "Tiquetes aéreos internacionales y domésticos (cotizables a medida)",
+          "Gastos personales y alimentación no especificada",
+          "Asistencia médica internacional (disponible como adicional)"
+        ],
+        "importantNotes": [
+          "Tarifas sujetas a disponibilidad y temporada (verano o nieve en invierno)."
+        ],
+        "whatsappMessage": "Quiero recibir cotización para el paquete Argentina: Buenos Aires y Bariloche.",
+        "sortOrder": 22
+      },
+      {
+        "id": "sa-bra-01",
+        "title": "Brasil: Río de Janeiro y Búzios",
+        "destination": "Río de Janeiro y Búzios, Brasil",
+        "duration": "6 Días / 5 Noches",
+        "businessLine": "southAmerica",
+        "price": null,
+        "priceLabel": "A consultar",
+        "currency": "USD",
+        "status": "published",
+        "isActive": true,
+        "media": [
+          {
+            "type": "image",
+            "url": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Río de Janeiro y playas de Búzios"
+          }
+        ],
+        "description": "Vive la energía vibrante de Río de Janeiro entre el Cristo Redentor y el Pan de Azúcar, y descansa en las playas cristalinas de Búzios.",
+        "features": [
+          "Cristo Redentor",
+          "Playas de Búzios",
+          "Traslados entre ciudades"
+        ],
+        "includes": [
+          "Alojamiento en Río de Janeiro y Búzios con desayuno",
+          "Traslados aeropuerto - hotel en Río - Búzios - aeropuerto",
+          "Tour a Corcovado y Pan de Azúcar"
+        ],
+        "notIncludes": [
+          "Tiquetes aéreos internacionales (cotizables según fecha)",
+          "Alimentación no especificada y gastos personales",
+          "Asistencia médica al viajero"
+        ],
+        "importantNotes": [
+          "Recomendado verificar requisitos de vacuna contra la fiebre amarilla según itinerario."
+        ],
+        "whatsappMessage": "Quiero recibir cotización para el paquete Brasil: Río de Janeiro y Búzios.",
+        "sortOrder": 23
+      },
+      {
+        "id": "sa-bol-01",
+        "title": "Bolivia: Salar de Uyuni y La Paz",
+        "destination": "La Paz y Salar de Uyuni, Bolivia",
+        "duration": "5 Días / 4 Noches",
+        "businessLine": "southAmerica",
+        "price": null,
+        "priceLabel": "A consultar",
+        "currency": "USD",
+        "status": "published",
+        "isActive": true,
+        "media": [
+          {
+            "type": "image",
+            "url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Paisaje andino de Bolivia y Salar de Uyuni"
+          }
+        ],
+        "description": "Una expedición fascinante por el altiplano andino: teleféricos y cultura en La Paz combinados con el espejo natural más grande del mundo en Uyuni.",
+        "features": [
+          "Salar de Uyuni 4x4",
+          "City Tour La Paz",
+          "Guía especializado"
+        ],
+        "includes": [
+          "Alojamiento en La Paz y Uyuni con desayunos",
+          "Excursión full day en vehículo 4x4 por el Salar de Uyuni e Isla Incahuasi",
+          "City tour en La Paz con recorrido en teleférico",
+          "Traslados aeropuerto - hotel - aeropuerto"
+        ],
+        "notIncludes": [
+          "Tiquetes aéreos internacionales y vuelos internos",
+          "Ingresos a parques o reservas no especificados",
+          "Asistencia médica internacional"
+        ],
+        "importantNotes": [
+          "Destino de gran altitud; te asesoramos con recomendaciones previas de aclimatación."
+        ],
+        "whatsappMessage": "Quiero recibir cotización para el paquete Bolivia: Salar de Uyuni y La Paz.",
+        "sortOrder": 24
+      },
+      {
+        "id": "sa-chl-01",
+        "title": "Chile: Santiago y Viña del Mar",
+        "destination": "Santiago, Valparaíso y Viña del Mar, Chile",
+        "duration": "5 Días / 4 Noches",
+        "businessLine": "southAmerica",
+        "price": null,
+        "priceLabel": "A consultar",
+        "currency": "USD",
+        "status": "published",
+        "isActive": true,
+        "media": [
+          {
+            "type": "image",
+            "url": "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Santiago de Chile y costa del Pacífico"
+          }
+        ],
+        "description": "Descubre la modernidad de Santiago rodeada por la Cordillera de los Andes, sus valles vitivinícolas y el encanto costero de Valparaíso y Viña del Mar.",
+        "features": [
+          "City Tour Santiago",
+          "Viña del Mar y Valparaíso",
+          "Opción Ruta del Vino"
+        ],
+        "includes": [
+          "Alojamiento en hotel seleccionado en Santiago con desayuno diario",
+          "Traslados aeropuerto - hotel - aeropuerto",
+          "City tour por Santiago de Chile",
+          "Excursión de día completo a Valparaíso y Viña del Mar"
+        ],
+        "notIncludes": [
+          "Tiquetes aéreos internacionales",
+          "Cenas, propinas y gastos personales",
+          "Asistencia médica internacional"
+        ],
+        "importantNotes": [
+          "Posibilidad de agregar extensión a centros de ski en temporada de invierno."
+        ],
+        "whatsappMessage": "Quiero recibir cotización para el paquete Chile: Santiago y Viña del Mar.",
+        "sortOrder": 25
       },
       {
         "id": "loc-01",
@@ -302,7 +477,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-opz5XqwPhUY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -399,74 +574,87 @@ export const siteConfig = {
       },
       {
         "id": "loc-04",
-        "title": "Relax en Palomino",
+        "title": "Santa Marta",
+        "destination": "Santa Marta, Magdalena",
+        "duration": "4 Días / 3 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1515238152791-8216bfdf89a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1515238152791-8216bfdf89a7?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Playas de Santa Marta y Caribe Colombiano"
           }
         ],
+        "description": "Disfruta la magia de la bahía más linda de América: playas cristalinas, atardeceres inolvidables, naturaleza en el Parque Tayrona e historia frente al mar Caribe.",
         "features": [
-          "Playa",
-          "Selva",
-          "Tubing"
+          "Playas del Caribe",
+          "Parque Tayrona",
+          "Familiar/Pareja"
         ],
         "includes": [
-          "Transporte terrestre desde Santa Marta",
-          "Alojamiento eco-hotel",
-          "Desayunos",
-          "Seguro"
+          "Tiquetes aéreos ida y regreso",
+          "Alojamiento en hotel seleccionado",
+          "Alimentación según plan elegido",
+          "Traslados aeropuerto - hotel - aeropuerto",
+          "Asistencia médica"
         ],
         "notIncludes": [
-          "Vuelos a Santa Marta",
-          "Actividades",
-          "Comidas adicionales"
+          "Excursiones opcionales (Tayrona, Playa Blanca o Minca)",
+          "Gastos personales y servicios no especificados",
+          "Propinas"
         ],
         "importantNotes": [
-          "Ideal para desconexión total"
+          "Fechas a demanda según disponibilidad aérea y hotelera",
+          "Opciones de alojamiento en El Rodadero, Bello Horizonte y Centro Histórico"
         ],
         "businessLine": "local",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a Santa Marta."
       },
       {
         "id": "loc-05",
-        "title": "Boyacá Tradicional",
+        "title": "Coveñas",
+        "destination": "Coveñas, Sucre",
+        "duration": "4 Días / 3 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1582236314811-9a706b4d3204?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Playas tranquilas de Coveñas"
           }
         ],
+        "description": "Escápate a las aguas tranquilas y cálidas del Golfo de Morrosquillo. Ideal para descansar en familia, disfrutar gastronomía costeña y explorar las Islas de San Bernardo.",
         "features": [
-          "Pueblos Patrimonio",
-          "Villa de Leyva",
-          "Gastronomía local"
+          "Aguas tranquilas",
+          "Plan Familiar",
+          "Golfo de Morrosquillo"
         ],
         "includes": [
-          "Transporte terrestre VIP",
-          "Alojamiento boutique",
-          "Desayunos y cenas",
-          "Tours guiados"
+          "Alojamiento frente al mar o zona hotelera seleccionada",
+          "Alimentación según plan elegido",
+          "Traslados terrestres o aéreos según origen",
+          "Asistencia médica"
         ],
         "notIncludes": [
-          "Gastos personales",
-          "Almuerzos",
-          "Entradas a viñedos"
+          "Excursión en lancha a Islas de San Bernardo (opcional)",
+          "Alimentación no descrita y gastos personales",
+          "Propinas"
         ],
         "importantNotes": [
-          "Salidas grupales e individuales disponibles"
+          "Salidas flexibles durante todo el año",
+          "Tarifas sujetas a temporada y disponibilidad"
         ],
         "businessLine": "local",
-        "priceLabel": "A consultar"
-      },
+        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a Coveñas."
+      },,
       {
         "id": "mar-01",
         "title": "Japón: Temporada de Cerezos",
@@ -477,7 +665,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?q=80&w=1964&?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -515,7 +703,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -624,7 +812,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-iQTmygr_WTY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -685,38 +873,45 @@ export const siteConfig = {
       },
       {
         "id": "mar-07",
-        "title": "Buenos Aires",
-        "price": 1990,
+        "title": "Dubái: Lujo y Desierto",
+        "destination": "Dubái, Emiratos Árabes Unidos",
+        "duration": "7 Días / 6 Noches",
+        "price": null,
+        "priceLabel": "A consultar",
         "currency": "USD",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1589909202802-8f4aadce1849?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Horizonte de Dubái y Burj Khalifa"
           }
         ],
+        "description": "Vive el contraste único entre la arquitectura futurista más impresionante del mundo, compras de primer nivel y una noche mágica entre las dunas del desierto árabe.",
         "features": [
-          "Tango",
-          "Gastronomía",
-          "10 Mar 2027"
+          "Burj Khalifa",
+          "Safari en el Desierto",
+          "Dubái y Abu Dhabi"
         ],
         "includes": [
-          "Vuelos",
-          "Alojamiento boutique",
-          "Cena Show de Tango",
-          "City Tour",
-          "Desayunos"
+          "Alojamiento en hoteles seleccionados con desayuno diario",
+          "Traslados aeropuerto - hotel - aeropuerto",
+          "City tour panorámico por Dubái clásico y moderno",
+          "Safari 4x4 en el desierto con cena BBQ y espectáculo",
+          "Asistencia médica internacional"
         ],
         "notIncludes": [
-          "Impuestos locales",
-          "Gastos no descritos"
+          "Tiquetes aéreos internacionales (cotizables según fecha)",
+          "Tourism Dirham Fee (pago directo en hotel)",
+          "Excursiones opcionales y gastos personales"
         ],
         "importantNotes": [
-          "Salida: 10 de marzo de 2027",
-          "Opciones de ampliación a Iguazú"
+          "Fechas flexibles y salidas grupales disponibles bajo consulta",
+          "Te asesoramos con todos los requisitos migratorios vigentes para colombianos"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir cotización para el paquete Dubái: Lujo y Desierto."
       },
       {
         "id": "mar-08",
@@ -806,7 +1001,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -843,7 +1038,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-opz5XqwPhUY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -882,7 +1077,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-DcyL0IoCY0A?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -921,7 +1116,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1zYWq3rdi8Y?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -958,7 +1153,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-u-Di0zMI4xI?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -995,7 +1190,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?q=80&w=1074?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1030,7 +1225,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-jrSA92yYkY?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1065,7 +1260,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-4Q-Rbu8Ipcg?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1102,7 +1297,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-gmOMKy9oXj8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1139,7 +1334,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-WBGjg0DsO_g?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1176,7 +1371,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1213,7 +1408,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-KP0uq0vIgI4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1250,7 +1445,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-WBGjg0DsO_g?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1287,7 +1482,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-WBGjg0DsO_g?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "includes": [
@@ -1327,19 +1522,19 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1528605105345-5344ea20e269?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            "url": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1000&q=80"
           },
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1545205597-3d9d02c29597?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            "url": "https://images.unsplash.com/photo-1687436874774-fa0d4616bec9?auto=format&fit=crop&w=1000&q=80"
           },
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1510844355160-2fb07bf9af75?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            "url": "https://images.unsplash.com/photo-1687436874174-977fdd9e2cb8?auto=format&fit=crop&w=1000&q=80"
           },
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1519834785169-98be25ec3f84?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+            "url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "features": [
@@ -1557,7 +1752,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?q=80&w=1964&?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "ctaLabel": "Ver Detalles / Cotizar",
@@ -1574,7 +1769,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-u-Di0zMI4xI?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "ctaLabel": "Ver Detalles / Cotizar",
@@ -1591,7 +1786,7 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1512759908851-f2f65f3eb175?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://plus.unsplash.com/premium_photo-1697730215093-baeae8060bfe?auto=format&fit=crop&w=1000&q=80"
           }
         ],
         "ctaLabel": "Ver Detalles / Cotizar",

@@ -119,7 +119,7 @@ export default function EditOfferModal({ offer, onClose }) {
                 rows={3}
                 value={formData.whatsappMessage}
                 onChange={handleChange}
-                placeholder="Ej. Hola Aqua Travel, quiero reservar la oferta de Punta Cana..."
+                placeholder="Ej. Hola AquaTravel, quiero reservar la oferta de Punta Cana..."
                 className="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#25D366] focus:ring-1 focus:ring-[#25D366]"
               />
             </div>

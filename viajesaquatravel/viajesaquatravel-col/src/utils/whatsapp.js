@@ -4,7 +4,7 @@
  */
 
 export const WHATSAPP_PREFIX =
-  'Hola Viajes Aqua Travel, te escribo desde la página web. ';
+  'Hola Viajes AquaTravel, te escribo desde la página web. ';
 
 // Número oficial de la agencia (debe coincidir con siteConfig.agency.whatsappNumber)
 export const DEFAULT_WHATSAPP_PHONE = '573043321590';

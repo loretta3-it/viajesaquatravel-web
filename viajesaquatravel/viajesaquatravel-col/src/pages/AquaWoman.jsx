@@ -100,7 +100,7 @@ export default function AquaWoman() {
       <section className="relative min-h-[82vh] flex items-center justify-center overflow-hidden border-b border-purple-500/20">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+            src="https://images.unsplash.com/photo-1600618528240-fb9fc964b853?q=80&w=2070?auto=format&fit=crop&w=1000&q=80"
             alt="Aqua Woman Hero"
             className="w-full h-full object-cover object-top"
           />
@@ -237,7 +237,7 @@ export default function AquaWoman() {
       <div className="bg-slate-900/70 py-10 text-center border-t border-slate-800">
         <Leaf className="w-7 h-7 text-rose-400/80 mx-auto mb-3" aria-hidden="true" />
         <p className="text-slate-400 text-sm">
-          Aqua Woman es una experiencia respaldada por Viajes Aqua Travel.
+          Aqua Woman es una experiencia respaldada por Viajes AquaTravel.
         </p>
       </div>
 

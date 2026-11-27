@@ -139,6 +139,7 @@ export default function Home() {
     const colors = {
       volume: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
       local: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+      southAmerica: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
       margin: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
       aquaWoman: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
     };

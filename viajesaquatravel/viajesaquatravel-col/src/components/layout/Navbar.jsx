@@ -14,7 +14,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { agency } = useSettings();
 
-  const brandName = agency?.name || 'Viajes Aqua Travel';
+  const brandName = agency?.name || 'Viajes AquaTravel';
   const rnt = agency?.rnt || '115795';
   const closeMenu = () => setMobileOpen(false);
 
@@ -28,7 +28,7 @@ export default function Navbar() {
         >
           <img
             src="/logo-circle.png"
-            alt="Logo Aqua Travel"
+            alt="Logo AquaTravel"
             className="h-10 w-auto object-contain"
           />
           <div>
