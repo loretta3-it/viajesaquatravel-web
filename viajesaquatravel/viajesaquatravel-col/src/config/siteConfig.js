@@ -56,16 +56,21 @@ export const siteConfig = {
       {
         "id": "vol-01",
         "title": "Punta Cana Todo Incluido",
+        "destination": "Punta Cana, Rep. Dominicana",
+        "duration": "5 Días / 4 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Playas y resorts Todo Incluido en Punta Cana"
           }
         ],
+        "description": "Disfruta playas de arena blanca, resorts frente al mar y alimentación ilimitada en el destino Todo Incluido favorito del Caribe para familias y parejas.",
         "features": [
           "Playa",
           "Todo Incluido",
@@ -88,21 +93,27 @@ export const siteConfig = {
           "Sujeto a disponibilidad aérea y hotelera"
         ],
         "businessLine": "volume",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete Punta Cana Todo Incluido.",
+        "sortOrder": 1
       },
       {
         "id": "vol-02",
         "title": "Cancún Todo Incluido",
+        "destination": "Cancún y Riviera Maya, México",
+        "duration": "5 Días / 4 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1552074284-5e88ef1aef18?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1552074284-5e88ef1aef18?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "alt": "Mar turquesa y zona hotelera de Cancún"
           }
         ],
+        "description": "Combina playas turquesa, resorts Todo Incluido, parques temáticos y la magia cultural de la Riviera Maya con asesoría migratoria previa.",
         "features": [
           "Vida Nocturna",
           "Playas",
@@ -123,21 +134,27 @@ export const siteConfig = {
           "Tarifas dinámicas"
         ],
         "businessLine": "volume",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete Cancún Todo Incluido.",
+        "sortOrder": 2
       },
       {
         "id": "vol-03",
         "title": "Escapada Curazao",
+        "destination": "Willemstad, Curazao",
+        "duration": "5 Días / 4 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1616016147494-069a531f8eb4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Aguas cristalinas y playas de coral en Curazao"
           }
         ],
+        "description": "Descubre calas de agua cristalina ideales para buceo y snorkel, junto al encanto colorido y la arquitectura europea del centro histórico de Willemstad.",
         "features": [
           "Playas de coral",
           "Arquitectura europea",
@@ -159,21 +176,27 @@ export const siteConfig = {
           "Exige certificado de fiebre amarilla"
         ],
         "businessLine": "volume",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete Escapada Curazao.",
+        "sortOrder": 3
       },
       {
         "id": "vol-04",
         "title": "Aruba - Isla Feliz",
+        "destination": "Oranjestad, Aruba",
+        "duration": "5 Días / 4 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1589136151624-9b27670d8a57?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Playas de arena blanca en Aruba"
           }
         ],
+        "description": "Sol garantizado todo el año, playas tranquilas de arena blanca como Eagle Beach y una oferta gastronómica y comercial de primer nivel.",
         "features": [
           "Compras",
           "Playas cristalinas",
@@ -195,21 +218,27 @@ export const siteConfig = {
           "Fechas a demanda"
         ],
         "businessLine": "volume",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete Aruba - Isla Feliz.",
+        "sortOrder": 4
       },
       {
         "id": "vol-05",
         "title": "Ciudad de Panamá",
+        "destination": "Ciudad de Panamá, Panamá",
+        "duration": "4 Días / 3 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1582236314811-9a706b4d3204?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Horizonte moderno de Ciudad de Panamá"
           }
         ],
+        "description": "La escapada perfecta que combina el icónico Canal de Panamá, el encanto del Casco Antiguo, centros comerciales y opción de playa en el Pacífico.",
         "features": [
           "Compras",
           "Canal de Panamá",
@@ -232,21 +261,27 @@ export const siteConfig = {
           "Sin visado para colombianos"
         ],
         "businessLine": "volume",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete Ciudad de Panamá.",
+        "sortOrder": 5
       },
       {
         "id": "vol-06",
         "title": "México D.F. y Cultura",
+        "destination": "Ciudad de México, México",
+        "duration": "5 Días / 4 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1518605363189-980b39bebe57?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1585464231875-d9ef1f5ad396?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Centro histórico y cultura en Ciudad de México"
           }
         ],
+        "description": "Sumérgete en la historia milenaria de Teotihuacán, la Basílica de Guadalupe, museos icónicos y una de las gastronomías más reconocidas del mundo.",
         "features": [
           "Historia",
           "Gastronomía",
@@ -266,21 +301,27 @@ export const siteConfig = {
           "Pre-registro migratorio obligatorio"
         ],
         "businessLine": "volume",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete México D.F. y Cultura.",
+        "sortOrder": 6
       },
       {
         "id": "vol-07",
         "title": "Perú Esencial",
+        "destination": "Lima, Cusco y Machu Picchu, Perú",
+        "duration": "6 Días / 5 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1526392060635-9d6019884377?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "alt": "Ciudadela inca de Machu Picchu en Perú"
           }
         ],
+        "description": "Recorre la capital gastronómica de Latinoamérica en Lima, la historia imperial de Cusco y vive la emoción de conocer la maravilla de Machu Picchu.",
         "features": [
           "Machu Picchu",
           "Lima",
@@ -302,7 +343,8 @@ export const siteConfig = {
           "Consultar disponibilidad de cupos para Machu Picchu con antelación"
         ],
         "businessLine": "southAmerica",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete Perú Esencial (Lima, Cusco y Machu Picchu).",
+        "sortOrder": 7
       },
       {
         "id": "sa-arg-01",
@@ -343,7 +385,7 @@ export const siteConfig = {
           "Tarifas sujetas a disponibilidad y temporada (verano o nieve en invierno)."
         ],
         "whatsappMessage": "Quiero recibir cotización para el paquete Argentina: Buenos Aires y Bariloche.",
-        "sortOrder": 22
+        "sortOrder": 8
       },
       {
         "id": "sa-bra-01",
@@ -383,7 +425,7 @@ export const siteConfig = {
           "Recomendado verificar requisitos de vacuna contra la fiebre amarilla según itinerario."
         ],
         "whatsappMessage": "Quiero recibir cotización para el paquete Brasil: Río de Janeiro y Búzios.",
-        "sortOrder": 23
+        "sortOrder": 9
       },
       {
         "id": "sa-bol-01",
@@ -424,7 +466,7 @@ export const siteConfig = {
           "Destino de gran altitud; te asesoramos con recomendaciones previas de aclimatación."
         ],
         "whatsappMessage": "Quiero recibir cotización para el paquete Bolivia: Salar de Uyuni y La Paz.",
-        "sortOrder": 24
+        "sortOrder": 10
       },
       {
         "id": "sa-chl-01",
@@ -465,21 +507,26 @@ export const siteConfig = {
           "Posibilidad de agregar extensión a centros de ski en temporada de invierno."
         ],
         "whatsappMessage": "Quiero recibir cotización para el paquete Chile: Santiago y Viña del Mar.",
-        "sortOrder": 25
+        "sortOrder": 11
       },
       {
         "id": "loc-01",
         "title": "San Andrés Islas",
+        "destination": "San Andrés, Colombia",
+        "duration": "4 Días / 3 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Mar de los siete colores en San Andrés Islas"
           }
         ],
+        "description": "Enamórate del mar de los siete colores, Johnny Cay, el Acuario natural y el ambiente isleño del Caribe colombiano en planes flexibles para toda la familia.",
         "features": [
           "Mar de los 7 colores",
           "Vuelos",
@@ -500,21 +547,27 @@ export const siteConfig = {
           "Pago de tarjeta de ingreso directo en el aeropuerto"
         ],
         "businessLine": "local",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a San Andrés Islas.",
+        "sortOrder": 12
       },
       {
         "id": "loc-02",
         "title": "Cartagena Histórica",
+        "destination": "Cartagena de Indias, Bolívar",
+        "duration": "4 Días / 3 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1583344445353-8b77a760f38b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1583531352515-8884af319dc1?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Ciudad Amurallada de Cartagena de Indias"
           }
         ],
+        "description": "Camina entre calles coloniales, balcones llenos de historia, atardeceres en la Ciudad Amurallada y escapadas a las playas de las Islas del Rosario.",
         "features": [
           "Ciudad Amurallada",
           "Playa",
@@ -535,21 +588,27 @@ export const siteConfig = {
           "Múltiples opciones de alojamiento disponibles"
         ],
         "businessLine": "local",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a Cartagena Histórica.",
+        "sortOrder": 13
       },
       {
         "id": "loc-03",
         "title": "Aventura en La Guajira",
+        "destination": "Riohacha y Cabo de la Vela, La Guajira",
+        "duration": "4 Días / 3 Noches",
         "price": null,
+        "priceLabel": "A consultar",
         "currency": "COP",
         "status": "published",
         "isActive": true,
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1549420847-f31f9fcbbcb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Desierto y mar Caribe en La Guajira"
           }
         ],
+        "description": "Vive el encuentro único entre el desierto y el mar Caribe: salinas de Manaure, Cabo de la Vela, dunas de Taroa y la hospitalidad ancestral Wayuu.",
         "features": [
           "Desierto",
           "Cultura Wayuu",
@@ -570,7 +629,8 @@ export const siteConfig = {
           "Destino de turismo de naturaleza y aventura"
         ],
         "businessLine": "local",
-        "priceLabel": "A consultar"
+        "whatsappMessage": "Quiero recibir cotización para el paquete Aventura en La Guajira.",
+        "sortOrder": 14
       },
       {
         "id": "loc-04",
@@ -612,7 +672,8 @@ export const siteConfig = {
           "Opciones de alojamiento en El Rodadero, Bello Horizonte y Centro Histórico"
         ],
         "businessLine": "local",
-        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a Santa Marta."
+        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a Santa Marta.",
+        "sortOrder": 15
       },
       {
         "id": "loc-05",
@@ -653,11 +714,14 @@ export const siteConfig = {
           "Tarifas sujetas a temporada y disponibilidad"
         ],
         "businessLine": "local",
-        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a Coveñas."
-      },,
+        "whatsappMessage": "Quiero recibir cotización para un paquete de viaje a Coveñas.",
+        "sortOrder": 16
+      },
       {
         "id": "mar-01",
         "title": "Japón: Temporada de Cerezos",
+        "destination": "Tokio, Kioto y Osaka, Japón",
+        "duration": "12 Días / 10 Noches",
         "price": 8690,
         "currency": "USD",
         "status": "published",
@@ -665,9 +729,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1665706896821-319040b81753?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Cerezos en flor y templos tradicionales en Japón"
           }
         ],
+        "description": "Vive la temporada más esperada del año en Japón recorriendo Tokio, Kioto y Osaka en tren bala con guía en español y hotelería premium.",
         "features": [
           "Tokio, Kioto, Osaka",
           "Guía Especializado",
@@ -691,11 +757,15 @@ export const siteConfig = {
           "Cupos extremadamente limitados",
           "Requiere visado"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre el circuito Japón: Temporada de Cerezos (26 Mar 2027).",
+        "sortOrder": 17
       },
       {
         "id": "mar-02",
         "title": "Europa por Primera Vez",
+        "destination": "España, Francia e Italia",
+        "duration": "15 Días / 13 Noches",
         "price": 3390,
         "currency": "EUR",
         "status": "published",
@@ -703,9 +773,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Torre Eiffel y circuito clásico por Europa"
           }
         ],
+        "description": "El circuito clásico ideal para tu primer viaje al Viejo Continente: Madrid, París, Roma y ciudades icónicas con vuelos desde Bogotá y guía acompañante.",
         "features": [
           "Multidestino",
           "Circuito Guiado",
@@ -727,11 +799,15 @@ export const siteConfig = {
           "Salida: 19 de marzo de 2027",
           "Itinerario abarca Madrid, París, Roma y más"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre el circuito Europa por Primera Vez (19 Mar 2027).",
+        "sortOrder": 18
       },
       {
         "id": "mar-03",
         "title": "¡Viva Vietnam!",
+        "destination": "Hanói, Bahía de Halong y Ho Chi Minh",
+        "duration": "12 Días / 10 Noches",
         "price": 4790,
         "currency": "USD",
         "status": "published",
@@ -739,9 +815,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1528127269322-539801943592?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1528127269322-539801943592?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "alt": "Crucero por la Bahía de Halong en Vietnam"
           }
         ],
+        "description": "Una inmersión fascinante por el sudeste asiático: navega en crucero por la mágica Bahía de Halong y descubre templos, cultura milenaria y gastronomía vibrante.",
         "features": [
           "Asia Exótica",
           "Bahía de Halong",
@@ -763,11 +841,15 @@ export const siteConfig = {
           "Salida: 05 de febrero de 2027",
           "Experiencia inmersiva en el sudeste asiático"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre el viaje ¡Viva Vietnam! (05 Feb 2027).",
+        "sortOrder": 19
       },
       {
         "id": "mar-04",
         "title": "Egipto y Jordania",
+        "destination": "El Cairo, Nilo y Petra",
+        "duration": "12 Días / 11 Noches",
         "price": 4351,
         "currency": "USD",
         "status": "published",
@@ -775,9 +857,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1539650116574-8efeb43e2b50?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Pirámides de Egipto y tesoro de Petra en Jordania"
           }
         ],
+        "description": "Maravíllate ante las Pirámides de Guiza, navega en crucero por el río Nilo con guía egiptólogo y recorre la ciudad rosada de Petra en Jordania.",
         "features": [
           "Pirámides",
           "Petra",
@@ -800,11 +884,15 @@ export const siteConfig = {
           "Salida: 18 de enero de 2027",
           "Clima ideal en esa época del año"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre el circuito Egipto y Jordania (18 Ene 2027).",
+        "sortOrder": 20
       },
       {
         "id": "mar-05",
         "title": "Turquía con Crucero Islas Griegas",
+        "destination": "Estambul, Capadocia y Mar Egeo",
+        "duration": "12 Días / 11 Noches",
         "price": 3890,
         "currency": "USD",
         "status": "published",
@@ -812,9 +900,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Mezquitas de Estambul y paisaje del Mar Egeo"
           }
         ],
+        "description": "Combina la mística de Estambul y los paisajes de Capadocia con un inolvidable crucero con pensión completa por las icónicas Islas Griegas.",
         "features": [
           "Estambul",
           "Capadocia",
@@ -835,11 +925,15 @@ export const siteConfig = {
         "importantNotes": [
           "Fechas de salida según programación naviera"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre Turquía con Crucero Islas Griegas.",
+        "sortOrder": 21
       },
       {
         "id": "mar-06",
         "title": "Guatemala: Joyas Arqueológicas",
+        "destination": "Antigua, Atitlán y Tikal, Guatemala",
+        "duration": "7 Días / 6 Noches",
         "price": 2970,
         "currency": "USD",
         "status": "published",
@@ -847,9 +941,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "alt": "Ruinas mayas y paisajes de Guatemala"
           }
         ],
+        "description": "Explora el corazón del mundo maya entre los templos milenarios de Tikal, el lago Atitlán y la arquitectura colonial de Antigua Guatemala.",
         "features": [
           "Cultura Maya",
           "Tikal",
@@ -869,7 +965,9 @@ export const siteConfig = {
         "importantNotes": [
           "Salida: 08 de febrero de 2027"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre Guatemala: Joyas Arqueológicas (08 Feb 2027).",
+        "sortOrder": 22
       },
       {
         "id": "mar-07",
@@ -911,11 +1009,14 @@ export const siteConfig = {
           "Te asesoramos con todos los requisitos migratorios vigentes para colombianos"
         ],
         "businessLine": "margin",
-        "whatsappMessage": "Quiero recibir cotización para el paquete Dubái: Lujo y Desierto."
+        "whatsappMessage": "Quiero recibir cotización para el paquete Dubái: Lujo y Desierto.",
+        "sortOrder": 23
       },
       {
         "id": "mar-08",
         "title": "Marruecos",
+        "destination": "Casablanca, Marrakech y Desierto del Sahara",
+        "duration": "9 Días / 8 Noches",
         "price": 2890,
         "currency": "EUR",
         "status": "published",
@@ -923,9 +1024,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+            "alt": "Medinas tradicionales y dunas del Sahara en Marruecos"
           }
         ],
+        "description": "Recorre ciudades imperiales, hospédate en auténticos riads tradicionales y duerme bajo las estrellas en un campamento en el Desierto del Sahara.",
         "features": [
           "Desierto de Sahara",
           "Medinas",
@@ -947,11 +1050,15 @@ export const siteConfig = {
         "importantNotes": [
           "Salida: 21 de enero de 2027"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre el circuito a Marruecos (21 Ene 2027).",
+        "sortOrder": 24
       },
       {
         "id": "mar-09",
         "title": "GP Fórmula 1 Miami 2027",
+        "destination": "Miami, Estados Unidos",
+        "duration": "5 Días / 4 Noches",
         "price": 2346,
         "currency": "USD",
         "status": "published",
@@ -959,9 +1066,11 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://images.unsplash.com/photo-1512759908851-f2f65f3eb175?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+            "url": "https://images.unsplash.com/photo-1535498730771-e735b998cd64?auto=format&fit=crop&w=1000&q=80",
+            "alt": "Experiencia Gran Premio de Fórmula 1 en Miami"
           }
         ],
+        "description": "Siente la adrenalina del Gran Premio de Miami con 4 noches de alojamiento, entrada de 3 días al circuito y seguro de viaje incluido.",
         "features": [
           "Experiencia F1",
           "Miami",
@@ -983,7 +1092,9 @@ export const siteConfig = {
           "Precios sujetos a variaciones del evento",
           "Requiere Visa Americana vigente"
         ],
-        "businessLine": "margin"
+        "businessLine": "margin",
+        "whatsappMessage": "Quiero recibir información sobre el paquete GP Fórmula 1 Miami 2027.",
+        "sortOrder": 25
       }
     ],
 
@@ -1786,8 +1897,8 @@ export const siteConfig = {
         "media": [
           {
             "type": "image",
-            "url": "https://plus.unsplash.com/premium_photo-1697730215093-baeae8060bfe?auto=format&fit=crop&w=1000&q=80"
-          }
+            "url": "https://images.unsplash.com/photo-1535498730771-e735b998cd64?auto=format&fit=crop&w=1000&q=80"
+          },
         ],
         "ctaLabel": "Ver Detalles / Cotizar",
         "ctaType": "product",
